@@ -7,17 +7,37 @@
             <input type="text" placeholder="Buscar..." />
         </div>
         <ul class="navbar-links">
-            <li><a ><router-link to="/"><font-awesome-icon :icon ="['fas','home']"/></router-link></a></li>
-            <li><a><router-link to="/favoritos"><font-awesome-icon :icon ="['fas','heart']"/></router-link></a></li>
-            <li><a><router-link to="/sacola"><font-awesome-icon :icon ="['fas','bag-shopping']"/></router-link></a></li>
-            <li><a><router-link to="/conta"><font-awesome-icon :icon ="['fas','user']"/></router-link></a></li>
+            <li><a><router-link to="/catalogo"><font-awesome-icon :icon="['fas', 'home']" /></router-link></a></li>
+            <li><a><router-link to="/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
+            <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" /></router-link></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
+                    :aria-expanded="isDropdownOpen"
+                    @click.prevent="toggleDropdown">
+                    <font-awesome-icon :icon="['fas', 'user']" />
+                </a>
+                <div class="dropdown-menu" v-if="isDropdownOpen">
+                    <router-link class="dropdown-item" to="/login">Entrar</router-link>
+                    <router-link class="dropdown-item" to="/cadastro">Cadastrar</router-link>
+                </div>
+            </li>
         </ul>
     </nav>
 </template>
 
 <script>
 export default {
-    name: "Navbar"
+    name: "Navbar",
+    data() {
+        return {
+            isDropdownOpen: false
+        };
+    },
+    methods: {
+        toggleDropdown() {
+            this.isDropdownOpen = !this.isDropdownOpen;
+        }
+    }
 };
 </script>
 
@@ -28,6 +48,7 @@ export default {
     justify-content: space-between;
     background: #2B2B2B;
 }
+
 .navbar-logo {
     position: relative;
     left: 50%;
@@ -36,13 +57,15 @@ export default {
 }
 
 .navbar-logo img {
-    height: 100px;  
+    height: 100px;
     width: auto;
 }
+
 .busca {
     left: 20px;
     position: absolute;
 }
+
 .busca input {
     padding: 0.5rem;
     font-size: 1rem;
@@ -64,6 +87,14 @@ export default {
     font-size: 1.5rem;
     color: #FEDE8B;
     transition: color 0.2s;
+}
+.navbar-links .dropdown-menu {
+    display: grid;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    right: 20px;
 }
 
 .navbar-links a:hover {
