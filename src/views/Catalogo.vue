@@ -12,7 +12,7 @@
         <div>
             <ul>
                 <li v-for="(item, index) in sacola" :key="index">
-                    {{ item.nome }} - R$ {{ item.preco }}
+                    {{ item.nome }} - R$ {{ item.preco }} {{ item.quantidade }}
                 </li>
             </ul>
         </div>
@@ -27,15 +27,15 @@ export default {
     data() {
         return {
             produtos: [
-                { id: 1, nome: "Brinco Dourado", preco: 25, imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-gota-vazada-1757365878.3214.jpg" },
-                { id: 2, nome: "Colar de Pérolas", preco: 40, imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-triplo-folheado-a-ouro-18k-e-prata-perolas--esferas-e-placas-circulares-1757446852.4441.jpg" },
-                { id: 3, nome: "Pulseira Dourada", preco: 30, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
-                { id: 4, nome: "Pulseira de Cobre", preco: 30, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
-                { id: 5, nome: "Pulseira com Zirconio", preco: 30, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
-                { id: 6, nome: "Pulseira de Aço", preco: 30, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
-                { id: 7, nome: "Anel de Prata", preco: 20, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-enrolado-1754996511.9469.jpg" },
-                { id: 8, nome: "Anel Dourado", preco: 20, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-vazado-1754396541.4854.jpg" },
-                { id: 9, nome: "Anel de gatinho e coração", preco: 30, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-semi-joia-gatinho-e-coracao-com-ponto-de-luz-1744760268.3022.jpg" }
+                { id: 1, nome: "Brinco Dourado", preco: 25,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-gota-vazada-1757365878.3214.jpg" },
+                { id: 2, nome: "Colar de Pérolas", preco: 40,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-triplo-folheado-a-ouro-18k-e-prata-perolas--esferas-e-placas-circulares-1757446852.4441.jpg" },
+                { id: 3, nome: "Pulseira Dourada", preco: 30,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
+                { id: 4, nome: "Pulseira de Cobre", preco: 30,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
+                { id: 5, nome: "Pulseira com Zirconio", preco: 30,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
+                { id: 6, nome: "Pulseira de Aço", preco: 30,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
+                { id: 7, nome: "Anel de Prata", preco: 20,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-enrolado-1754996511.9469.jpg" },
+                { id: 8, nome: "Anel Dourado", preco: 20,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-vazado-1754396541.4854.jpg" },
+                { id: 9, nome: "Anel de gatinho e coração", preco: 30,quantidade: 10, imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-semi-joia-gatinho-e-coracao-com-ponto-de-luz-1744760268.3022.jpg" }
             ],
             sacola: []
         };

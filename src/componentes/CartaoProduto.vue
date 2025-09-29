@@ -4,6 +4,7 @@
 
     <h3>{{ produto.nome }}</h3>
     <p>R$ {{ produto.preco }}</p>
+    <p>{{ produto.quantidade }}</p>
 
     <button @click="$emit('adicionar-a-sacola', produto)" >
       Adicionar à sacola
@@ -18,6 +19,19 @@ export default {
     produto: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      quantidadeAtual: this.produto.quantidade
+    };
+  },
+  methods: {
+    adicionarASacola() {
+      if (this.quantidadeAtual > 0) {
+        this.$emit('adicionar-a-sacola', this.produto);
+        this.quantidadeAtual--;
+      }
     }
   }
 };
