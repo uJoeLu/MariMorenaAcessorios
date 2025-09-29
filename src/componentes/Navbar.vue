@@ -3,11 +3,14 @@
         <div class="navbar-logo">
             <img src="@/assets/logo.png" alt="Mari Morena Acessórios" />
         </div>
+        <div class="busca">
+            <input type="text" placeholder="Buscar..." />
+        </div>
         <ul class="navbar-links">
-            <li><a href="#"><font-awesome-icon :icon ="['fas','home']"/></a></li>
-            <li><a href="#"><font-awesome-icon :icon ="['fas','heart']"/></a></li>
-            <li><a href="#"><font-awesome-icon :icon ="['fas','bag-shopping']"/></a></li>
-            <li><a href="#"><font-awesome-icon :icon ="['fas','user']"/></a></li>
+            <li><a ><router-link to="/"><font-awesome-icon :icon ="['fas','home']"/></router-link></a></li>
+            <li><a><router-link to="/favoritos"><font-awesome-icon :icon ="['fas','heart']"/></router-link></a></li>
+            <li><a><router-link to="/sacola"><font-awesome-icon :icon ="['fas','bag-shopping']"/></router-link></a></li>
+            <li><a><router-link to="/conta"><font-awesome-icon :icon ="['fas','user']"/></router-link></a></li>
         </ul>
     </nav>
 </template>
@@ -24,8 +27,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     background: #2B2B2B;
-    padding: 1rem 1rem;
-    box-shadow: #2B2B2B 0px 2px 1px;
 }
 .navbar-logo {
     position: relative;
@@ -38,19 +39,29 @@ export default {
     height: 100px;  
     width: auto;
 }
+.busca {
+    left: 20px;
+    position: absolute;
+}
+.busca input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-left: 20px;
+}
 
 .navbar-links {
     list-style: none;
     display: flex;
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
-    align-items: center;
+    gap: 20px;
+    margin-right: 20px;
 }
 
 .navbar-links a {
     text-decoration: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: #FEDE8B;
     transition: color 0.2s;
 }

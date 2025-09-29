@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from './componentes/Navbar.vue';
+import Footer from './componentes/Footer.vue';
 </script>
 
 <template>
@@ -7,33 +8,40 @@ import Navbar from './componentes/Navbar.vue';
     <Navbar />
   </header>
 
-  <body>
-    <h1>You did it!</h1>
-    <p>
-      Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-      documentation
-    </p>
-  </body>
+  <main class="main-content">
+    <router-view />
+  </main>
   <footer>
     <Footer />
   </footer>
 </template>
 
-<style scoped>
-html,
-body,
-#app {
-  margin: auto;
-  position: relatiave;
-  background-color: #2B2B2B;
-  height: 100vh;
-  width: auto;
 
-}
+
+
+
+<style scoped>
 
 header {
+  margin-bottom: 0px;
   position: relative;
   box-shadow: #000000 0px 4px 4px 0px;
 
+}  
+
+.main-content {
+  background-color: #2B2B2B;
+  display: flex;
+  margin: 0;
+  padding: 0; 
+  min-height: 100%;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  margin: 0px;
+  width: 100%;
 }
 </style>

@@ -1,0 +1,11 @@
+<template>
+    <div>
+        <h1>Redefinição de senha</h1>
+
+    </div>
+</template>
+<script>
+export default {
+    name: 'Redefinicao'
+}
+</script>
