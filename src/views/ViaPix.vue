@@ -4,9 +4,7 @@
 
     </div>
 </template>
-<script>
-export default {
-    name: 'ViaPix'
+<script setup>{
 }
 </script>
 <style scoped>

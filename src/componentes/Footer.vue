@@ -6,11 +6,8 @@
     </footer>
 </template>
 
-<script>
-export default {
-    name: 'Footer'
-}
-</script>
+<script setup>
+</script >
 
 <style scoped>
 .footer {

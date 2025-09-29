@@ -1,38 +1,33 @@
 <template>
     <div class="carrossel">
-        <button @click="prev" class="carrossel-btn left">&#10094;</button>
+        <button @click="prev()" class="carrossel-btn left">&#10094;</button>
         
         <div class="carrossel-slides">
-            <img :src="images[current]" alt="Slide" class="carrossel-img" /> 
+            <img :src="images[current.value]" alt="Slide" class="carrossel-img" /> 
         </div>
         
-        <button @click="next" class="carrossel-btn right">&#10095;</button>
+        <button @click="next()" class="carrossel-btn right">&#10095;</button>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Carrossel',
-    data() {
-        return {
-            images: [
-                'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756824425.5975.jpg',
-                'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756993451.3086.jpeg',
-                'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756824425.7439.jpg',
-                'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756993451.5092.jpg',
-            ],
-            current: 0
-        };
-    },
-    methods: {
-        next() {
-            this.current = (this.current + 1) % this.images.length;
-        },
-        prev() {
-            this.current = (this.current - 1 + this.images.length) % this.images.length;
-        }
-    }
-};
+<script setup>
+import { ref } from 'vue';
+
+const images = ref([
+    'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756824425.5975.jpg',
+    'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756993451.3086.jpeg',
+    'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756824425.7439.jpg',
+    'https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-argola-dupla-texturizada-m-1756993451.5092.jpg',
+]);
+const current = ref(0);
+
+function next() {
+    current.value = (current.value + 1) % images.value.length;
+}
+
+function prev() {
+    current.value = (current.value - 1 + images.value.length) % images.value.length;
+}
 </script>
 
 <style scoped>

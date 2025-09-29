@@ -4,8 +4,6 @@
 
     </div>
 </template>
-<script>
-export default {
-    name: 'DetalhesProduto'
+<script setup>{
 }
 </script>

@@ -25,20 +25,14 @@
     </nav>
 </template>
 
-<script>
-export default {
-    name: "Navbar",
-    data() {
-        return {
-            isDropdownOpen: false
-        };
-    },
-    methods: {
-        toggleDropdown() {
-            this.isDropdownOpen = !this.isDropdownOpen;
-        }
-    }
-};
+<script setup>
+import { ref } from 'vue';
+
+const isDropdownOpen = ref(false);
+
+function toggleDropdown() {
+    isDropdownOpen.value = !isDropdownOpen.value;
+}
 </script>
 
 <style scoped>

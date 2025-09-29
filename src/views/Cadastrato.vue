@@ -27,9 +27,7 @@
     </body>
 
 </template>
-<script>
-export default {
-    name: 'Cadastrato'
+<script setup>{
 }
 </script>
 <style scoped>

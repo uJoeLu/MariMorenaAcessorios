@@ -12,29 +12,15 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "CartaoProduto",
-  props: {
-    produto: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      quantidadeAtual: this.produto.quantidade
-    };
-  },
-  methods: {
-    adicionarASacola() {
-      if (this.quantidadeAtual > 0) {
-        this.$emit('adicionar-a-sacola', this.produto);
-        this.quantidadeAtual--;
-      }
-    }
+<script setup>
+const props = defineProps(
+  {
+  produto: {
+    type: Object,
+    required: true
   }
-};
+}
+);
 </script>
 <style scoped>
 .cartao {

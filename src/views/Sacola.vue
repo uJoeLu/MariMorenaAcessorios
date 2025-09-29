@@ -6,9 +6,7 @@
         </div>
     </body>
 </template>
-<script>
-export default {
-    name: 'Sacola'
+<script setup>{
 }
 </script>
 <style scoped>
