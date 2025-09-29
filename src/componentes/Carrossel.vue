@@ -3,7 +3,7 @@
         <button @click="prev()" class="carrossel-btn left">&#10094;</button>
         
         <div class="carrossel-slides">
-            <img :src="images[current.value]" alt="Slide" class="carrossel-img" /> 
+            <img :src="images[current]" alt="Slide" class="carrossel-img" /> 
         </div>
         
         <button @click="next()" class="carrossel-btn right">&#10095;</button>
@@ -39,7 +39,7 @@ function prev() {
     width: 100%; 
     height: 500px;
     margin: 0; 
-    padding: 0; 
+    padding: 0;
 }
 
 .carrossel-slides {
@@ -66,9 +66,9 @@ function prev() {
     border: none;
     border-radius: 100%;
     font-size: 3rem;
-    padding: auto;
     position: absolute;
-    top: 300px
+    top: 300px;
+
 
 }
 .carrossel-btn.left {
@@ -76,5 +76,5 @@ function prev() {
 }
 .carrossel-btn.right {
     right: 15px;
-}
+    }
 </style>

@@ -51,7 +51,7 @@ body{
     min-height: 100vh;
 }
 .car {
-    display: block;
+    display: flex;
     top: 0;
     left: 100%;
     right: 100%;

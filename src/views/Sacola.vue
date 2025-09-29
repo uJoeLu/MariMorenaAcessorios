@@ -4,9 +4,17 @@
         <div class="sacola">
             <h1>Minha Sacola</h1>
         </div>
+        <div>
+            <ul>
+                <li v-for="(item, index) in sacola" :key="index">
+                    {{ item.nome }} - R$ {{ item.preco }} {{ item.quantidade }}
+                </li>
+            </ul>
+        </div>
     </body>
 </template>
 <script setup>{
+    
 }
 </script>
 <style scoped>
