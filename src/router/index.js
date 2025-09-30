@@ -10,6 +10,7 @@ import ViaPix from '@/views/ViaPix.vue'
 import Sacola from '@/views/Sacola.vue'
 import Login from '@/views/Login.vue'
 import Cadastrato from '@/views/Cadastrato.vue'
+import Perfil from '@/views/Perfil.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,7 @@ const router = createRouter({
     {path: '/cadastro', name: 'cadastro', component: Cadastrato},
     {path: '/favoritos', name: 'favoritos', component: Favoritos},
     {path: '/sacola', name: 'sacola', component: Sacola},
+    {path: '/perfil', name: 'perfil', component: Perfil},
     {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto, props: true},
     {path: '/finalizar-compra', name: 'finalizar-compra', component: FinalizarCompra},
     {path: '/via-boleto', name: 'via-boleto', component: ViaBoleto},

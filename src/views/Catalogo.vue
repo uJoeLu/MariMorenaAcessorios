@@ -12,7 +12,7 @@
         <div>
             <ul>
                 <li v-for="(item, index) in sacola" :key="index">
-                    {{ item.nome }} - R$ {{ item.preco }} {{ item.quantidade }}
+                    {{ item.nome }} - R$ {{ item.preco }}
                 </li>
             </ul>
         </div>
@@ -61,6 +61,18 @@ body{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+
 }
 
 h1 {
