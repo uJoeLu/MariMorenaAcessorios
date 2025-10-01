@@ -18,6 +18,7 @@
         <div class="categorias">
             <h3>Categorias</h3>
             <ul>
+                <li>Todos</li>
                 <li>Aneis</li>
                 <li>Braceles</li>
                 <li>Brincos</li>

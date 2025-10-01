@@ -1,10 +1,9 @@
 <template>
   <div class= "cartao">
-    <img :src="produto.imagem" :alt="produto.nome" />
+    <router-link :to="'/Detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
 
     <h3>{{ produto.nome }}</h3>
     <p>R$ {{ produto.preco }}</p>
-    <p>{{ produto.quantidade }}</p>
 
     <button @click="$emit('adicionar-a-sacola', produto)" >
       Adicionar à sacola
