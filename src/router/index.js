@@ -21,7 +21,7 @@ const router = createRouter({
     {path: '/favoritos', name: 'favoritos', component: Favoritos},
     {path: '/sacola', name: 'sacola', component: Sacola},
     {path: '/perfil', name: 'perfil', component: Perfil},
-    {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto},
+    {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto, props: true},
     {path: '/finalizar-compra', name: 'finalizar-compra', component: FinalizarCompra},
     {path: '/via-boleto', name: 'via-boleto', component: ViaBoleto},
     {path: '/via-cartao', name: 'via-cartao', component: ViaCartao},

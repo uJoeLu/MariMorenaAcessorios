@@ -5,13 +5,16 @@
     <h3>{{ produto.nome }}</h3>
     <p>R$ {{ produto.preco }}</p>
 
-    <button @click="$emit('adicionar-a-sacola', produto)" >
+    <button @click="adicionarNaSacola(produto)" >
       Adicionar à sacola
     </button>
   </div>
 </template>
 
 <script setup>
+import { useSacola } from '@/composables/Sacola.js';
+const { adicionarNaSacola } = useSacola();
+
 const props = defineProps(
   {
   produto: {

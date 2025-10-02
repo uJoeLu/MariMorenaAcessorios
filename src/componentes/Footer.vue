@@ -18,14 +18,13 @@
         <div class="categorias">
             <h3>Categorias</h3>
             <ul>
-                <li>Todos</li>
-                <li>Aneis</li>
-                <li>Braceles</li>
-                <li>Brincos</li>
-                <li>Colares</li>
-                <li>Conjuntos</li>
-                <li>Pulseiras</li>
-                <li>Tiaras</li>
+                <li 
+                    v-for="categoria in categorias" 
+                    :key="categoria"
+                    @click="categoriasSelecionadas = categoria" 
+                    :class="{ 'active-filtro': categoria === categoriasSelecionadas }">
+                    {{ categoria }}
+                </li>
             </ul>
         </div>
         <div class="contato">
@@ -40,6 +39,9 @@
 </template>
 
 <script setup>
+import { useFiltros} from '@/composables/Filtros';
+const { categoriasSelecionadas, categorias} = useFiltros();
+
 </script>
 
 <style scoped>
@@ -95,6 +97,9 @@
 
 .links ul li {
     margin-bottom: 10px;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
 }
 
 .categorias {
@@ -102,6 +107,7 @@
     padding: 0 20px;
     margin: 0 30px 30px 30px;
     text-align: left;
+
 }
 
 .categorias h3 {
@@ -116,19 +122,26 @@
 
 .categorias ul li {
     margin-bottom: 10px;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
 }
+
 .contato {
     display: block;
     padding: 0 20px;
     margin-bottom: 30px;
     text-align: left;
 }
+
 .contato h3 {
     margin-top: 0;
 }
+
 .contato p {
     margin: 5px 0;
 }
+
 .footer-content {
     display: block;
     padding: 0 20px;
