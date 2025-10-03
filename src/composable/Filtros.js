@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import { useProdutos } from '@/composables/Produtos.js';
+import { useProdutos } from '@/composable/Produtos.js';
 
 const categoriasSelecionadas = ref('Todas');
 const categorias = ref([
@@ -12,8 +12,9 @@ const categorias = ref([
     "Pulseira",
     "Tiara"
 ]);
-const ordenacaoSelecionada = ref('Menor Preço');
+const ordenacaoSelecionada = ref('lancamentos');
 const ordenacoes = ref([
+    { value: 'lancamentos', label: 'Lançamentos' },
     { value: 'menor-preco', label: 'Preço: Menor para Maior' },
     { value: 'maior-preco', label: 'Preço: Maior para Menor' },
     { value: 'nome-az', label: 'Nome: A-Z' },
@@ -33,6 +34,8 @@ const produtosOrdenados = computed(() => {
     const listaParaOrdenar = [...listaBase]; 
     
     switch (ordenacaoSelecionada.value) {
+        case 'lancamentos':
+            return listaParaOrdenar.sort((a, b) => b.id - a.id);
         case 'menor-preco':
             return listaParaOrdenar.sort((a, b) => a.preco - b.preco);
             

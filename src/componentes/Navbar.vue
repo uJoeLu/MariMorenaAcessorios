@@ -7,9 +7,9 @@
             <input type="text" placeholder="Buscar..." />
         </div>
         <ul class="navbar-links">
-            <li><a><router-link to="/"><font-awesome-icon :icon="['fas', 'home']" /></router-link></a></li>
+            <li><a><router-link to="/"><font-awesome-icon :icon="['fas', 'home']" />  </router-link></a></li>
             <li><a><router-link to="/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
-            <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" /></router-link></a></li>
+            <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" /> {{totalQuantidade}} </router-link></a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
                     :aria-expanded="isDropdownOpen"
@@ -27,7 +27,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useSacola } from '@/store/Sacola';
+import { storeToRefs } from 'pinia';
 
+const sacola = useSacola();
+const {totalQuantidade} = storeToRefs(sacola);
 const isDropdownOpen = ref(false);
 
 function toggleDropdown() {

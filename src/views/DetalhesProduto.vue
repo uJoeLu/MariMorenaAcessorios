@@ -6,13 +6,13 @@
             <p>Carregando detalhes do produto...</p>
         </div>
 
-        <div v-else>
-            <div>
+        <div class="produto-detalhe" v-else>
+            <div class="imagem-produto">
                 <h1>{{ produto.nome }}</h1>
 
                 <img :src="produto.imagem" :alt="produto.nome" class="produto-imagem">
             </div>
-            <div>
+            <div class="detalhes-produto">
                 <p><strong>Preço:</strong> R$ {{ produto.preco.toFixed(2) }}</p>
                 <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
                 <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
@@ -20,12 +20,18 @@
             </div>
         </div>
     </div>
+    <div class="mais-opcoes">
+        <CartaoProduto v-for="item in produtosOrdenados.filter(item => item.categoria ==  produto.categoria)" :key="item.id" :produto="item"/>
+    </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useProdutos } from '@/composables/Produtos.js';
-import { useSacola } from '@/composables/Sacola.js';
+import { useProdutos } from '@/composable/Produtos.js';
+import { useSacola } from '@/store/Sacola.js';
+import CartaoProduto from '@/componentes/CartaoProduto.vue';
+import { useFiltros } from '@/composable/Filtros';
+const {produtosOrdenados } = useFiltros()
 const { adicionarNaSacola } = useSacola();
 const { produtos } = useProdutos();
 const produto = ref(null);
@@ -48,4 +54,81 @@ onMounted(() => {
     fetchProdutoLocal();
 });
 </script>
-<style scoped></style>
+<style scoped>
+.detalhe-produto-container{
+    display: flex;
+    margin: auto;
+}
+.produto-detalhe {
+    display: grid; 
+    grid-template-columns:  400px 1fr;
+    gap: 50px; 
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.produto-imagem {
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.imagem-produto {
+    display: flex;
+    width: 400px;
+    margin: auto;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #FEDE8B;;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+}
+.detalhes-produto {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 10px;
+    font-size: 18px;
+    line-height: 1.6;
+    padding: 10px;
+    background-color: #FEDE8B;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+.btn-adicionar-sacola {
+    background-color: #FF6F61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn-adicionar-sacola:hover {
+    background-color: #e65b50;
+}
+a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+}
+h1 {
+    margin-top: 0;
+}
+p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+strong {
+    font-weight: bold;
+}
+
+</style>

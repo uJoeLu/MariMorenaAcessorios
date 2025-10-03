@@ -39,8 +39,9 @@
 </template>
 
 <script setup>
-import { useFiltros} from '@/composables/Filtros';
+import { useFiltros} from '@/composable/Filtros';
 const { categoriasSelecionadas, categorias} = useFiltros();
+
 
 </script>
 

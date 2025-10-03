@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { useSacola } from '@/composables/Sacola.js';
+import { useSacola } from '@/store/Sacola.js';
 const { adicionarNaSacola } = useSacola();
 
 const props = defineProps(

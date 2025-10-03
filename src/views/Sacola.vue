@@ -36,7 +36,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useSacola } from '@/composables/Sacola.js';
+import { useSacola } from '@/store/Sacola.js';
 
 const { sacola, diminuirQtd } = useSacola();
 

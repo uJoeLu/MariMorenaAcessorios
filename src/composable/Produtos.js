@@ -1,6 +1,5 @@
 import { ref } from 'vue';
 
-// 1. A LISTA DE PRODUTOS PERMANECE AQUI, FORA DE QUALQUER COMPONENTE
 const produtos = ref([
     { id: 1, nome: "Brinco Dourado", preco: 25, quantidade: 10, categoria: "Brinco", descricao: "Brinco folheado a ouro 18k com design de gota vazada, elegante e sofisticado para diversas ocasiões.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-gota-vazada-1757365878.3214.jpg" },
     { id: 2, nome: "Colar de Pérolas", preco: 40, quantidade: 10, categoria: "Colar", descricao: "Colar triplo folheado a ouro 18k e prata, com pérolas, esferas e placas circulares, perfeito para compor looks clássicos.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-triplo-folheado-a-ouro-18k-e-prata-perolas--esferas-e-placas-circulares-1757446852.4441.jpg" },

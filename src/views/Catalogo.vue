@@ -34,7 +34,7 @@
 <script setup>
 import Carrossel from '@/componentes/Carrossel.vue';
 import CartaoProduto from '@/componentes/CartaoProduto.vue';
-import { useFiltros } from '@/composables/Filtros';
+import { useFiltros } from '@/composable/Filtros';
 
 const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, produtosOrdenados } = useFiltros();
 
