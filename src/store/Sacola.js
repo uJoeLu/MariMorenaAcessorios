@@ -19,6 +19,11 @@ export const useSacola = defineStore('sacola', {
     totalQuantidade: (state) => {
       return state.sacola.reduce((total, item) => total + item.quantidade, 0);
     },
+
+    // Retorna o valor total da sacola (soma de preco * quantidade)
+    totalPreco: (state) => {
+      return state.sacola.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+    },
   },
 
   // ACTIONS: Métodos para alterar o STATE
@@ -34,13 +39,21 @@ export const useSacola = defineStore('sacola', {
       }
     },
     
+    // Aumenta a quantidade de um produto na sacola
+    aumentarQtd(produtoId) {
+      const itemExistente = this.sacola.find(item => item.id === produtoId);
+      if (itemExistente) {
+        itemExistente.quantidade++;
+      }
+    },
+
     // Diminui a quantidade de um produto ou o remove se a quantidade chegar a 0
     diminuirQtd(produtoId) {
       const itemIndex = this.sacola.findIndex(item => item.id === produtoId);
-      
-      if (itemIndex > 0) {
+
+      if (itemIndex !== -1) {
         const itemExistente = this.sacola[itemIndex];
-        
+
         if (itemExistente.quantidade > 1) {
           // Diminui a quantidade
           itemExistente.quantidade--;

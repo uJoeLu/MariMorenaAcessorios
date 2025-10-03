@@ -1,6 +1,6 @@
 <template>
 
-    <body>
+    <div class="catalogo-page">
         <div class="car">
             <Carrossel />
         </div>
@@ -29,7 +29,7 @@
                 </select>
             </div>
         </div>
-    </body>
+    </div>
 </template>
 <script setup>
 import Carrossel from '@/componentes/Carrossel.vue';
@@ -40,7 +40,7 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
 
 </script>
 <style scoped>
-body {
+.catalogo-page {
     margin: auto;
     padding: 0;
     width: 100vw;

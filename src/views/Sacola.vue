@@ -15,19 +15,25 @@
                 <div class="item-detalhes">
                     <h3>{{ item.nome }}</h3>
                     <p>Preço unitário: R$ {{ item.preco.toFixed(2) }}</p>
-                    <p>Quantidade: {{ item.quantidade }}</p>
+                    <div class="quantidade-controle">
+                        <button @click="diminuirQtd(item.id)" class="btn-quantidade">-</button>
+                        <span>Quantidade: {{ item.quantidade }}</span>
+                        <button @click="aumentarQtd(item.id)" class="btn-quantidade">+</button>
+                    </div>
                     <p>Subtotal: R$ {{ (item.preco * item.quantidade).toFixed(2) }}</p>
-                    <button @click="diminuirQtd(item.id)" class="btn-remover">Remover</button>
+                    <button @click="removerItem(item.id)" class="btn-remover">Remover Item</button>
                 </div>
             </div>
             <div class="cep">
                 <h3>Calcular Frete</h3>
-                <input type="text" placeholder="Digite seu CEP" />
-                <button class="btn-calcular">Calcular</button>
+                <input type="text" v-model="cep" placeholder="Digite seu CEP" />
+                <button class="btn-calcular" @click="calcularFrete">Calcular</button>
+                <p v-if="frete !== null">Frete estimado: R$ {{ frete.toFixed(2) }}</p>
+                <p v-if="erroCep" class="erro-cep">{{ erroCep }}</p>
             </div>
 
             <div class="sacola-resumo">
-                <h2>Total da Compra: R$ {{ totalSacola.toFixed(2) }}</h2>
+                <h2>Total da Compra: R$ {{ totalPreco.toFixed(2) }}</h2>
                 <button class="btn-checkout">Finalizar Compra</button>
             </div>
         </div>
@@ -35,14 +41,27 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { useSacola } from '@/store/Sacola.js';
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
-const { sacola, diminuirQtd } = useSacola();
+const { aumentarQtd, diminuirQtd, removerItem } = useSacola();
+const { sacola, totalPreco } = storeToRefs(useSacola());
 
-const totalSacola = computed(() => {
-    return sacola.value.reduce((total, item) => total + (item.preco * item.quantidade), 0);
-});
+const cep = ref('');
+const frete = ref(null);
+const erroCep = ref('');
+
+function calcularFrete() {
+  erroCep.value = '';
+  frete.value = null;
+  const cepValido = /^[0-9]{5}-[0-9]{3}$/.test(cep.value);
+  if (!cepValido) {
+    erroCep.value = 'CEP inválido. Por favor, insira um CEP no formato 00000-000.';
+    return;
+  }
+  frete.value = 15.00;
+}
 </script>
 <style scoped>
 .sacola-container {
@@ -141,52 +160,23 @@ const totalSacola = computed(() => {
 .btn-checkout:hover {
     background-color: #218838;
 }
-.item-sacola:last-child {
-    border-bottom: none;
-}
-.item-sacola {
+.quantidade-controle {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
+    gap: 10px;
+    margin: 10px 0;
 }
-.item-detalhes {
-    flex: 1;
-    margin-left: 20px;
-}
-.item-detalhes h3 {
-    margin: 0 0 10px;
-}
-.item-detalhes p {
-    margin: 5px 0;
-}
-.btn-remover {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #ff4d4d;
-    color: #fff;
+.btn-quantidade {
+    padding: 5px 10px;
+    background-color: #BFAF8F;
+    color: #000;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.btn-remover:hover {
-    background-color: #e04343;
-}
-.sacola-resumo {
-    text-align: right;
-    margin-top: 20px;
-}
-.btn-checkout {
-    padding: 12px 24px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
 }
-.btn-checkout:hover {
-    background-color: #218838;
+.btn-quantidade:hover {
+    background-color: #e6c76b;
 }
 .item-sacola:last-child {
     border-bottom: none;

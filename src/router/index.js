@@ -9,7 +9,7 @@ import ViaCartao from '@/views/ViaCartao.vue'
 import ViaPix from '@/views/ViaPix.vue'
 import Sacola from '@/views/Sacola.vue'
 import Login from '@/views/Login.vue'
-import Cadastrato from '@/views/Cadastrato.vue'
+import Cadastro from '@/views/Cadastro.vue'
 import Perfil from '@/views/Perfil.vue'
 
 const router = createRouter({
@@ -17,7 +17,7 @@ const router = createRouter({
   routes: [
     {path: '/', name: 'catalogo', component: Catalogo},
     {path: '/login', name: 'login', component: Login},
-    {path: '/cadastro', name: 'cadastro', component: Cadastrato},
+    {path: '/cadastro', name: 'cadastro', component: Cadastro},
     {path: '/favoritos', name: 'favoritos', component: Favoritos},
     {path: '/sacola', name: 'sacola', component: Sacola},
     {path: '/perfil', name: 'perfil', component: Perfil},

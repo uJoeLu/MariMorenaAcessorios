@@ -9,7 +9,11 @@
         <ul class="navbar-links">
             <li><a><router-link to="/"><font-awesome-icon :icon="['fas', 'home']" />  </router-link></a></li>
             <li><a><router-link to="/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
-            <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" /> {{totalQuantidade}} </router-link></a></li>
+            <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" />
+            <span class="qtd">
+              {{ totalQuantidade }}
+            </span>
+            </router-link></a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
                     :aria-expanded="isDropdownOpen"
@@ -97,5 +101,18 @@ function toggleDropdown() {
 
 .navbar-links a:hover {
     color: #c2185b;
+}
+.qtd{
+    position: absolute;
+    top: 15px;
+    right: 55px;
+    background-color: red;
+    color: white;
+    border-radius: 100%;
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+    
+    
+    
 }
 </style>
