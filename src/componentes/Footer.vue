@@ -54,6 +54,7 @@ const { categoriasSelecionadas, categorias} = useFiltros();
     justify-content: center;
     color: #000000;
     font-size: 16px;
+    flex-wrap: wrap;
 }
 
 .footer-sobre {
@@ -62,7 +63,6 @@ const { categoriasSelecionadas, categorias} = useFiltros();
     text-align: justify;
     margin-bottom: 30px;
     padding: 0 20px;
-
 }
 
 .footer-sobre h2 {
@@ -77,7 +77,6 @@ const { categoriasSelecionadas, categorias} = useFiltros();
     bottom: 20px;
     line-height: 1.5;
 }
-
 
 .links {
     display: block;
@@ -108,7 +107,6 @@ const { categoriasSelecionadas, categorias} = useFiltros();
     padding: 0 20px;
     margin: 0 30px 30px 30px;
     text-align: left;
-
 }
 
 .categorias h3 {
@@ -147,13 +145,37 @@ const { categoriasSelecionadas, categorias} = useFiltros();
     display: block;
     padding: 0 20px;
     text-align: center;
-    position: absolute;
-    bottom: 0;
-    width: 100vh;
-    margin: 10px auto 10px 20px;
+    position: relative;
+    width: 100%;
     font-size: 14px;
     color: #000000;
     border-top: 1px solid #000000;
     padding-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-sobre,
+    .links,
+    .categorias,
+    .contato {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .links ul li,
+    .categorias ul li {
+        text-align: center;
+    }
+
+    .footer-content {
+        position: static;
+        width: 100%;
+        margin: 20px 0 0 0;
+    }
 }
 </style>

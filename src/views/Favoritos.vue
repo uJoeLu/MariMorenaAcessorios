@@ -27,4 +27,16 @@ body {
     width: 50vw;
     min-height: 100vh;
 }
+
+@media (max-width: 768px) {
+    body {
+        width: 90vw;
+        border: 5px solid #FEDE8B;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
 </style>

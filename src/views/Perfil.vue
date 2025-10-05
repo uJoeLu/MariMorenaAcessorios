@@ -1,7 +1,18 @@
 <template>
     <body>
         <div>
-            <h1>Perfil</h1>
+            <div>
+                <img >
+            </div>
+            <div>
+                <ul>
+                    <li><a href="/perfil">Perfil</a></li>
+                    <li><a href="/pedidos">Pedidos</a></li>
+                    <li><a href="/favoritos">Favoritos</a></li>
+                    <li><a href="/configuracoes">Configurações</a></li>
+                    <li><button @click="logout">Sair</button></li>
+                </ul>
+            </div>
         </div>
     </body>
 </template>
@@ -25,5 +36,17 @@ body {
     border-radius: 5%;
     width: 50vw;
     min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    body {
+        width: 90vw;
+        border: 5px solid #FEDE8B;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
 }
 </style>

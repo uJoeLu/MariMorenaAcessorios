@@ -36,14 +36,14 @@ function prev() {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; 
+    width: 100%;
     height: 500px;
-    margin: 0; 
+    margin: 0;
     padding: 0;
 }
 
 .carrossel-slides {
-    width: 100%; 
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -51,7 +51,7 @@ function prev() {
 }
 
 .carrossel-img {
-    max-width: 100%; 
+    max-width: 100%;
     height: 100%;
     margin: 0;
     object-fit: contain;
@@ -67,14 +67,33 @@ function prev() {
     border-radius: 100%;
     font-size: 3rem;
     position: absolute;
-    top: 300px;
-
-
+    top: 50%;
+    transform: translateY(-50%);
 }
 .carrossel-btn.left {
     left: 15px;
 }
 .carrossel-btn.right {
     right: 15px;
+}
+
+@media (max-width: 768px) {
+    .carrossel {
+        height: 300px;
     }
+
+    .carrossel-btn {
+        width: 40px;
+        font-size: 2rem;
+        top: 50%;
+    }
+
+    .carrossel-btn.left {
+        left: 10px;
+    }
+
+    .carrossel-btn.right {
+        right: 10px;
+    }
+}
 </style>

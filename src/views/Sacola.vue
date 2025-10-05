@@ -33,7 +33,7 @@
             </div>
 
             <div class="sacola-resumo">
-                <h2>Total da Compra: R$ {{ totalPreco.toFixed(2) }}</h2>
+                <h2>Total da Compra: R$ {{ (totalPreco + frete).toFixed(2)}}</h2>
                 <button class="btn-checkout">Finalizar Compra</button>
             </div>
         </div>
@@ -55,10 +55,10 @@ const erroCep = ref('');
 function calcularFrete() {
   erroCep.value = '';
   frete.value = null;
-  const cepValido = /^[0-9]{5}-[0-9]{3}$/.test(cep.value);
+  const cepValido = /^[0-9]{5}-?[0-9]{3}$/.test(cep.value);
   if (!cepValido) {
-    erroCep.value = 'CEP inválido. Por favor, insira um CEP no formato 00000-000.';
-    return;
+    erroCep.value = 'CEP inválido. Por favor, insira um CEP no formato 00000-000 ou 00000000.';
+    return 0;
   }
   frete.value = 15.00;
 }
@@ -182,4 +182,37 @@ function calcularFrete() {
     border-bottom: none;
 }
 
+@media (max-width: 768px) {
+    .sacola-container {
+        width: 90%;
+        margin: 10px auto;
+        padding: 15px;
+    }
+
+    .item-sacola {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .imagem-container {
+        flex: none;
+        margin-right: 0;
+        margin-bottom: 10px;
+        align-self: center;
+    }
+
+    .cep input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .cep .btn-calcular {
+        width: 100%;
+    }
+
+    .sacola-resumo {
+        text-align: center;
+    }
+}
 </style>

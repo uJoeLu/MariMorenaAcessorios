@@ -70,8 +70,6 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     background-color: #2B2B2B;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: fit-content;
-
-
 }
 
 .filtro-categorias h2 {
@@ -87,7 +85,6 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     font-size: 24px;
     color: #FEDE8B;
 }
-
 
 .filtro-categorias .dropdown {
     display: block;
@@ -133,8 +130,8 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
-    width: 1600px;
-    max-width: 800px;
+    width: 100%;
+    max-width: 1200px;
     box-sizing: border-box;
 }
 
@@ -142,5 +139,28 @@ h1 {
     text-align: center;
     margin-top: 20px;
     color: #FEDE8B;
+}
+
+@media (max-width: 768px) {
+    .espaco {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .filtro-categorias,
+    .filtro-ordenacao {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .cartoes-produtos {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
 }
 </style>

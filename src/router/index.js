@@ -11,6 +11,7 @@ import Sacola from '@/views/Sacola.vue'
 import Login from '@/views/Login.vue'
 import Cadastro from '@/views/Cadastro.vue'
 import Perfil from '@/views/Perfil.vue'
+import Redefinicao from '@/views/Redefinicao.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +19,7 @@ const router = createRouter({
     {path: '/', name: 'catalogo', component: Catalogo},
     {path: '/login', name: 'login', component: Login},
     {path: '/cadastro', name: 'cadastro', component: Cadastro},
+    {path: '/redefinicao', name: 'redefinicao', component: Redefinicao},
     {path: '/favoritos', name: 'favoritos', component: Favoritos},
     {path: '/sacola', name: 'sacola', component: Sacola},
     {path: '/perfil', name: 'perfil', component: Perfil},

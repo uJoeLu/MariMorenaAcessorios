@@ -49,13 +49,13 @@ function toggleDropdown() {
     align-items: center;
     justify-content: space-between;
     background: #2B2B2B;
+    padding: 0 20px;
 }
 
 .navbar-logo {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-
 }
 
 .navbar-logo img {
@@ -96,7 +96,7 @@ function toggleDropdown() {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    right: 20px;
+    right: 50px;
 }
 
 .navbar-links a:hover {
@@ -105,14 +105,47 @@ function toggleDropdown() {
 .qtd{
     position: absolute;
     top: 15px;
-    right: 55px;
+    right: 70px;
     background-color: red;
     color: white;
     border-radius: 100%;
     padding: 0.2rem 0.5rem;
     font-size: 1rem;
-    
-    
-    
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .navbar-logo img {
+        height: 60px;
+    }
+
+    .busca {
+        position: static;
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .busca input {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .navbar-links {
+        gap: 10px;
+        margin-right: 0;
+    }
+
+    .navbar-links a {
+        font-size: 1.2rem;
+    }
+
+    .qtd {
+        top: 10px;
+        right: 10px;
+    }
 }
 </style>

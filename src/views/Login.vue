@@ -1,18 +1,19 @@
 <template>
     <div class="login-page">
-        <div class="logo">
+
             <img src="../assets/logofull.jpeg" alt="Logo">
-        </div>
+
         <div class="form">
             <h2>Entrar com sua conta Mari Morena </h2>
-            <form>
+            <form @submit.prevent="login">
                 <div>
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required />
+                    <input type="email" id="email" name="email" required v-model="email"/>
                 </div>
                 <div>
                     <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" required />
+                    <input type="password" id="senha" name="senha" required v-model="senha" />
+                    <p :style="{ opacity: 0.5 }"><router-link to="/redefinicao">Esqueceu a senha?</router-link></p>                    
                 </div>
                 <div class="button-group">
                     <button><router-link to="/cadastro">Cadastre-se</router-link>
@@ -20,11 +21,55 @@
                     <button type="submit">Entrar</button>
                 </div>
             </form>
+            <p v-if="mensagem" :class="{ success: isSuccess, error: !isSuccess }">{{ mensagem }}</p>
         </div>
     </div>
 </template>
-<script setup>{
-}
+<script setup>
+import { ref, onMounted } from 'vue';
+import { logar, getUsuarioLogado } from '@/auth/autenticacao'; // Importa a lógica
+const email = ref('');
+const senha = ref('');
+const mensagem = ref('');
+const isSuccess = ref(false);
+const usuarioLogado = ref(null);
+
+const checkSession = () => {
+  const user = getUsuarioLogado();
+  usuarioLogado.value = user ? user.email : null;
+};
+
+const login = () => {
+  mensagem.value = '';
+  if (!email.value || !senha.value) {
+    mensagem.value = 'Preencha todos os campos.';
+    isSuccess.value = false;
+    return;
+  }
+
+  try {
+    const resultado = logar(email.value, senha.value);
+
+    mensagem.value = 'Login realizado com sucesso!';
+    isSuccess.value = true;
+    usuarioLogado.value = resultado.email;
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+    
+
+    email.value = '';
+    senha.value = '';
+
+  } catch (error) {
+    mensagem.value = error.message;
+    isSuccess.value = false;
+  }
+};
+
+onMounted(() => {
+  checkSession();
+});
 </script>
 <style scoped>
 .login-page {
@@ -35,8 +80,7 @@
     grid-template-columns: 1fr 1fr;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-
+    min-height: 100vh;   
 }
 
 .form {
@@ -48,10 +92,16 @@
     margin-top: 20px;
     background: #FEDE8B;
 }
-.form .h2{
+.form h2{
     margin-top: 0;
     text-align: center;
     max-width: 200px;
+}
+.success {
+    color: green;
+}
+.error {
+    color: red;
 }
 form{
     display: flex;
@@ -68,7 +118,23 @@ form{
     display: flex;
     place-items: center;
     gap: 10px;
-    
 }
 
+@media (max-width: 768px) {
+    .login-page {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        padding: 20px;
+    }
+
+    .form {
+        max-width: 100%;
+        margin-top: 0;
+    }
+
+    form {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
 </style>
