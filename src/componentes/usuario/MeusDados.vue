@@ -1,20 +1,29 @@
 <template>
-    <div class="meus-dados-container">
+    <div class="meus-dados-container" v-if="usuario">
         <div class="meus-dados-content">
-            {{ getUsuarioLogado().email }}
-            {{ getUsuarioLogado().nome }}
-            {{ getUsuarioLogado().endereco }}
-            {{ getUsuarioLogado().bairro }}
-            {{ getUsuarioLogado().cep }}
-            {{ getUsuarioLogado().estado }}
-            {{ getUsuarioLogado().cidade }}
-            {{ getUsuarioLogado().telefone }}
+            <p>Email: {{ usuario.email }}</p>
+            <p>Nome: {{ usuario.nome }}</p>
+            <p>Endereço: {{ usuario.endereco }}</p>
+            <p>Bairro: {{ usuario.bairro }}</p>
+            <p>CEP: {{ usuario.cep }}</p>
+            <p>Estado: {{ usuario.estado }}</p>
+            <p>Cidade: {{ usuario.cidade }}</p>
+            <p>Telefone: {{ usuario.telefone }}</p>
         </div>
-        
+    </div>
+    <div v-else>
+        <p>Usuário não está logado.</p>
     </div>
 </template>
 <script setup>
 import { getUsuarioLogado } from '@/auth/autenticacao'
+import { ref, onMounted } from 'vue'
+
+const usuario = ref(null)
+
+onMounted(() => {
+    usuario.value = getUsuarioLogado()
+})
 </script>
 <style scoped>
     .meus-dados-container {

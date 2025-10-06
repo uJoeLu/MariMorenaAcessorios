@@ -1,52 +1,86 @@
 <template>
-    <body>
-        <div>
-            <div>
-                <img >
-            </div>
-            <div>
-                <ul>
-                    <li><a href="/perfil">Perfil</a></li>
-                    <li><a href="/pedidos">Pedidos</a></li>
-                    <li><a href="/favoritos">Favoritos</a></li>
-                    <li><a href="/configuracoes">Configurações</a></li>
-                    <li><button @click="logout">Sair</button></li>
-                </ul>
-            </div>
+    <div class="perfil-container">
+        <div class="sidebar">
+            <button @click="activeTab = 'dados'" :class="{ active: activeTab === 'dados' }">Meus Dados</button>
+            <button @click="activeTab = 'pedidos'" :class="{ active: activeTab === 'pedidos' }">Meus Pedidos</button>
+            <button @click="activeTab = 'favoritos'" :class="{ active: activeTab === 'favoritos' }">Meus Favoritos</button>
+            <button @click="activeTab = 'comentarios'" :class="{ active: activeTab === 'comentarios' }">Comentários</button>
+            <button @click="logout" class="logout-btn">Sair</button>
         </div>
-    </body>
+        <div class="content">
+            <MeusDados v-if="activeTab === 'dados'" />
+            <MeusPedidos v-if="activeTab === 'pedidos'" />
+            <Favoritos v-if="activeTab === 'favoritos'" />
+            <Comentário v-if="activeTab === 'comentarios'" />
+        </div>
+    </div>
 </template>
-<script setup>{
-}
+
+<script setup>
+import { ref } from 'vue'
+import MeusDados from '@/componentes/usuario/MeusDados.vue'
+import MeusPedidos from '@/componentes/usuario/MeusPedidos.vue'
+import Favoritos from '@/componentes/usuario/Favoritos.vue'
+import Comentário from '@/componentes/usuario/Comentário.vue'
+import { logout } from '@/auth/autenticacao'
+
+const activeTab = ref('dados')
 </script>
+
 <style scoped>
-h1 {
-    color: #FEDE8B;
-    margin-bottom: 20px;
-}
-body {
+.perfil-container {
     display: flex;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
+    height: 100vh;
     background-color: #2B2B2B;
-    border: 10px solid #FEDE8B;
-    border-radius: 5%;
-    width: 50vw;
-    min-height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #FEDE8B;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar button {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: left;
+}
+
+.sidebar button.active {
+    background-color: #2B2B2B;
+    color: #FEDE8B;
+}
+
+.logout-btn {
+    margin-top: auto;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {
-    body {
-        width: 90vw;
-        border: 5px solid #FEDE8B;
-        padding: 10px;
+    .perfil-container {
+        flex-direction: column;
     }
 
-    h1 {
-        font-size: 1.5rem;
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .sidebar button {
+        flex: 1;
+        text-align: center;
     }
 }
 </style>

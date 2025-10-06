@@ -1,6 +1,11 @@
 <template>
-  <div class= "cartao">
-    <router-link :to="'/Detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
+  <div class="cartao">
+    <div class="imagem-container">
+      <router-link :to="'/Detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
+      <button class="favorito-btn" @click="toggleFavorito(produto)" :class="{ 'favoritado': isFavorito(produto.id) }">
+        ♥
+      </button>
+    </div>
 
     <h3>{{ produto.nome }}</h3>
     <p>R$ {{ produto.preco }}</p>
@@ -13,7 +18,10 @@
 
 <script setup>
 import { useSacola } from '@/store/Sacola.js';
+import { useFavoritos } from '@/store/Favoritos.js';
+
 const { adicionarNaSacola } = useSacola();
+const { toggleFavorito, isFavorito } = useFavoritos();
 
 const props = defineProps(
   {
@@ -64,5 +72,35 @@ const props = defineProps(
 }
 .cartao button:hover {
   background-color: #e6c76b;
+}
+
+.imagem-container {
+  position: relative;
+  display: inline-block;
+}
+
+.favorito-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.favorito-btn:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.favorito-btn.favoritado {
+  color: red;
 }
 </style>
