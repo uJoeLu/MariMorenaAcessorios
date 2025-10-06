@@ -1,5 +1,5 @@
 const hashPassword = (senha) => {
-    return btoa(senha); // Simples encoding, use bcrypt ou outra lib para produção
+    return btoa(senha); 
     
 }
 const getUsuarios = () => {
@@ -10,16 +10,21 @@ const salvarUsuarios = (usuarios) => {
     localStorage.setItem('usuarios', JSON.stringify(usuarios))
 }
 export function cadastrarUsuario(usuario) {
-    const { email, nome, dataNasc, endereco, estado, cidade, telefone, senha } = usuario;
+    const { email, nome, dataNasc, endereco, bairro, cep, estado, cidade, telefone, senha } = usuario;
     const hashedSenha = hashPassword(senha);
     const usuarios = getUsuarios();
-    
+    const cepValido = /^[0-9]{5}-?[0-9]{3}$/.test(cep);
+
     const usuarioExistente = usuarios.find(user => user.email === email);
+    
+    if (!cepValido) {
+        throw new Error ( 'CEP inválido. Por favor, insira um CEP no formato 00000-000 ou 00000000.');
+    }
     if (usuarioExistente) {
-        throw new Error('Usuário já cadastrado com este email.');
+        throw new Error ('Usuário já cadastrado com este email.');
     }
     
-    const novoUsuario = { email, nome, dataNasc, endereco, estado, cidade, telefone, senha: hashedSenha };
+    const novoUsuario = { email, nome, dataNasc, endereco, bairro, cep, estado, cidade, telefone, senha: hashedSenha };
     usuarios.push(novoUsuario);
     salvarUsuarios(usuarios);
     
@@ -61,4 +66,6 @@ export function redefinirSenha(email, dataNasc, novaSenha) {
 
 export function logout() {
     localStorage.removeItem('usuarioLogado');
+    window.location.href = '/';
+    
 }

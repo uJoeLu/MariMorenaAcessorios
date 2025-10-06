@@ -25,6 +25,16 @@
                     <input type="text" id="endereco" name="endereco" v-model="endereco" required />
                 </div>
                 <div>
+                    <p>Bairro</p>
+                    <label for="bairro"></label>
+                    <input type="text" id="bairro" name="bairro" v-model="bairro" required />
+                </div>
+                <div>
+                    <p>CEP</p>
+                    <label for="cep"></label>
+                    <input type="text" id="cep" name="cep" v-model="cep" required />
+                </div>
+                <div>
                     <p>Estado</p>
                     <label for="estado"></label>
                     <input type="text" id="estado" name="estado" v-model="estado" required />
@@ -47,7 +57,8 @@
                 <div>
                     <p>Confirmar Senha</p>
                     <label for="confirmar-senha"></label>
-                    <input type="password" id="confirmar-senha" name="confirmar-senha" v-model="confirmarSenha" required />
+                    <input type="password" id="confirmar-senha" name="confirmar-senha" v-model="confirmarSenha"
+                        required />
                 </div>
                 <div class="check">
                     <div class="termos">
@@ -59,59 +70,77 @@
                         <button type="button"><router-link to="/login">Já tenho conta</router-link></button>
                     </div>
                 </div>
+                <div v-if="mensagem" :class="['mensagem', { 'sucesso': isSuccess, 'erro': !isSuccess }]">
+                    {{ mensagem }}
+                </div>
+                <div v-if="!cepValido" class="mensagem erro">
+                    CEP inválido. Por favor, insira um CEP válido.
+                </div>
+                <div v-if="!termos" class="mensagem erro">
+                    Você deve aceitar os termos de uso e política de privacidade.
+                </div>
+                <div v-if="senha !== confirmarSenha" class="mensagem erro">
+                    As senhas não coincidem.
+                </div>
             </form>
         </div>
     </div>
 </template>
 <script setup>
-    import {ref, onMounted} from 'vue'
-    import { cadastrarUsuario, getUsuarioLogado } from '@/auth/autenticacao';
-    const email = ref('')
-    const nome = ref('')
-    const dataNasc = ref('')
-    const endereco = ref('')
-    const estado = ref('')
-    const cidade = ref('')
-    const telefone = ref('')
-    const senha = ref('')
-    const mensagem = ref('')
-    const isSuccess = ref(false)
-    const usuarioLogado = ref(null)
+import { ref, onMounted } from 'vue'
+import { cadastrarUsuario, getUsuarioLogado } from '@/auth/autenticacao';
+const email = ref('')
+const nome = ref('')
+const dataNasc = ref('')
+const endereco = ref('')
+const bairro = ref('')
+const cep = ref('')
+const estado = ref('')
+const cidade = ref('')
+const telefone = ref('')
+const senha = ref('')
+const mensagem = ref('')
+const isSuccess = ref(false)
+const usuarioLogado = ref(null)
 
-    
-    function checkSession() {
-        const usuario = getUsuarioLogado()
-        if (usuario) {
-            usuarioLogado.value = usuario
-        }
+
+
+function checkSession() {
+    const usuario = getUsuarioLogado()
+    if (usuario) {
+        usuarioLogado.value = usuario
     }
-    function fazerCadastro() {
-        const dadosUsuario = {
-            email: email.value,
-            nome: nome.value,
-            dataNasc: dataNasc.value,
-            endereco: endereco.value,
-            estado: estado.value,
-            cidade: cidade.value,
-            telefone: telefone.value,
-            senha: senha.value
-        }
+}
+function fazerCadastro() {
+    const dadosUsuario = {
+        email: email.value,
+        nome: nome.value,
+        dataNasc: dataNasc.value,
+        endereco: endereco.value,
+        bairro: bairro.value,
+        cep: cep.value,
+        estado: estado.value,
+        cidade: cidade.value,
+        telefone: telefone.value,
+        senha: senha.value
+    }
+
+    try {
+        cadastrarUsuario(dadosUsuario)
+        mensagem.value = 'Cadastro realizado com sucesso!'
+        isSuccess.value = true
         
-        try {
-            cadastrarUsuario(dadosUsuario)
-            mensagem.value = 'Cadastro realizado com sucesso!'
-            isSuccess.value = true
-            window.location.href = '/'
-            
-        } catch (error) {
-            mensagem.value = 'Erro ao realizar cadastro: ' + error.message
-            isSuccess.value = false
-        }
+        window.location.href = '/login'
+
+    } catch (error) {        
+        mensagem.value = 'Erro ao realizar cadastro: ' + error.message
+        isSuccess.value = false
     }
-    onMounted(() => {
-        checkSession()
-    })
-    
+}
+onMounted(() => {
+    checkSession()
+})
+
 </script>
 <style scoped>
 .pagina-cadastro {
@@ -124,12 +153,13 @@
     padding: 2rem;
     min-height: 100vh;
 }
+
 .pagina-cadastro img {
     max-width: 100%;
     height: auto;
     align-self: center;
     justify-self: center;
-    
+
 }
 
 .formulario {
@@ -137,7 +167,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color:#FEDE8B;
+    background-color: #FEDE8B;
     border-radius: 8px;
     padding: 2rem;
 }
@@ -146,24 +176,25 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     background-color: #FEDE8B;
-    gap: 1rem;    
+    gap: 1rem;
 }
 
 
-.check{
+.check {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     grid-column: span 2;
-    
-} 
+
+}
 
 
 .formulario h1 {
     text-align: center;
     margin-bottom: 1.5rem;
 }
-.botoes{
+
+.botoes {
     display: flex;
     gap: 1rem;
 }

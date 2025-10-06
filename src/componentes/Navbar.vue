@@ -14,7 +14,7 @@
               {{ totalQuantidade }}
             </span>
             </router-link></a></li>
-            <li class="nav-item dropdown">
+            <li v-if=" getUsuarioLogado() === null " class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
                     :aria-expanded="isDropdownOpen"
                     @click.prevent="toggleDropdown">
@@ -25,6 +25,19 @@
                     <router-link class="dropdown-item" to="/cadastro">Cadastrar</router-link>
                 </div>
             </li>
+            <li v-else class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
+                    :aria-expanded="isDropdownOpen"
+                    @click.prevent="toggleDropdown">
+                    <font-awesome-icon :icon="['fas', 'user']" />
+                    {{ getUsuarioLogado().nome }}
+                </a>
+                <div class="dropdown-menu" v-if="isDropdownOpen">
+                    <router-link class="dropdown-item" to="/perfil">Perfil</router-link>
+                    <router-link class="dropdown-item" to="/pedidos">Meus Pedidos</router-link>
+                    <a class="dropdown-item" @click="logout()">Sair</a>
+                </div>
+            </li>
         </ul>
     </nav>
 </template>
@@ -33,6 +46,7 @@
 import { ref } from 'vue';
 import { useSacola } from '@/store/Sacola';
 import { storeToRefs } from 'pinia';
+import { getUsuarioLogado, logout } from '@/auth/autenticacao';
 
 const sacola = useSacola();
 const {totalQuantidade} = storeToRefs(sacola);
@@ -78,6 +92,8 @@ function toggleDropdown() {
 }
 
 .navbar-links {
+    position: relative;
+    
     list-style: none;
     display: flex;
     gap: 20px;
@@ -93,19 +109,21 @@ function toggleDropdown() {
 .navbar-links .dropdown-menu {
     display: grid;
     position: absolute;
+    left: 50%;
+    
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    right: 50px;
+    
 }
 
 .navbar-links a:hover {
     color: #c2185b;
 }
 .qtd{
-    position: absolute;
-    top: 15px;
-    right: 70px;
+    position: relative;
+    top: -15px;
+    right: 5px;
     background-color: red;
     color: white;
     border-radius: 100%;
