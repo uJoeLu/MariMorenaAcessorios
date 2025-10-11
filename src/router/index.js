@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Catalogo from '@/views/Catalogo.vue'
-import Favoritos from '@/views/Favoritos.vue'
 import DetalhesProduto from '@/views/DetalhesProduto.vue'
 import FinalizarCompra from '@/views/FinalizarCompra.vue'
 import ViaBoleto from '@/views/ViaBoleto.vue'
@@ -20,7 +19,6 @@ const router = createRouter({
     {path: '/login', name: 'login', component: Login},
     {path: '/cadastro', name: 'cadastro', component: Cadastro},
     {path: '/redefinicao', name: 'redefinicao', component: Redefinicao},
-    {path: '/favoritos', name: 'favoritos', component: Favoritos},
     {path: '/sacola', name: 'sacola', component: Sacola},
     {path: '/perfil', name: 'perfil', component: Perfil},
     {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto, props: true},

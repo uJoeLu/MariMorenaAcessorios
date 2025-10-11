@@ -14,28 +14,22 @@
               {{ totalQuantidade }}
             </span>
             </router-link></a></li>
-            <li v-if=" getUsuarioLogado() === null " class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
-                    :aria-expanded="isDropdownOpen"
-                    @click.prevent="toggleDropdown">
-                    <font-awesome-icon :icon="['fas', 'user']" />
-                </a>
-                <div class="dropdown-menu" v-if="isDropdownOpen">
-                    <router-link class="dropdown-item" to="/login">Entrar</router-link>
-                    <router-link class="dropdown-item" to="/cadastro">Cadastrar</router-link>
+            <li v-if=" getUsuarioLogado() === null " class="nav-item guest-section dropdown">
+                <font-awesome-icon :icon="['fas', 'user']" />
+                <div class="dropdown-content">
+                    <router-link to="/login">Entrar</router-link>
+                    <router-link to="/cadastro">Cadastrar</router-link>
                 </div>
             </li>
-            <li v-else class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" role="button" aria-haspopup="true"
-                    :aria-expanded="isDropdownOpen"
-                    @click.prevent="toggleDropdown">
-                    <font-awesome-icon :icon="['fas', 'user']" />
-                    {{ getUsuarioLogado().nome }}
-                </a>
-                <div class="dropdown-menu" v-if="isDropdownOpen">
-                    <router-link class="dropdown-item" to="/perfil">Perfil</router-link>
-                    <router-link class="dropdown-item" to="/pedidos">Meus Pedidos</router-link>
-                    <a class="dropdown-item" @click="logout()">Sair</a>
+            <li v-else class="nav-item user-section dropdown">
+                <font-awesome-icon :icon="['fas', 'user']" />
+                {{ getUsuarioLogado().nome }}
+                <div class="dropdown-content">
+                    <router-link to="/perfil">Perfil</router-link>
+                    <router-link to="/meuspedidos">Meus Pedidos</router-link>
+                    <router-link to="/favoritos">Favoritos</router-link>
+                    <router-link to="/comentarios">Comentarios</router-link>
+                    <a @click="logout()">Sair</a>
                 </div>
             </li>
         </ul>
@@ -43,18 +37,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useSacola } from '@/store/Sacola';
 import { storeToRefs } from 'pinia';
-import { getUsuarioLogado, logout } from '@/auth/autenticacao';
+import {  getUsuarioLogado, logout } from '@/auth/autenticacao';
 
 const sacola = useSacola();
 const {totalQuantidade} = storeToRefs(sacola);
-const isDropdownOpen = ref(false);
-
-function toggleDropdown() {
-    isDropdownOpen.value = !isDropdownOpen.value;
-}
 </script>
 
 <style scoped>
@@ -93,12 +81,12 @@ function toggleDropdown() {
 
 .navbar-links {
     position: relative;
-    
     list-style: none;
     display: flex;
     gap: 20px;
     margin-right: 20px;
 }
+
 
 .navbar-links a {
     text-decoration: none;
@@ -106,19 +94,46 @@ function toggleDropdown() {
     color: #FEDE8B;
     transition: color 0.2s;
 }
-.navbar-links .dropdown-menu {
-    display: grid;
-    position: absolute;
-    left: 50%;
-    
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    
-}
 
 .navbar-links a:hover {
     color: #c2185b;
+}
+
+.guest-section, .user-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #FEDE8B;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2B2B2B;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    top: 100%;
+    right: 0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: #FEDE8B;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #c2185c7c;
 }
 .qtd{
     position: relative;

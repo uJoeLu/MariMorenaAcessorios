@@ -1,36 +1,33 @@
 <template>
     <div class="perfil-container">
         <div class="sidebar">
-            <button @click="activeTab = 'dados'" :class="{ active: activeTab === 'dados' }">Meus Dados</button>
-            <button @click="activeTab = 'pedidos'" :class="{ active: activeTab === 'pedidos' }">Meus Pedidos</button>
-            <button @click="activeTab = 'favoritos'" :class="{ active: activeTab === 'favoritos' }">Meus Favoritos</button>
-            <button @click="activeTab = 'comentarios'" :class="{ active: activeTab === 'comentarios' }">Comentários</button>
+            <router-link to="/perfil/meusdados" class="sidebar-link">Meus Dados</router-link>
+            <router-link to="/perfil/meuspedidos" class="sidebar-link">Meus Pedidos</router-link>
+            <router-link to="/perfil/favoritos" class="sidebar-link">Meus Favoritos</router-link>
+            <router-link to="/perfil/comentarios" class="sidebar-link">Comentários</router-link>
             <button @click="logout" class="logout-btn">Sair</button>
         </div>
         <div class="content">
-            <MeusDados v-if="activeTab === 'dados'" />
-            <MeusPedidos v-if="activeTab === 'pedidos'" />
-            <Favoritos v-if="activeTab === 'favoritos'" />
-            <Comentário v-if="activeTab === 'comentarios'" />
+            <router-view v-if="route.matched.length > 1" />
+            <div v-else class="default-content">
+                
+            </div>
         </div>
+         
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import MeusDados from '@/componentes/usuario/MeusDados.vue'
-import MeusPedidos from '@/componentes/usuario/MeusPedidos.vue'
-import Favoritos from '@/componentes/usuario/Favoritos.vue'
-import Comentário from '@/componentes/usuario/Comentário.vue'
 import { logout } from '@/auth/autenticacao'
+import { useRoute } from 'vue-router'
 
-const activeTab = ref('dados')
+const route = useRoute()
 </script>
 
 <style scoped>
 .perfil-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #2B2B2B;
 }
 
@@ -42,16 +39,17 @@ const activeTab = ref('dados')
     flex-direction: column;
 }
 
-.sidebar button {
+.sidebar-link {
     margin-bottom: 10px;
     padding: 10px;
-    border: none;
-    background-color: transparent;
+    text-decoration: none;
+    color: #2B2B2B;
+    display: block;
     cursor: pointer;
     text-align: left;
 }
 
-.sidebar button.active {
+.sidebar-link.router-link-active {
     background-color: #2B2B2B;
     color: #FEDE8B;
 }
@@ -65,6 +63,7 @@ const activeTab = ref('dados')
     padding: 20px;
     background-color: #fff;
     overflow-y: auto;
+    min-width: 100vh;
 }
 
 @media (max-width: 768px) {
@@ -78,7 +77,7 @@ const activeTab = ref('dados')
         justify-content: space-around;
     }
 
-    .sidebar button {
+    .sidebar-link {
         flex: 1;
         text-align: center;
     }

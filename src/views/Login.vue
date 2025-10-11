@@ -4,8 +4,8 @@
             <img src="../assets/logofull.jpeg" alt="Logo">
 
         <div class="form">
-            <h2>Entrar com sua conta<br>Mari Morena<br></h2>
-            <h4 style="text-align: center; margin-top: 0px; position: absolute;">Acessórios</h4>
+            <h2>Entrar com sua conta<br>Mari Morena</h2>
+            <h3>Acessórios</h3>
             <form @submit.prevent="login">
                 <div>
                     <label for="email">Email:</label>
@@ -93,10 +93,23 @@ onMounted(() => {
     margin-top: 20px;
     background: #FEDE8B;
 }
+.form input {
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+}
 .form h2{
     margin-top: 0;
     text-align: center;
 }
+.form h3{
+    text-align: center;
+    margin-top: -1.5rem;
+}
+
 .success {
     color: green;
 }

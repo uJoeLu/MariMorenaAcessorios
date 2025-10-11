@@ -179,6 +179,13 @@ onMounted(() => {
     background-color: #FEDE8B;
     gap: 1rem;
 }
+.formulario input {
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background: white;
+}
 
 .sucess {
     color: green;
