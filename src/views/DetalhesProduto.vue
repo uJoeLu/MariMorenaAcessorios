@@ -7,21 +7,24 @@
         </div>
 
         <div class="produto-detalhe" v-else>
-            <div class="imagem-produto">
-                <h1>{{ produto.nome }}</h1>
-
-                <img :src="produto.imagem" :alt="produto.nome" class="produto-imagem">
+            <div class="top-section">
+                <div class="imagem-produto">
+                    <img :src="produto.imagem" :alt="produto.nome" class="produto-imagem">
+                </div>
+                <div class="detalhes-produto">
+                    <h1>{{ produto.nome }}</h1>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco.toFixed(2) }}</p>
+                    <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+                    <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+                    <button @click="adicionarNaSacola(produto)" class="btn-adicionar-sacola">Adicionar à Sacola</button>
+                </div>
             </div>
-            <div class="detalhes-produto">
-                <p><strong>Preço:</strong> R$ {{ produto.preco.toFixed(2) }}</p>
-                <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
-                <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
-                <button @click="adicionarNaSacola(produto)" class="btn-adicionar-sacola">Adicionar à Sacola</button>
+            <div class="mais-opcoes">
+                <h2>Mais Opções</h2>
+                <div class="produtos-relacionados">
+                    <CartaoProduto v-for="item in produtosOrdenados.filter(item => item.categoria == produto.categoria && item.id !== produto.id)" :key="item.id" :produto="item"/>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="mais-opcoes">
-        <CartaoProduto v-for="item in produtosOrdenados.filter(item => item.categoria ==  produto.categoria)" :key="item.id" :produto="item"/>
         </div>
         <div class="comentarios-section" v-if="produto">
             <h2>Comentários</h2>
@@ -39,6 +42,7 @@
                 </li>
             </ul>
         </div>
+    </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -60,7 +64,7 @@ const { adicionarNaSacola } = useSacola();
 const { produtos } = useProdutos();
 const produto = ref(null);
 const isLoading = ref(true);
-const produtoId = props.id;
+const produtoId = Number(props.id);
 
 const comentariosStore = useComentarios();
 const comentarios = ref([]);
@@ -111,12 +115,35 @@ onMounted(() => {
     flex-direction: column;
 }
 .produto-detalhe {
-    display: grid;
-    grid-template-columns: 400px 1fr;
-    gap: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 20px;
     max-width: 1200px;
     margin: auto;
+}
+
+.top-section {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 50px;
+}
+
+.mais-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mais-opcoes h2 {
+    text-align: center;
+    margin: 0;
+}
+
+.produtos-relacionados {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 .produto-imagem {
@@ -182,8 +209,8 @@ strong {
     font-weight: bold;
 }
 .comentarios-section {
-    max-width: 1200px;
-    margin: 20px auto;
+    min-width: 100%;
+    margin: auto;
     padding: 20px;
     background-color: #FEDE8B;
     border-radius: 8px;
@@ -202,7 +229,7 @@ strong {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 textarea {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -224,9 +251,12 @@ textarea {
 }
 
 @media (max-width: 768px) {
-    .produto-detalhe {
+    .top-section {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+
+    .produto-detalhe {
         padding: 10px;
     }
 
@@ -236,6 +266,10 @@ textarea {
 
     .detalhes-produto {
         text-align: center;
+    }
+
+    .mais-opcoes {
+        justify-content: flex-start;
     }
 }
 </style>
