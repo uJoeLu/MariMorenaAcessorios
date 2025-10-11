@@ -4,7 +4,8 @@
             <img src="../assets/logofull.jpeg" alt="Logo">
 
         <div class="form">
-            <h2>Entrar com sua conta Mari Morena </h2>
+            <h2>Entrar com sua conta<br>Mari Morena<br></h2>
+            <h4 style="text-align: center; margin-top: 0px; position: absolute;">Acessórios</h4>
             <form @submit.prevent="login">
                 <div>
                     <label for="email">Email:</label>
@@ -27,7 +28,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { logar, getUsuarioLogado } from '@/auth/autenticacao'; // Importa a lógica
+import { logar, getUsuarioLogado } from '@/auth/autenticacao';
 const email = ref('');
 const senha = ref('');
 const mensagem = ref('');
@@ -95,7 +96,6 @@ onMounted(() => {
 .form h2{
     margin-top: 0;
     text-align: center;
-    max-width: 200px;
 }
 .success {
     color: green;

@@ -56,8 +56,8 @@
                 </div>
                 <div>
                     <p>Confirmar Senha</p>
-                    <label for="confirmar-senha"></label>
-                    <input type="password" id="confirmar-senha" name="confirmar-senha" v-model="confirmarSenha"
+                    <label for="confirmarSenha"></label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" v-model="confirmarSenha"
                         required />
                 </div>
                 <div class="check">
@@ -70,17 +70,8 @@
                         <button type="button"><router-link to="/login">Já tenho conta</router-link></button>
                     </div>
                 </div>
-                <div v-if="mensagem" :class="['mensagem', { 'sucesso': isSuccess, 'erro': !isSuccess }]">
+                <div v-if="mensagem" :class="['mensagem', { sucess: isSuccess, error: !isSuccess }]">
                     {{ mensagem }}
-                </div>
-                <div v-if="!cepValido" class="mensagem erro">
-                    CEP inválido. Por favor, insira um CEP válido.
-                </div>
-                <div v-if="!termos" class="mensagem erro">
-                    Você deve aceitar os termos de uso e política de privacidade.
-                </div>
-                <div v-if="senha !== confirmarSenha" class="mensagem erro">
-                    As senhas não coincidem.
                 </div>
             </form>
         </div>
@@ -99,12 +90,18 @@ const estado = ref('')
 const cidade = ref('')
 const telefone = ref('')
 const senha = ref('')
+const confirmarSenha = ref('')
 const mensagem = ref('')
 const isSuccess = ref(false)
 const usuarioLogado = ref(null)
 
-
-
+function confirmarPassword() {
+    if (senha.value !== confirmarSenha.value) {
+        isSuccess.value = false
+        return false
+    }
+    return true
+}
 function checkSession() {
     const usuario = getUsuarioLogado()
     if (usuario) {
@@ -123,6 +120,10 @@ function fazerCadastro() {
         cidade: cidade.value,
         telefone: telefone.value,
         senha: senha.value
+    }
+    if (!confirmarPassword()) {
+        mensagem.value = 'As senhas não coincidem.'
+        return
     }
 
     try {
@@ -179,6 +180,14 @@ onMounted(() => {
     gap: 1rem;
 }
 
+.sucess {
+    color: green;
+    
+}
+.error{
+    color: red;
+    
+}
 
 .check {
     display: flex;

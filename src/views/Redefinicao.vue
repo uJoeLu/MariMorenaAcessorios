@@ -1,31 +1,37 @@
 <template>
     <div class="container">
-        <div class="redefinicao">
-            <h1>Redefinição de senha</h1>
-            <p>Insira seu e-mail para redefinir sua senha.</p>
+        <div class="espaco">
+            <div class="logo">
+                <img src="@/assets/logo.png" alt="Logo" />
+            </div>
+            <div class="redefinicao">
+                <h1>Redefinição de senha</h1>
+                <p>Insira seu e-mail para redefinir sua senha.</p>
+            </div>
+            <div class="form">
+                <form @submit.prevent="senhaNova">
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="email" placeholder="E-mail" v-model="email" required />
+                        <label for="dataNasc">Data de nascimento</label>
+                        <input id="dataNasc" type="date" placeholder="Data de nascimento" v-model="dataNasc" required />
+                        <label for="novaSenha">Nova senha</label>
+                        <input id="novaSenha" type="password" placeholder="Digite a nova senha" v-model="novaSenha"
+                            required />
+                        <label for="confirmarSenha">Confirmar senha</label>
+                        <input id="confirmarSenha" type="password" placeholder="Confirme a nova senha"
+                            v-model="confirmarSenha" required />
+                    </div>
+                    <button type="submit">Redefinir senha</button>
+                </form>
+            </div>
+            <div class="mensagem" v-if="mensagem">
+                {{ mensagem }}
+            </div>
+            <div class="voltar">
+                <a href="/login">Voltar para o login</a>
+            </div>
         </div>
-        <div class="form">
-            <form @submit.prevent="senhaNova">
-                <div class="input-group">
-                    <label for="email">E-mail</label>
-                    <input id="email" type="email" placeholder="E-mail" v-model="email" required />
-                    <label for="dataNasc">Data de nascimento</label>
-                    <input id="dataNasc" type="date" placeholder="Data de nascimento" v-model="dataNasc" required />
-                    <label for="novaSenha">Nova senha</label>
-                    <input id="novaSenha" type="password" placeholder="Digite a nova senha" v-model="novaSenha" required />
-                    <label for="confirmarSenha">Confirmar senha</label>
-                    <input id="confirmarSenha" type="password" placeholder="Confirme a nova senha" v-model="confirmarSenha" required />
-                </div>
-                <button type="submit">Redefinir senha</button>
-            </form>
-        </div>
-        <div class="mensagem" v-if="mensagem">
-            {{ mensagem }}
-        </div>
-        <div class="voltar">
-            <a href="/login">Voltar para o login</a>
-        </div>
-
     </div>
 </template>
 <script setup>
@@ -38,14 +44,6 @@ const confirmarSenha = ref('');
 const mensagem = ref('');
 
 async function senhaNova() {
-    if (!email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        mensagem.value = 'E-mail inválido.';
-        setTimeout(() => {
-            mensagem.value = '';
-            window.location.href = '/';
-        }, 3000);
-        return;
-    }
 
     if (novaSenha.value.length < 6) {
         mensagem.value = 'A senha deve ter pelo menos 8 caracteres.';
@@ -71,7 +69,7 @@ async function senhaNova() {
             mensagem.value = '';
             window.location.href = '/login';
         }, 2000);
-        
+
     } catch (error) {
         mensagem.value = error.message || 'Erro ao redefinir a senha. Verifique os dados e tente novamente.';
         console.error(error);
@@ -87,19 +85,32 @@ async function senhaNova() {
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-color: #f5f5f5;
+    background-color: #FEDE8B;
     padding: 20px;
     box-sizing: border-box;
+}
+.espaco {
+    text-align: center;
+    background-color: #2B2B2B;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+    
 }
 
 .redefinicao {
     text-align: center;
     margin-bottom: 20px;
+    color: #FEDE8B;
 }
 
 .form {
     width: 100%;
     max-width: 400px;
+
 }
 
 .input-group {
