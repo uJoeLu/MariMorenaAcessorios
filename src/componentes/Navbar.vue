@@ -26,9 +26,9 @@
                 {{ getUsuarioLogado().nome }}
                 <div class="dropdown-content">
                     <router-link to="/perfil">Perfil</router-link>
-                    <router-link to="/meuspedidos">Meus Pedidos</router-link>
-                    <router-link to="/favoritos">Favoritos</router-link>
-                    <router-link to="/comentarios">Comentarios</router-link>
+                    <router-link to="/perfil/meuspedidos">Meus Pedidos</router-link>
+                    <router-link to="/perfil/favoritos">Favoritos</router-link>
+                    <router-link to="/perfil/comentarios">Comentarios</router-link>
                     <a @click="logout()">Sair</a>
                 </div>
             </li>

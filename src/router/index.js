@@ -11,6 +11,10 @@ import Login from '@/views/Login.vue'
 import Cadastro from '@/views/Cadastro.vue'
 import Perfil from '@/views/Perfil.vue'
 import Redefinicao from '@/views/Redefinicao.vue'
+import MeusDados from '@/componentes/usuario/MeusDados.vue'
+import MeusPedidos from '@/componentes/usuario/MeusPedidos.vue'
+import Favoritos from '@/componentes/usuario/Favoritos.vue'
+import Comentarios from '@/componentes/usuario/Comentarios.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +24,14 @@ const router = createRouter({
     {path: '/cadastro', name: 'cadastro', component: Cadastro},
     {path: '/redefinicao', name: 'redefinicao', component: Redefinicao},
     {path: '/sacola', name: 'sacola', component: Sacola},
-    {path: '/perfil', name: 'perfil', component: Perfil},
+    {path: '/perfil', name: 'perfil', component: Perfil,
+      children: [
+        { path: 'meusdados', name: 'meusdados', component: MeusDados },
+        { path: 'meuspedidos', name: 'meuspedidos', component: MeusPedidos },
+        { path: 'favoritos', name: 'favoritos', component: Favoritos },
+        { path: 'comentarios', name: 'comentarios', component: Comentarios }
+      ]
+    },
     {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto, props: true},
     {path: '/finalizar-compra', name: 'finalizar-compra', component: FinalizarCompra},
     {path: '/via-boleto', name: 'via-boleto', component: ViaBoleto},
