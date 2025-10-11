@@ -42,20 +42,25 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
 import { useProdutos } from '@/composable/Produtos.js';
 import { useSacola } from '@/store/Sacola.js';
 import CartaoProduto from '@/componentes/CartaoProduto.vue';
 import { useFiltros } from '@/composable/Filtros';
 import { useComentarios } from '@/store/Comentarios.js';
 
+const props = defineProps({
+  id: {
+    type: Number,
+    required: true
+  }
+});
+
 const { produtosOrdenados } = useFiltros();
 const { adicionarNaSacola } = useSacola();
 const { produtos } = useProdutos();
 const produto = ref(null);
 const isLoading = ref(true);
-const route = useRoute();
-const produtoId = Number(route.params.id);
+const produtoId = props.id;
 
 const comentariosStore = useComentarios();
 const comentarios = ref([]);

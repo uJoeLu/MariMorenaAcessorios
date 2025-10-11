@@ -1,7 +1,7 @@
 <template>
   <div class="cartao">
     <div class="imagem-container">
-      <router-link :to="'/Detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
+      <router-link :to="'/detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
       <button class="favorito-btn" @click="toggleFavorito(produto)" :class="{ 'favoritado': isFavorito(produto.id) }">
         ♥
       </button>

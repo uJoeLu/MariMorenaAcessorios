@@ -8,7 +8,7 @@
         </div>
         <ul class="navbar-links">
             <li><a><router-link to="/"><font-awesome-icon :icon="['fas', 'home']" />  </router-link></a></li>
-            <li><a><router-link to="/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
+            <li><a><router-link to="/perfil/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
             <li><a><router-link to="/sacola"><font-awesome-icon :icon="['fas', 'bag-shopping']" />
             <span class="qtd">
               {{ totalQuantidade }}
