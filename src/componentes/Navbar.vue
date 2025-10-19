@@ -3,9 +3,7 @@
         <div class="navbar-logo">
             <img src="@/assets/logo.png" alt="Mari Morena Acessórios" />
         </div>
-        <div class="busca">
-            <input type="text" placeholder="Buscar..." />
-        </div>
+
         <ul class="navbar-links">
             <li><a><router-link to="/"><font-awesome-icon :icon="['fas', 'home']" />  </router-link></a></li>
             <li><a><router-link to="/perfil/favoritos"><font-awesome-icon :icon="['fas', 'heart']" /></router-link></a></li>
@@ -65,19 +63,6 @@ const {totalQuantidade} = storeToRefs(sacola);
     width: auto;
 }
 
-.busca {
-    left: 20px;
-    position: absolute;
-}
-
-.busca input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    margin-left: 20px;
-}
 
 .navbar-links {
     position: relative;

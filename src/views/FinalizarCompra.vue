@@ -1,22 +1,31 @@
 <template>
-    <div>
-        <h1>Finalizar compra</h1>
-        <div class="info-entrega">
-            <h3>Informações de entrega</h3>
-            
-
-        </div>
-        <div class="info-pagamento">
-
-        </div>
-        <div class="resumo-pedido">
-
-        </div>
-        
-
+  <div class="checkout-container">
+    <div class="check">
+      <h1>Finalizar Compra</h1>
+      <Checkout />
     </div>
+  </div>
 </template>
-<script setup>{
+
+<script setup>
+import Checkout from '../componentes/checkout/Checkout.vue';
+</script>
+
+<style scoped>
+.checkout-container{
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 100px;
+  min-height: 100vh;
+  
 
 }
-</script>
+.check {
+  background-color: #FEDE8B;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+}
+</style>

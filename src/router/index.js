@@ -3,9 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Catalogo from '@/views/Catalogo.vue'
 import DetalhesProduto from '@/views/DetalhesProduto.vue'
 import FinalizarCompra from '@/views/FinalizarCompra.vue'
-import ViaBoleto from '@/views/ViaBoleto.vue'
-import ViaCartao from '@/views/ViaCartao.vue'
-import ViaPix from '@/views/ViaPix.vue'
 import Sacola from '@/views/Sacola.vue'
 import Login from '@/views/Login.vue'
 import Cadastro from '@/views/Cadastro.vue'
@@ -15,6 +12,10 @@ import MeusDados from '@/componentes/usuario/MeusDados.vue'
 import MeusPedidos from '@/componentes/usuario/MeusPedidos.vue'
 import Favoritos from '@/componentes/usuario/Favoritos.vue'
 import Comentarios from '@/componentes/usuario/Comentarios.vue'
+import Checkout from '@/componentes/checkout/Checkout.vue'
+import ConfirmacaoStep from '@/componentes/checkout/ConfirmacaoStep.vue'
+import EnderecoStep from '@/componentes/checkout/EnderecoStep.vue'
+import PagamentoStep from '@/componentes/checkout/PagamentoStep.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,9 +35,13 @@ const router = createRouter({
     },
     {path: '/detalhes/:id', name: 'detalhes-produto', component: DetalhesProduto, props: true},
     {path: '/finalizar-compra', name: 'finalizar-compra', component: FinalizarCompra},
-    {path: '/via-boleto', name: 'via-boleto', component: ViaBoleto},
-    {path: '/via-cartao', name: 'via-cartao', component: ViaCartao},
-    {path: '/via-pix', name: 'via-pix', component: ViaPix}
+    {path: '/checkout', name: 'checkout', component: Checkout,
+      children: [
+        {path: '/confirmacao', name: 'confirmacao', component: ConfirmacaoStep},
+        {path: '/endereco', name: 'endereco', component: EnderecoStep},
+        {path: '/pagamento', name: 'pagamento', component: PagamentoStep}
+      ]
+    }
   ]
 })
 

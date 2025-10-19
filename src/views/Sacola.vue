@@ -34,7 +34,7 @@
 
             <div class="sacola-resumo">
                 <h2>Total da Compra: R$ {{ (totalPreco + frete).toFixed(2)}}</h2>
-                <button class="btn-checkout">Finalizar Compra</button>
+                <button class="btn-checkout" ><router-link to="/finalizar-compra"> Finalizar Compra </router-link></button>
             </div>
         </div>
     </div>

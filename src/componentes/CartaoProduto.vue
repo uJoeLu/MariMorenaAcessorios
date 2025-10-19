@@ -34,7 +34,8 @@ const props = defineProps(
 </script>
 <style scoped>
 .cartao {
-  display: block;
+  display: flex;
+  flex-direction: column;
   padding: 16px;
   text-align: center;
   transition: transform 0.2s;
@@ -45,7 +46,7 @@ const props = defineProps(
   border-radius: 5px;
 }
 .cartao img {
-  max-width: 100%;
+  max-width: 200px;
   height: auto;
   border-radius: 8px;
   margin-bottom: 12px;

@@ -5,6 +5,9 @@
             <Carrossel />
         </div>
         <h1 class="text-2xl font-bold mb-4">Catálogo</h1>
+        <div class="buscar">
+            <Busca />
+        </div>
         <div class="espaco">
             <div class="filtro-categorias">
                 <h2>Filtros</h2>
@@ -34,6 +37,7 @@
 <script setup>
 import Carrossel from '@/componentes/Carrossel.vue';
 import CartaoProduto from '@/componentes/CartaoProduto.vue';
+import Busca from '@/componentes/Busca.vue';
 import { useFiltros } from '@/composable/Filtros';
 
 const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, produtosOrdenados } = useFiltros();
@@ -57,6 +61,19 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     max-width: 1200px;
     margin: auto;
     width: 100%;
+}
+.buscar {
+    position: relative;
+    margin-left: 20%;
+}
+
+.buscar input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-left: 20px;
 }
 
 .filtro-categorias {
