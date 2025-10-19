@@ -36,6 +36,7 @@ const props = defineProps(
 .cartao {
   display: flex;
   flex-direction: column;
+  max-width: 200px;
   padding: 16px;
   text-align: center;
   transition: transform 0.2s;
