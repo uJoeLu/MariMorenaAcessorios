@@ -67,7 +67,6 @@ function prev() {
     border-radius: 100%;
     font-size: 3rem;
     position: absolute;
-    top: 50%;
     transform: translateY(-50%);
 }
 .carrossel-btn.left {

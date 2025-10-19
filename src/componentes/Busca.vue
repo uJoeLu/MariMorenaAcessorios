@@ -21,7 +21,7 @@ const { buscar } = useFiltros();
 }
 
 .busca-input {
-  width: 100%;
+  max-width: 50%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;

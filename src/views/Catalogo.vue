@@ -67,14 +67,6 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     margin-left: 20%;
 }
 
-.buscar input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    margin-left: 20px;
-}
 
 .filtro-categorias {
     display: flex;
