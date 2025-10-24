@@ -23,7 +23,7 @@
                 <font-awesome-icon :icon="['fas', 'user']" />
                 {{ getUsuarioLogado().nome }}
                 <div class="dropdown-content">
-                    <router-link to="/perfil">Perfil</router-link>
+                    <router-link to="/perfil/meusdados">Perfil</router-link>
                     <router-link to="/perfil/meuspedidos">Meus Pedidos</router-link>
                     <router-link to="/perfil/favoritos">Favoritos</router-link>
                     <router-link to="/perfil/comentarios">Comentarios</router-link>
