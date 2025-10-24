@@ -28,6 +28,7 @@ const route = useRoute()
 .perfil-container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
     background-color: #2B2B2B;
 }
 
@@ -61,9 +62,7 @@ const route = useRoute()
 .content {
     flex: 1;
     padding: 20px;
-    background-color: #fff;
-    overflow-y: auto;
-    min-width: 100vh;
+    background-color: #2B2B2B;
 }
 
 @media (max-width: 768px) {

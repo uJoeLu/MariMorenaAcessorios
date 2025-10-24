@@ -26,12 +26,6 @@ onMounted(() => {
 })
 </script>
 <style scoped>
-    .meus-dados-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
 
 .meus-dados-content {
     background-color: #f9f9f9;
