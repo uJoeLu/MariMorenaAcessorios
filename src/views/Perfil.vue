@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { logout } from '@/auth/autenticacao'
+import { logout } from '@/service/autenticacao'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()

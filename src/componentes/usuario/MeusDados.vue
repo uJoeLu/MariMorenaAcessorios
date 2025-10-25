@@ -16,7 +16,7 @@
     </div>
 </template>
 <script setup>
-import { getUsuarioLogado } from '@/auth/autenticacao'
+import { getUsuarioLogado } from '@/service/autenticacao'
 import { ref, onMounted } from 'vue'
 
 const usuario = ref(null)

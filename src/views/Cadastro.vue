@@ -21,8 +21,8 @@
                 </div>
                 <div>
                     <p>Seu Endereço</p>
-                    <label for="endereco"></label>
-                    <input type="text" id="endereco" name="endereco" v-model="endereco" required />
+                    <label for="rua"></label>
+                    <input type="text" id="rua" name="rua" v-model="rua" required />
                 </div>
                 <div>
                     <p>Bairro</p>
@@ -79,11 +79,11 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { cadastrarUsuario, getUsuarioLogado } from '@/auth/autenticacao';
+import { cadastrarUsuario, getUsuarioLogado } from '@/service/autenticacao';
 const email = ref('')
 const nome = ref('')
 const dataNasc = ref('')
-const endereco = ref('')
+const rua = ref('')
 const bairro = ref('')
 const cep = ref('')
 const estado = ref('')
@@ -113,13 +113,15 @@ function fazerCadastro() {
         email: email.value,
         nome: nome.value,
         dataNasc: dataNasc.value,
-        endereco: endereco.value,
+        telefone: telefone.value,
+        senha: senha.value
+    }
+    const dadosEndereco = {
+        rua: rua.value,
         bairro: bairro.value,
         cep: cep.value,
         estado: estado.value,
         cidade: cidade.value,
-        telefone: telefone.value,
-        senha: senha.value
     }
     if (!confirmarPassword()) {
         mensagem.value = 'As senhas não coincidem.'
@@ -127,7 +129,7 @@ function fazerCadastro() {
     }
 
     try {
-        cadastrarUsuario(dadosUsuario)
+        cadastrarUsuario(dadosUsuario, dadosEndereco)
         mensagem.value = 'Cadastro realizado com sucesso!'
         isSuccess.value = true
         

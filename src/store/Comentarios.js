@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getUsuarioLogado } from '@/auth/autenticacao.js';
+import { getUsuarioLogado } from '@/service/autenticacao.js';
 
 export const useComentarios = defineStore('comentarios', {
   state: () => ({

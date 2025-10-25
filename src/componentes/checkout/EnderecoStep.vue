@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { getUsuarioLogado } from '@/auth/autenticacao';
+import { getUsuarioLogado } from '@/service/autenticacao';
 
 const emit = defineEmits(['selecione-endereco']);
 

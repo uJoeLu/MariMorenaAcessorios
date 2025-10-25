@@ -9,10 +9,16 @@ const getUsuarios = () => {
 const salvarUsuarios = (usuarios) => {
     localStorage.setItem('usuarios', JSON.stringify(usuarios))
 }
-export function cadastrarUsuario(usuario) {
-    const { email, nome, dataNasc, endereco, bairro, cep, estado, cidade, telefone, senha } = usuario;
+const atualizarSessao = (usuarioAtualizado) => {
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuarioAtualizado))
+}
+export function cadastrarUsuario(usuario, endereco ) {
+    const { email, nome, dataNasc, telefone, senha } = usuario;
+    const { rua, bairro, cep, estado, cidade } = endereco;
+
     const hashedSenha = hashPassword(senha);
     const usuarios = getUsuarios();
+    
     const cepValido = /^[0-9]{5}-?[0-9]{3}$/.test(cep);
 
     const usuarioExistente = usuarios.find(user => user.email === email);
@@ -23,10 +29,30 @@ export function cadastrarUsuario(usuario) {
     if (usuarioExistente) {
         throw new Error ('Usuário já cadastrado com este email.');
     }
+    const primeiroEndereco = {
+        id: crypto.getRandomValues(),
+        rua, 
+        bairro, 
+        cep, 
+        estado, 
+        cidade,
+        isPrincipal: true,
+    };
     
-    const novoUsuario = { email, nome, dataNasc, endereco, bairro, cep, estado, cidade, telefone, senha: hashedSenha };
+    // 2. Cria o novo usuário com o campo 'enderecos' como um array
+    const novoUsuario = { 
+        id: crypto.getRandomValues(),
+        email, 
+        nome, 
+        dataNasc, 
+        telefone, 
+        senha: hashedSenha,
+        enderecos: [primeiroEndereco],
+        eAdmin: false,
+    };
     usuarios.push(novoUsuario);
     salvarUsuarios(usuarios);
+    atualizarSessao(novoUsuario);
     
     return novoUsuario;
 }

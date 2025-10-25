@@ -28,7 +28,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { logar, getUsuarioLogado } from '@/auth/autenticacao';
+import { logar, getUsuarioLogado } from '@/service/autenticacao';
 const email = ref('');
 const senha = ref('');
 const mensagem = ref('');
