@@ -30,7 +30,7 @@ export function cadastrarUsuario(usuario, endereco ) {
         throw new Error ('Usuário já cadastrado com este email.');
     }
     const primeiroEndereco = {
-        id: crypto.getRandomValues(),
+        id: crypto.randomUUID(),
         rua, 
         bairro, 
         cep, 
@@ -41,7 +41,7 @@ export function cadastrarUsuario(usuario, endereco ) {
     
     // 2. Cria o novo usuário com o campo 'enderecos' como um array
     const novoUsuario = { 
-        id: crypto.getRandomValues(),
+        id: crypto.randomUUID(),
         email, 
         nome, 
         dataNasc, 

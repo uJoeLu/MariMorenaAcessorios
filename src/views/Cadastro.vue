@@ -133,7 +133,7 @@ function fazerCadastro() {
         mensagem.value = 'Cadastro realizado com sucesso!'
         isSuccess.value = true
         
-        window.location.href = '/login'
+        window.location.href = '/'
 
     } catch (error) {        
         mensagem.value = 'Erro ao realizar cadastro: ' + error.message

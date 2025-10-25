@@ -1,23 +1,58 @@
 <template>
-    <div class="meus-dados-container" v-if="usuario">
-        <div class="meus-dados-content">
-            <p>Email: {{ usuario.email }}</p>
-            <p>Nome: {{ usuario.nome }}</p>
-            <p>Endereço: {{ usuario.endereco }}</p>
-            <p>Bairro: {{ usuario.bairro }}</p>
-            <p>CEP: {{ usuario.cep }}</p>
-            <p>Estado: {{ usuario.estado }}</p>
-            <p>Cidade: {{ usuario.cidade }}</p>
-            <p>Telefone: {{ usuario.telefone }}</p>
+    <div class="meus-dados-container">
+        
+        <div v-if="!usuario">
+            <p>Usuário não está logado.</p>
         </div>
-    </div>
-    <div v-else>
-        <p>Usuário não está logado.</p>
+        
+        <div v-else-if="!modoEdicao" class="meus-dados-content">
+            <h2>Meus Dados</h2>
+            <button v-if="usuario && !modoEdicao" @click="iniciarEdicao" class="btn btn-editar">
+                Editar Perfil
+            </button>
+            <p><strong>Email:</strong> {{ usuario.email }}</p>
+            <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+            <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+
+            <h3 class="endereco-titulo">Endereço Principal</h3>
+            <div v-if="primeiroEndereco" class="endereco-info">
+                <p>{{ primeiroEndereco.rua }}, {{ primeiroEndereco.bairro }}</p>
+                <p>{{ primeiroEndereco.cidade }} - {{ primeiroEndereco.estado }}, CEP: {{ primeiroEndereco.cep }}</p>
+            </div>
+            <div v-else>
+                <p>Nenhum endereço cadastrado.</p>
+            </div>
+        </div>
+
+        <div v-else class="meus-dados-form">
+            <h3>Editar Perfil</h3>
+            <form @submit.prevent="salvarAlteracoes">
+                <div class="input-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" v-model="formDados.nome" required>
+                </div>
+                <div class="input-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="text" id="telefone" v-model="formDados.telefone" required>
+                </div>
+                
+                <div class="botoes-edicao">
+                    <button type="submit" class="btn btn-salvar">Salvar</button>
+                    <button type="button" @click="cancelarEdicao" class="btn btn-cancelar">Cancelar</button>
+                </div>
+                <p v-if="mensagem" :class="['mensagem', { sucess: isSuccess, error: !isSuccess }]">{{ mensagem }}</p>
+            </form>
+        </div>
     </div>
 </template>
 <script setup>
 import { getUsuarioLogado } from '@/service/autenticacao'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+const primeiroEndereco = computed(() => {
+    return usuario.value && usuario.value.enderecos.length > 0
+        ? usuario.value.enderecos.find(e => e.isPrincipal) || usuario.value.enderecos[0]
+        : null;
+});
 
 const usuario = ref(null)
 

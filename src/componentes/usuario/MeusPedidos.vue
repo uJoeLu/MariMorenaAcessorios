@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-// Lógica para pedidos, se necessário
+
 </script>
 
 <style scoped>
