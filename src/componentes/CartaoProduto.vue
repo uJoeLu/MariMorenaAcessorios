@@ -1,8 +1,9 @@
 <template>
   <div class="cartao">
     <div class="imagem-container">
+      <div v-if="erroFavorito" class="mensagem-erro"> {{ erroFavorito }} </div>
       <router-link :to="'/detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
-      <button class="favorito-btn" @click="toggleFavorito(produto)" :class="{ 'favoritado': isFavorito(produto.id) }">
+      <button class="favorito-btn" @click="handleToggleFavorito(produto)" :class="{ 'favoritado': isFavorito(produto.id)}" >
         ♥
       </button>
     </div>
@@ -17,11 +18,24 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useSacola } from '@/store/Sacola.js';
 import { useFavoritos } from '@/store/Favoritos.js';
 
 const { adicionarNaSacola } = useSacola();
 const { toggleFavorito, isFavorito } = useFavoritos();
+
+const erroFavorito = ref('');
+
+const handleToggleFavorito = (produto) => {
+  const erro = toggleFavorito(produto);
+  if (erro) {
+    erroFavorito.value = erro;
+    setTimeout(() => {
+      erroFavorito.value = '';
+    }, 3000);
+  }
+};
 
 const props = defineProps(
   {
@@ -86,16 +100,11 @@ const props = defineProps(
   top: 10px;
   right: 10px;
   background: rgba(255, 255, 255, 0.8);
-  border: none;
-  border-radius: 50%;
   width: 30px;
   height: 30px;
-  cursor: pointer;
-  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
 }
 
 .favorito-btn:hover {
@@ -104,5 +113,18 @@ const props = defineProps(
 
 .favorito-btn.favoritado {
   color: red;
+}
+.mensagem-erro{
+  position: absolute;
+  top: -50px;
+  color: red;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+
+  z-index: 1000;
+  font-size: 0.85rem;
+  text-align: center;
+  font-weight: bold;
 }
 </style>

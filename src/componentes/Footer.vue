@@ -10,7 +10,7 @@
             <h3>Links Rápidos</h3>
             <ul>
                 <li><router-link to="/">Inicio</router-link></li>
-                <li><router-link to="/favoritos">Favoritos</router-link></li>
+                <li><router-link to="/perfil/favoritos">Favoritos</router-link></li>
                 <li><router-link to="/sacola">Sacola</router-link></li>
                 <li><router-link to="/perfil">Conta</router-link></li>
             </ul>

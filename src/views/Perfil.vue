@@ -8,9 +8,9 @@
             <button @click="logout" class="logout-btn">Sair</button>
         </div>
         <div class="content">
-            <router-view v-if="route.matched.length > 1" />
-            <div v-else class="default-content">
-                
+            <router-view v-if=" useFavoritos().favoritos"/>
+            <div v-else>
+                <h2>Não há itens favoritados</h2>
             </div>
         </div>
          
@@ -19,9 +19,8 @@
 
 <script setup>
 import { logout } from '@/service/autenticacao'
-import { useRoute } from 'vue-router'
+import { useFavoritos } from '@/store/Favoritos';
 
-const route = useRoute()
 </script>
 
 <style scoped>
