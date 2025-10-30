@@ -60,7 +60,7 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
     align-items: flex-start;
     max-width: 1200px;
     margin: auto;
-    width: 100%;
+    min-width: 100%;
 }
 .buscar {
     position: relative;
@@ -137,11 +137,12 @@ const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, pr
 
 .cartoes-produtos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     width: 100%;
     max-width: 1200px;
     box-sizing: border-box;
+    margin: 0 auto;
 }
 
 h1 {

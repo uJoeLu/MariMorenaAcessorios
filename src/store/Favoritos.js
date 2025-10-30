@@ -17,7 +17,6 @@ const getFavoritosFromStorage = () => {
 export const useFavoritos = defineStore("favoritos", {
   state: () => ({
     favoritos: getFavoritosFromStorage(),
-    usuarioId: getUsuarioLogado()?.id || null,
   }),
 
   getters: {
@@ -53,14 +52,11 @@ export const useFavoritos = defineStore("favoritos", {
     },
 
     saveToLocalStorage() {
-      const usuario = getUsuarioLogado();
-      this.usuarioId = usuario?.id || null;
       localStorage.setItem(getKey(), JSON.stringify(this.favoritos));
     },
 
     loadFavoritos() {
       this.favoritos = getFavoritosFromStorage();
-      this.usuarioId = getUsuarioLogado()?.id || null;
     },
   },
 });

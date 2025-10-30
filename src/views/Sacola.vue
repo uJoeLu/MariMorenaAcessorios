@@ -2,13 +2,13 @@
     <div class="sacola-container">
         <h1>Minha Sacola</h1>
 
-        <div v-if="sacola.length === 0" class="sacola-vazia">
+        <div v-if="sacolaStore.sacola.length < 1  " class="sacola-vazia">
             <p>Sua sacola está vazia. Adicione alguns acessórios lindos!</p>
             <router-link to="/" class="btn-voltar">Voltar ao Catálogo</router-link>
         </div>
 
         <div v-else>
-            <div v-for="item in sacola" :key="item.id" class="item-sacola">
+            <div v-for="item in sacolaStore.sacola" :key="item.id" class="item-sacola">
                 <div class="imagem-container">
                 <img :src="item.imagem" :alt="item.nome" class="item-imagem">
                 </div>
@@ -33,7 +33,7 @@
             </div>
 
             <div class="sacola-resumo">
-                <h2>Total da Compra: R$ {{ (totalPreco + frete).toFixed(2)}}</h2>
+                <h2>Total da Compra: R$ {{ (sacolaStore.totalPreco + frete).toFixed(2)}}</h2>
                 <button class="btn-checkout" ><router-link to="/finalizar-compra"> Finalizar Compra </router-link></button>
             </div>
         </div>
@@ -42,11 +42,10 @@
 
 <script setup>
 import { useSacola } from '@/store/Sacola.js';
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const { aumentarQtd, diminuirQtd, removerItem } = useSacola();
-const { sacola, totalPreco } = storeToRefs(useSacola());
+const sacolaStore = useSacola();
 
 const cep = ref('');
 const frete = ref(null);
@@ -62,15 +61,21 @@ function calcularFrete() {
   }
   frete.value = 15.00;
 }
+onMounted(() => {
+    sacolaStore.loadSacola();
+});
+
 </script>
 <style scoped>
+
 .sacola-container {
-    width: 40%;
+    width: 50%;
     margin: 20px auto;
     padding: 20px;
     background-color:#FEDE8B;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20% ;
 }
 .sacola-vazia {
     text-align: center;
