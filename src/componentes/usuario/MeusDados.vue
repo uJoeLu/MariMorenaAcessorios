@@ -48,6 +48,7 @@
 <script setup>
 import { getUsuarioLogado } from '@/service/autenticacao'
 import { ref, onMounted, computed } from 'vue'
+import { useCepApi } from '@/composable/useCepApi'
 const primeiroEndereco = computed(() => {
     return usuario.value && usuario.value.enderecos.length > 0
         ? usuario.value.enderecos.find(e => e.isPrincipal) || usuario.value.enderecos[0]

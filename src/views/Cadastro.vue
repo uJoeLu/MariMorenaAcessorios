@@ -33,16 +33,18 @@
                     <p>CEP</p>
                     <label for="cep"></label>
                     <input type="text" id="cep" name="cep" v-model="cep" required />
+                    <button type="button" @click="validarCep" :disabled="loading">Validar CEP</button>
+                    <p v-if="erro" class="error">{{ erro }}</p>
                 </div>
                 <div>
                     <p>Estado</p>
                     <label for="estado"></label>
-                    <input type="text" id="estado" name="estado" v-model="estado" required />
+                    <input type="text" id="estado" name="estado" v-model="estado" disabled required />
                 </div>
                 <div>
                     <p>Cidade</p>
                     <label for="cidade"></label>
-                    <input type="text" id="cidade" name="cidade" v-model="cidade" required />
+                    <input type="text" id="cidade" name="cidade" v-model="cidade" disabled required />
                 </div>
                 <div>
                     <p>Seu Telefone</p>
@@ -80,6 +82,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { cadastrarUsuario, getUsuarioLogado } from '@/service/autenticacao';
+import { useCepApi } from '@/composable/useCepApi';
 const email = ref('')
 const nome = ref('')
 const dataNasc = ref('')
@@ -94,6 +97,8 @@ const confirmarSenha = ref('')
 const mensagem = ref('')
 const isSuccess = ref(false)
 const usuarioLogado = ref(null)
+
+const { buscarEndereco, loading, erro } = useCepApi()
 
 function confirmarPassword() {
     if (senha.value !== confirmarSenha.value) {
@@ -140,6 +145,16 @@ function fazerCadastro() {
         isSuccess.value = false
     }
 }
+async function validarCep() {
+    try {
+        const endereco = await buscarEndereco(cep.value);
+        cidade.value = endereco.cidade;
+        estado.value = endereco.estado;
+    } catch (error) {
+        // Erro já tratado no composable
+    }
+}
+
 onMounted(() => {
     checkSession()
 })

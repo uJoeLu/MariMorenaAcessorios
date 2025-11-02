@@ -2,7 +2,7 @@ const hashPassword = (senha) => {
     return btoa(senha); 
     
 }
-const getUsuarios = () => {
+const   getUsuarios = () => {
     const usuarios = localStorage.getItem('usuarios')
     return usuarios ? JSON.parse(usuarios) : []
 }
@@ -11,6 +11,37 @@ const salvarUsuarios = (usuarios) => {
 }
 const atualizarSessao = (usuarioAtualizado) => {
     localStorage.setItem('usuarioLogado', JSON.stringify(usuarioAtualizado))
+}
+export function atualizarEndereco(enderecoAtualizado){
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+        throw new Error('Nenhum usuário logado.');
+    }
+    const enderecoIndex = usuario.enderecos.findIndex(end => end.id === enderecoAtualizado.id);
+    if (enderecoIndex === -1) {
+        throw new Error('Endereço não encontrado.');
+    }
+    usuario.enderecos[enderecoIndex] = {
+        ...usuario.enderecos[enderecoIndex],
+        ...enderecoAtualizado,
+    };
+    atualizarSessao(usuario);
+}
+export function adicionarEndereco(novoEndereco) {
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+        throw new Error('Nenhum usuário logado.');
+    }
+    usuario.enderecos.push(novoEndereco);
+    atualizarSessao(usuario);
+}
+export function removerEndereco(idEndereco) {
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+        throw new Error('Nenhum usuário logado.');
+    }
+    usuario.enderecos = usuario.enderecos.filter(end => end.id !== idEndereco);
+    atualizarSessao(usuario);
 }
 export function cadastrarUsuario(usuario, endereco ) {
     const { email, nome, dataNasc, telefone, senha } = usuario;
@@ -39,7 +70,6 @@ export function cadastrarUsuario(usuario, endereco ) {
         isPrincipal: true,
     };
     
-    // 2. Cria o novo usuário com o campo 'enderecos' como um array
     const novoUsuario = { 
         id: crypto.randomUUID(),
         email, 
@@ -56,6 +86,26 @@ export function cadastrarUsuario(usuario, endereco ) {
     
     return novoUsuario;
 }
+export function atualizarUsuario(dadosAtualizados) {
+    const usuarioLogado = getUsuarioLogado();
+    if (!usuarioLogado) {
+        throw new Error('Nenhum usuário logado.');
+    };
+    const usuarios = getUsuarios();
+    const usuarioIndex = usuarios.findIndex(user => user.id === usuarioLogado.id); 
+    if (usuarioIndex === -1) {
+        throw new Error('Usuário não encontrado.');
+    }
+    const usuarioAtualizado = {
+        ...usuarios[usuarioIndex],
+        ...dadosAtualizados,
+    };
+    usuarios[usuarioIndex] = usuarioAtualizado;
+    salvarUsuarios(usuarios);
+    atualizarSessao(usuarioAtualizado);
+    return usuarioAtualizado;
+}
+
 export function logar( email, senha){
     const hashedSenha = hashPassword(senha);
     const usuarios = getUsuarios();

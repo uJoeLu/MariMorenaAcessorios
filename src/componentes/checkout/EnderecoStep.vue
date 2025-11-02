@@ -17,8 +17,10 @@
         <input type="text" placeholder="Endereço" required v-model="novoEndereco.endereco" />
         <input type="text" placeholder="Bairro" required v-model="novoEndereco.bairro" />
         <input type="text" placeholder="Cep" required v-model="novoEndereco.cep" />
-        <input type="text" placeholder="Cidade" required v-model="novoEndereco.cidade" />
-        <input type="text" placeholder="Estado" required v-model="novoEndereco.estado" />
+        <button type="button" @click="validarCep" :disabled="loading">Validar CEP</button>
+        <p v-if="erro" class="error">{{ erro }}</p>
+        <input type="text" placeholder="Cidade" required v-model="novoEndereco.cidade" disabled />
+        <input type="text" placeholder="Estado" required v-model="novoEndereco.estado" disabled />
         <button type="submit">Salvar e Usar Endereço</button>
       </form>
     </div>
@@ -28,6 +30,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { getUsuarioLogado } from '@/service/autenticacao';
+import { useCepApi } from '@/composable/useCepApi';
 
 const emit = defineEmits(['selecione-endereco']);
 
@@ -48,6 +51,8 @@ if (usuario && usuario.endereco) {
 
 const shownovoEnderecoForm = ref(false);
 
+const { buscarEndereco, loading, erro } = useCepApi();
+
 const novoEndereco = reactive({
   endereco: '',
   bairro: '',
@@ -65,6 +70,14 @@ const AddnovoEndereco = () => {
   enderecos.value.push(novo);
   emit('selecione-endereco', novo);
 };
+
+async function validarCep() {
+
+    const endereco = await buscarEndereco(novoEndereco.cep);
+    novoEndereco.cidade = endereco.cidade;
+    novoEndereco.estado = endereco.estado;
+
+}
 </script>
 
 <style scoped>
