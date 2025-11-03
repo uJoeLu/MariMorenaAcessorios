@@ -1,13 +1,28 @@
 <template>
     <div class="comentario-container">
-        <h2>Meus Comentários</h2>
-        <p>Aqui você pode ver e gerenciar seus comentários.</p>
-        <!-- Adicione lógica para exibir comentários aqui -->
+        <h2>Comentários do Usuário</h2>
+        <div>
+            <div v-if="!comentarios" class="sem-comentarios">
+                <p>Você ainda não fez nenhum comentário.</p>
+            </div>
+            <div v-else class="comentarios-lista">
+                <div v-for="comentario in comentarios" :key="comentario.id" class="comentario-card">
+                    <h3>Comentário sobre {{ comentario.produtoId }}</h3>
+                    <p><strong>Data:</strong> {{ new Date(comentario.data).toLocaleDateString('pt-BR') }}</p>
+                    <p><strong>Avaliação:</strong> {{ comentario.avaliacao }} / 5</p>
+                    <p><strong>Comentário:</strong> {{ comentario.texto }}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-// Lógica para comentários, se necessário
+import { useComentarios } from '@/store/Comentarios.js';
+
+const comentariosStore = useComentarios();
+const comentarios = comentariosStore.comentarios;
+
 </script>
 
 <style scoped>

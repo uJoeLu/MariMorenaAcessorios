@@ -46,7 +46,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useProdutos } from '@/composable/Produtos.js';
+import { useProdutos } from '@/store/Produtos.js';
 import { useSacola } from '@/store/Sacola.js';
 import CartaoProduto from '@/componentes/CartaoProduto.vue';
 import { useFiltros } from '@/composable/Filtros';
@@ -61,7 +61,7 @@ const props = defineProps({
 
 const { produtosOrdenados } = useFiltros();
 const { adicionarNaSacola } = useSacola();
-const { produtos } = useProdutos();
+const produtosStore = useProdutos();
 const produto = ref(null);
 const isLoading = ref(true);
 const produtoId = Number(props.id);
@@ -70,21 +70,11 @@ const comentariosStore = useComentarios();
 const comentarios = ref([]);
 const novoComentario = ref('');
 
-const fetchProdutoLocal = () => {
-    isLoading.value = true;
-    if (produtoId && !isNaN(produtoId)) {
-        const produtoEncontrado = produtos.value.find(p => p.id === produtoId);
-        produto.value = produtoEncontrado;
-        comentarios.value = comentariosStore.getComentariosPorProduto(produtoId);
-    } else {
-        console.error("ID do produto inválido na rota.");
-    }
-    isLoading.value = false;
-};
+
 
 const adicionarComentario = () => {
     try {
-        comentariosStore.adicionarComentario(produtoId, novoComentario.value);
+        comentariosStore.adicionarComentario(produto, novoComentario.value);
         novoComentario.value = '';
         comentarios.value = comentariosStore.getComentariosPorProduto(produtoId);
     } catch (error) {

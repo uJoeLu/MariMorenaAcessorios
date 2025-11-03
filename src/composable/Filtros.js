@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import { useProdutos } from '@/composable/Produtos.js';
+import { useProdutos } from '@/store/Produtos.js';
 
 const categoriasSelecionadas = ref('Todas');
 const categorias = ref([
@@ -21,10 +21,10 @@ const ordenacoes = ref([
     { value: 'nome-za', label: 'Nome: Z-A' }
 ]);
 const buscar = ref('');
-const { produtos } = useProdutos();
 
 const produtosOrdenados = computed(() => {
-    let listaBase = produtos.value;
+    const produtosStore = useProdutos();
+    let listaBase = produtosStore.produtos;
 
     if (buscar.value.trim() !== '') {
         listaBase = listaBase.filter(produto =>

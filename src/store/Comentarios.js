@@ -1,9 +1,21 @@
 import { defineStore } from "pinia";
 import { getUsuarioLogado } from '@/service/autenticacao.js';
 
+const getkey = () => {
+  const usuario = getUsuarioLogado();
+  return usuario ? `comentarios_${usuario.id}` : 'comentarios';
+};
+const getComentariosFromStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem(getkey())) || [];
+  } catch {
+    return [];
+  }
+};
+
 export const useComentarios = defineStore('comentarios', {
   state: () => ({
-    comentarios: JSON.parse(localStorage.getItem('comentarios') || '[]'),
+    comentarios: getComentariosFromStorage(),
   }),
 
   getters: {
@@ -13,14 +25,15 @@ export const useComentarios = defineStore('comentarios', {
   },
 
   actions: {
-    adicionarComentario(produtoId, texto) {
+    adicionarComentario(produto, texto) {
       const usuario = getUsuarioLogado();
+      const 
       if (!usuario) {
         throw new Error('Usuário não logado');
       }
       const novoComentario = {
         id: Date.now(),
-        produtoId,
+        produto,
         usuario: usuario.nome,
         texto,
         data: new Date().toISOString(),
@@ -30,7 +43,10 @@ export const useComentarios = defineStore('comentarios', {
     },
 
     salvarComentarios() {
-      localStorage.setItem('comentarios', JSON.stringify(this.comentarios));
+      localStorage.setItem(getkey(), JSON.stringify(this.comentarios));
+    },
+    loadComentarios() {
+      this.comentarios = getComentariosFromStorage();
     },
   },
 });
