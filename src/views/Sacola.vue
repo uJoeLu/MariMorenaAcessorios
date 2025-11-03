@@ -34,7 +34,7 @@
 
             <div class="sacola-resumo">
                 <h2>Total da Compra: R$ {{ (sacolaStore.totalPreco + frete).toFixed(2)}}</h2>
-                <button class="btn-checkout" ><router-link to="/finalizar-compra"> Finalizar Compra </router-link></button>
+                <button @click="logado" class="btn-checkout" ><router-link to="/finalizar-compra"  > Finalizar Compra </router-link></button>
             </div>
         </div>
     </div>
@@ -43,6 +43,8 @@
 <script setup>
 import { useSacola } from '@/store/Sacola.js';
 import { ref, onMounted } from 'vue';
+import { getUsuarioLogado } from '@/service/autenticacao';
+import router from '@/router';
 
 const { aumentarQtd, diminuirQtd, removerItem } = useSacola();
 const sacolaStore = useSacola();
@@ -50,6 +52,12 @@ const sacolaStore = useSacola();
 const cep = ref('');
 const frete = ref(null);
 const erroCep = ref('');
+function logado() {
+    if (!getUsuarioLogado()) {
+        router.push('/login');
+        alert('Por favor, faça login para finalizar a compra.');
+    }
+}
 
 function calcularFrete() {
   erroCep.value = '';
