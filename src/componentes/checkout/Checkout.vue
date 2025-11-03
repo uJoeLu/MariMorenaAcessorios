@@ -49,9 +49,12 @@ import EnderecoStep from './EnderecoStep.vue';
 import PagamentoStep from './PagamentoStep.vue';
 import ConfirmacaoStep from './ConfirmacaoStep.vue';
 import { useSacola } from '@/store/Sacola.js';
+import { usePedidos } from '@/store/Pedidos.js';
 
 const sacolaStore = useSacola();
-const { sacola, totalPreco } = sacolaStore;
+const { sacola, totalPreco, totalQuantidade } = sacolaStore;
+
+const pedidosStore = usePedidos();
 
 const currentStep = ref(1);
 
@@ -71,6 +74,7 @@ const SelecionarPagamento = (formaPagamento) => {
 };
 
 const finalizarPedido = () => {
+  pedidosStore.adicionarPedido(sacola, totalPreco, totalQuantidade);
   currentStep.value = 4;
   sacolaStore.limparSacola();
 };
