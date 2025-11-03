@@ -37,14 +37,13 @@ import { useCepApi } from '@/composable/useCepApi';
 
 const emit = defineEmits(['selecione-endereco']);
 
-// Desestrutura o Composable
 const { buscarEndereco, loading, erro } = useCepApi();
 
 const usuario = getUsuarioLogado();
 
 const enderecos = ref([]);
 
-if (usuario && usuario.rua) { // Verificação corrigida para 'usuario.rua' ou a chave correta
+if (usuario && usuario.rua) { 
   enderecos.value = [{
     rua: usuario.rua,
     bairro: usuario.bairro,

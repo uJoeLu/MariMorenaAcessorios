@@ -71,6 +71,10 @@ export const useSacola = defineStore('sacola', {
         this.sacola = this.sacola.filter(item => item.id !== produtoId);
         this.saveToLocalStorage();
     },
+    limparSacola() {
+      this.sacola = [];
+      this.saveToLocalStorage();
+    },
     saveToLocalStorage() {
       localStorage.setItem(getKey(), JSON.stringify(this.sacola));
     },

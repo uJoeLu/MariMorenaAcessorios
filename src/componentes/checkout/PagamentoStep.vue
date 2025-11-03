@@ -28,13 +28,10 @@ const formaPagamento = ref('');
 
 const selecionarPagamento = (tipo) => {
   formaPagamento.value = tipo;
+  emit('select-payment', tipo);
 };
 
-const confirmarPagamento = () => {
-  if (formaPagamento.value) {
-    emit('select-payment', formaPagamento.value);
-  }
-};
+
 </script>
 
 <style scoped>
