@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { getUsuarioLogado } from '@/service/autenticacao.js';
+import { getProdutoById } from '@/store/Produtos.js';
 
 const getkey = () => {
   const usuario = getUsuarioLogado();
@@ -25,15 +26,15 @@ export const useComentarios = defineStore('comentarios', {
   },
 
   actions: {
-    adicionarComentario(produto, texto) {
+    adicionarComentario(produtoId, texto) {
       const usuario = getUsuarioLogado();
-      const 
+      const produto = getProdutoById(produtoId);
       if (!usuario) {
         throw new Error('Usuário não logado');
       }
       const novoComentario = {
         id: Date.now(),
-        produto,
+        produto: produto.nome,
         usuario: usuario.nome,
         texto,
         data: new Date().toISOString(),

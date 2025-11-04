@@ -7,7 +7,7 @@
             </div>
             <div v-else class="comentarios-lista">
                 <div v-for="comentario in comentarios" :key="comentario.id" class="comentario-card">
-                    <h3>Comentário sobre {{ comentario.produtoId }}</h3>
+                    <h3>Comentário sobre {{ comentario.produto }}</h3>
                     <p><strong>Data:</strong> {{ new Date(comentario.data).toLocaleDateString('pt-BR') }}</p>
                     <p><strong>Avaliação:</strong> {{ comentario.avaliacao }} / 5</p>
                     <p><strong>Comentário:</strong> {{ comentario.texto }}</p>
