@@ -35,6 +35,7 @@ export const useComentarios = defineStore('comentarios', {
       }
       const novoComentario = {
         id: Date.now(),
+        produtoId: produtoId,
         produto: produto.nome,
         usuario: usuario.nome,
         texto,
