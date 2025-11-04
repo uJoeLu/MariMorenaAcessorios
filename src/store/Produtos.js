@@ -1,54 +1,60 @@
 import { defineStore } from 'pinia';
 
+const produtosMock = [
+    { id: 1, nome: "Brinco Dourado", preco: 25, quantidade: 10, categoria: "Brinco", descricao: "Brinco folheado a ouro 18k com design de gota vazada, elegante e sofisticado para diversas ocasiões.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-gota-vazada-1757365878.3214.jpg" },
+    { id: 2, nome: "Colar de Pérolas", preco: 40, quantidade: 10, categoria: "Colar", descricao: "Colar triplo folheado a ouro 18k e prata, com pérolas, esferas e placas circulares, perfeito para compor looks clássicos.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-triplo-folheado-a-ouro-18k-e-prata-perolas--esferas-e-placas-circulares-1757446852.4441.jpg" },
+    { id: 3, nome: "Pulseira Dourada", preco: 30, quantidade: 10, categoria: "Pulseira", descricao: "Bracelete aro folheado a prata com dois fios duplos, moderno e versátil para o dia a dia.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
+    { id: 7, nome: "Anel de Prata", preco: 20, quantidade: 10, categoria: "Anel", descricao: "Anel folheado a ouro 18k e prata com design enrolado, delicado e cheio de estilo.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-enrolado-1754996511.9469.jpg" },
+    { id: 8, nome: "Anel Dourado", preco: 20, quantidade: 10, categoria: "Anel", descricao: "Anel folheado a ouro 18k e prata com design vazado, ideal para quem busca elegância e modernidade.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-vazado-1754396541.4854.jpg" },
+    { id: 9, nome: "Anel de gatinho e coração", preco: 30, quantidade: 10, categoria: "Anel", descricao: "Anel semijoia com gatinho e coração, possui ponto de luz, perfeito para quem ama acessórios delicados.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-semi-joia-gatinho-e-coracao-com-ponto-de-luz-1744760268.3022.jpg" },
+    { id: 10, nome: "Conjunto Colar e Brinco", preco: 50, quantidade: 10, categoria: "Conjunto", descricao: "Conjunto folheado a ouro 18k com colar e brinco em formato de coração texturizado, sofisticado e romântico.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/conjunto-colar-e-brinco-folheado-a-ouro-18k-coracao-texturizado-1756232619.379.jpg" },
+    { id: 11, nome: "Conjunto Colar e Brinco", preco: 45, quantidade: 10, categoria: "Conjunto", descricao: "Conjunto folheado a ouro 18k e prata, colar e brinco com design maxi botton, moderno e elegante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/conjunto-colar-e-brinco-folheado-a-ouro-18k-e-prata-max-botton-1758661935.4903.jpg" },
+    { id: 12, nome: "Tiara Rosa com Stitch e Sorvete", preco: 15, quantidade: 10, categoria: "Tiara", descricao: "Tiara rosa decorada com Stitch e sorvetinho, divertida e perfeita para crianças.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/tiara-rosa-com-stitch-e-sorvetinho-1740408338.1134.jpg" },
+    { id: 13, nome: "Tiara Rosa com a Capivara", preco: 15, quantidade: 10, categoria: "Tiara", descricao: "Tiara rosa com capivara, acessório fofo e exclusivo para dar um toque especial ao visual.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/tiara-rosa-com-capivara-1740407873.1204.jpg" },
+    { id: 14, nome: "Brinco de Coração", preco: 20, quantidade: 10, categoria: "Brinco", descricao: "Brinco folheado a ouro 18k e prata em formato de coração resinado, delicado e apaixonante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-coracao-resinado-1758655850.0005.jpg" },
+    { id: 15, nome: "Colar com Pingente Gota Longa", preco: 35, quantidade: 10, categoria: "Colar", descricao: "Colar folheado a ouro 18k com pingente de gota longa, sofisticado e ideal para compor looks elegantes.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-folheado-a-ouro-18k-pingente-gota-longa-1749558255.5448.jpg" },
+    { id: 16, nome: "Pulseira Folheada a Ouro 18k Fio Torcido", preco: 25, quantidade: 10, categoria: "Pulseira", descricao: "Pulseira folheada a ouro 18k com fio torcido e inspiração VG preto, moderna e cheia de personalidade.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/pulseira-folheada-a-ouro-18k-fio-torcido-e-inspiracao-vg-preto-1758564353.1998.jpg" },
+    { id: 17, nome: "Bracelete Aço Inoxidavel", preco: 30, quantidade: 10, categoria: "Bracelete", descricao: "Bracelete folheado a ouro 18k, inspirado em grandes marcas, resistente e elegante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-folheado-a-ouro-18k-inspiracao-grandes-marcas-1758658323.0727.jpg" },
+    { id: 18, nome: "Bracelete Folheado", preco: 40, quantidade: 10, categoria: "Bracelete", descricao: "Bracelete folheado a ouro 18k e prata com design liso maxi, ideal para quem busca estilo e sofisticação.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-folheado-a-ouro-18k-e-prata-design-liso-maxi-1758652465.7533.jpg" }
 
+];
+
+const getProdutos = () => {
+    try {
+        return JSON.parse(localStorage.getItem('produtos'));
+    } finally {
+        return produtosMock;
+    }
+};
 
 export const useProdutos = defineStore('produtos', {
-  state: () => ({
-    
-    produtos: [
-      { id: 1, nome: "Brinco Dourado", preco: 25, quantidade: 10, categoria: "Brinco", descricao: "Brinco folheado a ouro 18k com design de gota vazada, elegante e sofisticado para diversas ocasiões.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-gota-vazada-1757365878.3214.jpg" },
-      { id: 2, nome: "Colar de Pérolas", preco: 40, quantidade: 10, categoria: "Colar", descricao: "Colar triplo folheado a ouro 18k e prata, com pérolas, esferas e placas circulares, perfeito para compor looks clássicos.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-triplo-folheado-a-ouro-18k-e-prata-perolas--esferas-e-placas-circulares-1757446852.4441.jpg" },
-      { id: 3, nome: "Pulseira Dourada", preco: 30, quantidade: 10, categoria: "Pulseira", descricao: "Bracelete aro folheado a prata com dois fios duplos, moderno e versátil para o dia a dia.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-aro-folheado-a-prata-dois-fios-duplos-1758060165.6218.jpg" },
-      { id: 7, nome: "Anel de Prata", preco: 20, quantidade: 10, categoria: "Anel", descricao: "Anel folheado a ouro 18k e prata com design enrolado, delicado e cheio de estilo.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-enrolado-1754996511.9469.jpg" },
-      { id: 8, nome: "Anel Dourado", preco: 20, quantidade: 10, categoria: "Anel", descricao: "Anel folheado a ouro 18k e prata com design vazado, ideal para quem busca elegância e modernidade.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-folheado-a-ouro-18k-e-prata-vazado-1754396541.4854.jpg" },
-      { id: 9, nome: "Anel de gatinho e coração", preco: 30, quantidade: 10, categoria: "Anel", descricao: "Anel semijoia com gatinho e coração, possui ponto de luz, perfeito para quem ama acessórios delicados.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/anel-semi-joia-gatinho-e-coracao-com-ponto-de-luz-1744760268.3022.jpg" },
-      { id: 10, nome: "Conjunto Colar e Brinco", preco: 50, quantidade: 10, categoria: "Conjunto", descricao: "Conjunto folheado a ouro 18k com colar e brinco em formato de coração texturizado, sofisticado e romântico.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/conjunto-colar-e-brinco-folheado-a-ouro-18k-coracao-texturizado-1756232619.379.jpg" },
-      { id: 11, nome: "Conjunto Colar e Brinco", preco: 45, quantidade: 10, categoria: "Conjunto", descricao: "Conjunto folheado a ouro 18k e prata, colar e brinco com design maxi botton, moderno e elegante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/conjunto-colar-e-brinco-folheado-a-ouro-18k-e-prata-max-botton-1758661935.4903.jpg" },
-      { id: 12, nome: "Tiara Rosa com Stitch e Sorvete", preco: 15, quantidade: 10, categoria: "Tiara", descricao: "Tiara rosa decorada com Stitch e sorvetinho, divertida e perfeita para crianças.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/tiara-rosa-com-stitch-e-sorvetinho-1740408338.1134.jpg" },
-      { id: 13, nome: "Tiara Rosa com a Capivara", preco: 15, quantidade: 10, categoria: "Tiara", descricao: "Tiara rosa com capivara, acessório fofo e exclusivo para dar um toque especial ao visual.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/tiara-rosa-com-capivara-1740407873.1204.jpg" },
-      { id: 14, nome: "Brinco de Coração", preco: 20, quantidade: 10, categoria: "Brinco", descricao: "Brinco folheado a ouro 18k e prata em formato de coração resinado, delicado e apaixonante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/brinco-folheado-a-ouro-18k-e-prata-coracao-resinado-1758655850.0005.jpg" },
-      { id: 15, nome: "Colar com Pingente Gota Longa", preco: 35, quantidade: 10, categoria: "Colar", descricao: "Colar folheado a ouro 18k com pingente de gota longa, sofisticado e ideal para compor looks elegantes.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/colar-folheado-a-ouro-18k-pingente-gota-longa-1749558255.5448.jpg" },
-      { id: 16, nome: "Pulseira Folheada a Ouro 18k Fio Torcido", preco: 25, quantidade: 10, categoria: "Pulseira", descricao: "Pulseira folheada a ouro 18k com fio torcido e inspiração VG preto, moderna e cheia de personalidade.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/pulseira-folheada-a-ouro-18k-fio-torcido-e-inspiracao-vg-preto-1758564353.1998.jpg" },
-      { id: 17, nome: "Bracelete Aço Inoxidavel", preco: 30, quantidade: 10, categoria: "Bracelete", descricao: "Bracelete folheado a ouro 18k, inspirado em grandes marcas, resistente e elegante.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-folheado-a-ouro-18k-inspiracao-grandes-marcas-1758658323.0727.jpg" },
-      { id: 18, nome: "Bracelete Folheado", preco: 40, quantidade: 10, categoria: "Bracelete", descricao: "Bracelete folheado a ouro 18k e prata com design liso maxi, ideal para quem busca estilo e sofisticação.", imagem: "https://febijus.bwimg.com.br/febijus/produtos/bracelete-folheado-a-ouro-18k-e-prata-design-liso-maxi-1758652465.7533.jpg" }
-    ]
-  }),
+    state: () => ({
+        produtos: getProdutos(),
+    }),
 
-  getters: {
-    getProdutoById: (state) => (id) => {
-      return state.produtos.find(produto => produto.id === id);
+    getters: {
+        getProdutoById: (state) => (id) => {
+            return state.produtos.find(produto => produto.id === id);
+        },
     },
-    getProdutosByCategoria: (state) => (categoria) => {
-      return state.produtos.filter(produto => produto.categoria === categoria);
-    },
-    produtosDisponiveis: (state) => {
-      return state.produtos.filter(produto => produto.quantidade > 0);
-    }
-  },
 
-  actions: {
-    addProduto(produto) {
-      const newId = Math.max(...this.produtos.map(p => p.id)) + 1;
-      this.produtos.push({ ...produto, id: newId });
-    },
-    updateProduto(id, updates) {
-      const index = this.produtos.findIndex(produto => produto.id === id);
-      if (index !== -1) {
-        this.produtos[index] = { ...this.produtos[index], ...updates };
-      }
-    },
-    deleteProduto(id) {
-      this.produtos = this.produtos.filter(produto => produto.id !== id);
+    actions: {
+        cadastrarProduto(novoProduto) {
+            this.produtos.push(novoProduto);
+            this.salvarProdutos();
+        },
+
+        salvarProdutos() {
+            localStorage.setItem('produtos', JSON.stringify(this.produtos));
+        },
+
+        deletarProduto(id) {
+            this.produtos = this.produtos.filter(produto => produto.id !== id);
+            this.salvarProdutos();
+        },
+
+        loadProdutos() {
+            this.produtos = getProdutos();
+        },
     }
-  }
 });

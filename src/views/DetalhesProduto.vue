@@ -71,10 +71,15 @@ const comentarios = ref([]);
 const novoComentario = ref('');
 
 
+const fetchProdutoLocal = () => {
+    produto.value = produtosStore.getProdutoById(produtoId);
+    comentarios.value = comentariosStore.getComentariosPorProduto(produtoId);
+    isLoading.value = false;
+};
 
 const adicionarComentario = () => {
     try {
-        comentariosStore.adicionarComentario(produto, novoComentario.value);
+        comentariosStore.adicionarComentario(produtoid, novoComentario.value);
         novoComentario.value = '';
         comentarios.value = comentariosStore.getComentariosPorProduto(produtoId);
     } catch (error) {
