@@ -79,7 +79,7 @@ const fetchProdutoLocal = () => {
 
 const adicionarComentario = () => {
     try {
-        comentariosStore.adicionarComentario(produtoid, novoComentario.value);
+        comentariosStore.adicionarComentario(produtoId, novoComentario.value);
         novoComentario.value = '';
         comentarios.value = comentariosStore.getComentariosPorProduto(produtoId);
     } catch (error) {

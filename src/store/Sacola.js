@@ -72,8 +72,8 @@ export const useSacola = defineStore('sacola', {
         this.saveToLocalStorage();
     },
     limparSacola() {
-      this.sacola = [];
-      this.saveToLocalStorage();
+      localStorage.removeItem(getKey());
+      this.sacola.splice(0, this.sacola.length);
     },
     saveToLocalStorage() {
       localStorage.setItem(getKey(), JSON.stringify(this.sacola));
