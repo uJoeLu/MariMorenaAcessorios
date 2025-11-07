@@ -1,22 +1,12 @@
 import { defineStore } from "pinia";
-import { getUsuarioLogado } from '@/service/autenticacao.js';
-import { useProdutos } from './Produtos.js';
+import { ComentarioService } from "@/service/comentarioService";
 
-const getkey = () => {
-  const usuario = getUsuarioLogado();
-  return usuario ? `comentarios_${usuario.id}` : 'comentarios';
-};
-const getComentariosFromStorage = () => {
-  try {
-    return JSON.parse(localStorage.getItem(getkey())) || [];
-  } catch {
-    return [];
-  }
-};
+const service = new ComentarioService();
 
 export const useComentarios = defineStore('comentarios', {
   state: () => ({
-    comentarios: getComentariosFromStorage(),
+    comentarios: [],
+    erro: null
   }),
 
   getters: {
@@ -26,30 +16,41 @@ export const useComentarios = defineStore('comentarios', {
   },
 
   actions: {
-    adicionarComentario(produtoId, texto) {
-      const usuario = getUsuarioLogado();
-      const produtoStore = useProdutos();
-      const produto = produtoStore.getProdutoById(produtoId);
-      if (!usuario) {
-        throw new Error('Usuário não logado');
+    async adicionarComentario(produtoId, texto) {
+      try {
+        const comentario = await service.adicionarComentario(produtoId, texto);
+        this.comentarios.push(comentario);
+        this.erro = null;
+        return comentario;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
-      const novoComentario = {
-        id: Date.now(),
-        produtoId: produtoId,
-        produto: produto.nome,
-        usuario: usuario.nome,
-        texto,
-        data: new Date().toISOString(),
-      };
-      this.comentarios.push(novoComentario);
-      this.salvarComentarios();
     },
 
-    salvarComentarios() {
-      localStorage.setItem(getkey(), JSON.stringify(this.comentarios));
+    async removerComentario(comentarioId) {
+      try {
+        await service.removerComentario(comentarioId);
+        this.comentarios = this.comentarios.filter(c => c.id !== comentarioId);
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
-    loadComentarios() {
-      this.comentarios = getComentariosFromStorage();
+
+    async loadComentarios(produtoId = null) {
+      try {
+        if (produtoId) {
+          this.comentarios = await service.listarComentariosPorProduto(produtoId);
+        } else {
+          this.comentarios = await service.listarComentariosDoUsuario();
+        }
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
   },
 });

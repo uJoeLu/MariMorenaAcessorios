@@ -43,7 +43,7 @@
 <script setup>
 import { useSacola } from '@/store/Sacola.js';
 import { ref, onMounted } from 'vue';
-import { getUsuarioLogado } from '@/service/autenticacao';
+import { getUsuarioLogado } from '@/service/authService';
 import router from '@/router';
 
 const { aumentarQtd, diminuirQtd, removerItem } = useSacola();

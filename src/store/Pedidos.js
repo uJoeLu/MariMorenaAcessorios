@@ -1,9 +1,17 @@
 import { defineStore } from "pinia";
-import { getUsuarioLogado } from "@/service/autenticacao";
+import { PedidoService } from "@/service/pedidoService";
+import { UsuarioDAO } from "@/dao/usuarioDao";
+
+const service = new PedidoService();
+const usuarioDao = new UsuarioDAO();
 
 const getKey = () => {
-  const usuario = getUsuarioLogado();
-  return usuario ? `pedidos_${usuario.id}` : 'pedidos';
+  try {
+    const usuario = usuarioDao.getUsuarioLogado();
+    return usuario ? `pedidos_${usuario.id}` : 'pedidos';
+  } catch {
+    return 'pedidos';
+  }
 };
 
 const getPedidosFromStorage = () => {
@@ -17,6 +25,7 @@ const getPedidosFromStorage = () => {
 export const usePedidos = defineStore('pedidos', {
   state: () => ({
     pedidos: getPedidosFromStorage(),
+    erro: null
   }),
 
   getters: {
@@ -29,61 +38,81 @@ export const usePedidos = defineStore('pedidos', {
     },
 
     pedidosPendentes: (state) => {
-      return state.pedidos.filter(pedido => pedido.status === 'pendente');
+      return state.pedidos.filter(pedido => pedido.status === 'Pendente');
     },
 
     pedidosConfirmados: (state) => {
-      return state.pedidos.filter(pedido => pedido.status === 'confirmado');
-    },
-    pedidosEnviados: (state) => {
-      return state.pedidos.filter(pedido => pedido.status === 'enviado');
-    },
-    pedidosCancelados: (state) => {
-      return state.pedidos.filter(pedido => pedido.status === 'cancelado');
-    },
-    pedidosEntregues: (state) => {
-      return state.pedidos.filter(pedido => pedido.status === 'entregue');
+      return state.pedidos.filter(pedido => pedido.status === 'Confirmado');
     },
 
+    pedidosEnviados: (state) => {
+      return state.pedidos.filter(pedido => pedido.status === 'Enviado');
+    },
+
+    pedidosCancelados: (state) => {
+      return state.pedidos.filter(pedido => pedido.status === 'Cancelado');
+    },
+
+    pedidosEntregues: (state) => {
+      return state.pedidos.filter(pedido => pedido.status === 'Entregue');
+    },
   },
 
   actions: {
-    adicionarPedido(items, totalPreco, totalQuantidade) {
-      const usuario = getUsuarioLogado();
-      if (!usuario) {
-        throw new Error('Usuário não logado');
-      }
-      const novoPedido = {
-        id: crypto.randomUUID(),
-        usuarioId: usuario.id,
-        items: [...items],
-        totalPreco,
-        totalQuantidade,
-        data: new Date().toISOString(),
-        status: 'pendente',
-      };
-      this.pedidos.push(novoPedido);
-      this.salvarPedidos();
-    },
-
-    atualizarStatusPedido(pedidoId, novoStatus) {
-      const pedido = this.pedidos.find(p => p.id === pedidoId);
-      if (pedido) {
-        pedido.status = novoStatus;
-        this.salvarPedidos();
+    async criarPedido(itensSacola, enderecoId) {
+      try {
+        const pedido = await service.criarPedido(itensSacola, enderecoId);
+        this.pedidos.push(pedido);
+        this.erro = null;
+        return pedido;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
     },
 
-    cancelarPedido(pedidoId) {
-      this.atualizarStatusPedido(pedidoId, 'cancelado');
+    async atualizarStatusPedido(pedidoId, novoStatus) {
+      try {
+        const pedidoAtualizado = await service.atualizarStatusPedido(pedidoId, novoStatus);
+        const index = this.pedidos.findIndex(p => p.id === pedidoId);
+        if (index !== -1) {
+          this.pedidos[index] = pedidoAtualizado;
+        }
+        this.erro = null;
+        return pedidoAtualizado;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
 
-    salvarPedidos() {
+    async cancelarPedido(pedidoId) {
+      try {
+        const pedidoCancelado = await service.cancelarPedido(pedidoId);
+        const index = this.pedidos.findIndex(p => p.id === pedidoId);
+        if (index !== -1) {
+          this.pedidos[index] = pedidoCancelado;
+        }
+        this.erro = null;
+        return pedidoCancelado;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
+    },
+
+    async salvarPedidos() {
       localStorage.setItem(getKey(), JSON.stringify(this.pedidos));
     },
 
-    loadPedidos() {
-      this.pedidos = getPedidosFromStorage();
+    async loadPedidos() {
+      try {
+        this.pedidos = await service.listarPedidosUsuario();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
   },
 });

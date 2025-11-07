@@ -25,6 +25,11 @@
                     <input type="text" id="rua" name="rua" v-model="rua" required />
                 </div>
                 <div>
+                    <p>Número</p>
+                    <label for="numero"></label>
+                    <input type="text" id="numero" name="numero" v-model="numero" required />
+                </div>
+                <div>
                     <p>Bairro</p>
                     <label for="bairro"></label>
                     <input type="text" id="bairro" name="bairro" v-model="bairro" required />
@@ -81,12 +86,13 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { cadastrarUsuario, getUsuarioLogado } from '@/service/autenticacao';
+import { cadastrarUsuario, getUsuarioLogado } from '@/service/authService';
 import { useCepApi } from '@/composable/useCepApi';
 const email = ref('')
 const nome = ref('')
 const dataNasc = ref('')
 const rua = ref('')
+const numero = ref('')
 const bairro = ref('')
 const cep = ref('')
 const estado = ref('')
@@ -123,6 +129,7 @@ function fazerCadastro() {
     }
     const dadosEndereco = {
         rua: rua.value,
+        numero: rua.value,
         bairro: bairro.value,
         cep: cep.value,
         estado: estado.value,
@@ -146,15 +153,12 @@ function fazerCadastro() {
     }
 }
 async function validarCep() {
-    try {
+
         const endereco = await buscarEndereco(cep.value);
         cidade.value = endereco.cidade;
         estado.value = endereco.estado;
-    } catch (error) {
-        // Erro já tratado no composable
-    }
-}
 
+}
 onMounted(() => {
     checkSession()
 })

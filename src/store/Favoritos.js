@@ -1,62 +1,66 @@
 import { defineStore } from "pinia";
-import { getUsuarioLogado } from "@/service/autenticacao";
+import { FavoritoService } from "@/service/favoritoService";
 
-const getKey = () => {
-  const usuario = getUsuarioLogado();
-  return usuario ? `favoritos_${usuario.id}` : "favoritos";
-};
-
-const getFavoritosFromStorage = () => {
-  try {
-    return JSON.parse(localStorage.getItem(getKey())) || [];
-  } catch {
-    return [];
-  }
-};
+const service = new FavoritoService();
 
 export const useFavoritos = defineStore("favoritos", {
   state: () => ({
-    favoritos: getFavoritosFromStorage(),
+    favoritos: [],
+    erro: null
   }),
 
   getters: {
     isFavorito: (state) => (produtoId) =>
-      state.favoritos.some((item) => item.id === produtoId),
+      state.favoritos.some((item) => item.produtoId === produtoId),
   },
 
   actions: {
-    
-    adicionarFavorito(produto) {
-      if (!this.isFavorito(produto.id)) {
-        this.favoritos.push(produto);
-        this.saveToLocalStorage();
+    async adicionarFavorito(produto) {
+      try {
+        const favorito = await service.adicionarFavorito(produto);
+        this.favoritos.push(favorito);
+        this.erro = null;
+        return favorito;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
     },
 
-    removerFavorito(produtoId) {
-      const index = this.favoritos.findIndex((item) => item.id === produtoId);
-      if (index !== -1) {
-        this.favoritos.splice(index, 1);
-        this.saveToLocalStorage();
+    async removerFavorito(produtoId) {
+      try {
+        await service.removerFavorito(produtoId);
+        this.favoritos = this.favoritos.filter(item => item.produtoId !== produtoId);
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
     },
 
-    toggleFavorito(produto) {
-      if(!getUsuarioLogado()){
-        return 'Você precisa estar logado para favoritar.';
+    async toggleFavorito(produto) {
+      try {
+        await service.toggleFavorito(produto);
+        if (this.isFavorito(produto.id)) {
+          await this.removerFavorito(produto.id);
+        } else {
+          await this.adicionarFavorito(produto);
+        }
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
-      this.isFavorito(produto.id)
-        ? this.removerFavorito(produto.id)
-        : this.adicionarFavorito(produto);
-      return null;
     },
 
-    saveToLocalStorage() {
-      localStorage.setItem(getKey(), JSON.stringify(this.favoritos));
-    },
-
-    loadFavoritos() {
-      this.favoritos = getFavoritosFromStorage();
+    async loadFavoritos() {
+      try {
+        this.favoritos = await service.listarFavoritos();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
   },
 });

@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { logout } from '@/service/autenticacao'
+import { logout } from '@/service/authService'
 import { useFavoritos } from '@/store/Favoritos';
 
 </script>

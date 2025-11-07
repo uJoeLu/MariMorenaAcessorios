@@ -35,7 +35,7 @@
     </div>
 </template>
 <script setup>
-import { redefinirSenha } from '@/service/autenticacao';
+import { redefinirSenha } from '@/service/authService';
 import { ref } from 'vue';
 const email = ref('');
 const dataNasc = ref('');

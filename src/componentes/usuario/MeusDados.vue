@@ -46,7 +46,7 @@
     </div>
 </template>
 <script setup>
-import { getUsuarioLogado } from '@/service/autenticacao'
+import { getUsuarioLogado } from '@/service/authService'
 import { ref, onMounted, computed } from 'vue'
 const primeiroEndereco = computed(() => {
     return usuario.value && usuario.value.enderecos.length > 0

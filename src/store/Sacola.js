@@ -1,23 +1,33 @@
-import { getUsuarioLogado } from "@/service/autenticacao";
 import { defineStore } from "pinia";
+import { SacolaDAO } from "@/dao/sacolaDao";
+import { UsuarioDAO } from "@/dao/usuarioDao";
+
+const dao = new SacolaDAO();
+const usuarioDao = new UsuarioDAO();
 
 const getKey = () => {
-  const usuario = getUsuarioLogado();
-  return usuario ? `sacola_${usuario.id}` : 'sacola';
+  try {
+    const usuario = usuarioDao.getUsuarioLogado();
+    return usuario ? `sacola_${usuario.id}` : 'sacola';
+  } catch {
+    return 'sacola';
+  }
 }
 
 const getSacolaFromStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem(getKey())) || [];
+    const data = JSON.parse(localStorage.getItem(getKey())) || [];
+    if (!Array.isArray(data)) return [];
+    return data.filter(item => typeof item === 'object' && item !== null && item.id && typeof item.quantidade === 'number' && item.quantidade > 0);
   } catch {
     return [];
   }
 };
 
 export const useSacola = defineStore('sacola', {
-  
   state: () => ({
     sacola: getSacolaFromStorage(),
+    erro: null
   }),
 
   getters: {
@@ -35,51 +45,89 @@ export const useSacola = defineStore('sacola', {
   },
 
   actions: {
-    adicionarNaSacola(produto) {
-      const itemExistente = this.sacola.find(item => item.id === produto.id);
-      if (itemExistente) {
-        itemExistente.quantidade++;
-        this.saveToLocalStorage();
-      } else {
-        this.sacola.push({ ...produto, quantidade: 1 });
-        this.saveToLocalStorage();
-      }
-    },
-    
-    aumentarQtd(produtoId) {
-      const itemExistente = this.sacola.find(item => item.id === produtoId);
-      itemExistente.quantidade++;
-      this.saveToLocalStorage();
-    },
-
-    diminuirQtd(produtoId) {
-      const itemIndex = this.sacola.findIndex(item => item.id === produtoId);
-
-      if (itemIndex !== -1) {
-        const itemExistente = this.sacola[itemIndex];
-
-        if (itemExistente.quantidade > 1) {
-          itemExistente.quantidade--;
+    async adicionarNaSacola(produto) {
+      try {
+        const itemExistente = this.sacola.find(item => item.id === produto.id);
+        if (itemExistente) {
+          itemExistente.quantidade++;
         } else {
-          this.sacola.splice(itemIndex, 1);
+          this.sacola.push({ ...produto, quantidade: 1 });
         }
-        this.saveToLocalStorage();
+        await this.saveToLocalStorage();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
       }
     },
-    
-    removerItem(produtoId) {
+
+    async aumentarQtd(produtoId) {
+      try {
+        const itemExistente = this.sacola.find(item => item.id === produtoId);
+        if (itemExistente) {
+          itemExistente.quantidade++;
+          await this.saveToLocalStorage();
+        }
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
+    },
+
+    async diminuirQtd(produtoId) {
+      try {
+        const itemIndex = this.sacola.findIndex(item => item.id === produtoId);
+        if (itemIndex !== -1) {
+          const itemExistente = this.sacola[itemIndex];
+          if (itemExistente.quantidade > 1) {
+            itemExistente.quantidade--;
+          } else {
+            this.sacola.splice(itemIndex, 1);
+          }
+          await this.saveToLocalStorage();
+        }
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
+    },
+
+    async removerItem(produtoId) {
+      try {
         this.sacola = this.sacola.filter(item => item.id !== produtoId);
-        this.saveToLocalStorage();
+        await this.saveToLocalStorage();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
-    limparSacola() {
-      localStorage.removeItem(getKey());
-      this.sacola.splice(0, this.sacola.length);
+
+    async limparSacola() {
+      try {
+        this.sacola = [];
+        await this.saveToLocalStorage();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     },
-    saveToLocalStorage() {
+
+    async saveToLocalStorage() {
       localStorage.setItem(getKey(), JSON.stringify(this.sacola));
     },
-    loadSacola() {
-      this.sacola = getSacolaFromStorage();
+
+    async loadSacola() {
+      try {
+        this.sacola = getSacolaFromStorage();
+        this.erro = null;
+      } catch (error) {
+        this.erro = error.message;
+        throw error;
+      }
     }
   },
 });

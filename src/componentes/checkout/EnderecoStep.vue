@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { getUsuarioLogado, adicionarEndereco } from '@/service/autenticacao'; // Adicionei adicionarEndereco
+import { getUsuarioLogado, adicionarEndereco } from '@/service/authService'; // Adicionei adicionarEndereco
 import { useCepApi } from '@/composable/useCepApi';
 
 const emit = defineEmits(['selecione-endereco']);

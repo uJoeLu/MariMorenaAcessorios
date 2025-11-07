@@ -37,7 +37,7 @@
 <script setup>
 import { useSacola } from '@/store/Sacola';
 import { storeToRefs } from 'pinia';
-import {  getUsuarioLogado, logout } from '@/service/autenticacao';
+import {  getUsuarioLogado, logout } from '@/service/authService';
 
 const sacola = useSacola();
 const {totalQuantidade} = storeToRefs(sacola);
