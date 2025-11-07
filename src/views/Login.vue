@@ -28,19 +28,20 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { logar, getUsuarioLogado } from '@/service/authService';
+import { AuthService } from '@/service/authService';
 const email = ref('');
 const senha = ref('');
 const mensagem = ref('');
 const isSuccess = ref(false);
 const usuarioLogado = ref(null);
+const authService = new AuthService();
 
 const checkSession = () => {
-  const user = getUsuarioLogado();
+  const user = authService.getUsuarioLogado();
   usuarioLogado.value = user ? user.email : null;
 };
 
-const login = () => {
+const login = async () => {
   mensagem.value = '';
   if (!email.value || !senha.value) {
     mensagem.value = 'Preencha todos os campos.';
@@ -49,7 +50,7 @@ const login = () => {
   }
 
   try {
-    const resultado = logar(email.value, senha.value);
+    const resultado = await authService.login(email.value, senha.value);
 
     mensagem.value = 'Login realizado com sucesso!';
     isSuccess.value = true;
@@ -57,7 +58,7 @@ const login = () => {
     setTimeout(() => {
       window.location.href = '/';
     }, 2000);
-    
+
 
     email.value = '';
     senha.value = '';
