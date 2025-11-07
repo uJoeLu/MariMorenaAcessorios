@@ -32,14 +32,15 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { getUsuarioLogado, adicionarEndereco } from '@/service/authService'; // Adicionei adicionarEndereco
+import { AuthService } from '@/service/authService';
 import { useCepApi } from '@/composable/useCepApi';
 
 const emit = defineEmits(['selecione-endereco']);
 
 const { buscarEndereco, loading, erro } = useCepApi();
 
-const usuario = getUsuarioLogado();
+const authService = new AuthService();
+const usuario = authService.getUsuarioLogado();
 
 const enderecos = ref([]);
 
@@ -80,15 +81,15 @@ const selecionarEndereco = (endereco) => {
 };
 
 const AddnovoEndereco = () => {
-  const novo = { 
-    ...novoEndereco, 
+  const novo = {
+    ...novoEndereco,
     id: crypto.randomUUID()
   };
   // Salva o novo endereço no backend
-  adicionarEndereco(novo);
+  authService.adicionarEndereco(novo);
 
   enderecos.value.push(novo);
-  
+
   // Limpa o formulário após salvar
   Object.assign(novoEndereco, {
     rua: '',
@@ -98,7 +99,7 @@ const AddnovoEndereco = () => {
     estado: ''
   });
   shownovoEnderecoForm.value = false;
-  
+
   emit('selecione-endereco', novo);
 };
 
