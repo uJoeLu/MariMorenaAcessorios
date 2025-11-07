@@ -5,10 +5,10 @@
             <router-link to="/perfil/meuspedidos" class="sidebar-link">Meus Pedidos</router-link>
             <router-link to="/perfil/favoritos" class="sidebar-link">Meus Favoritos</router-link>
             <router-link to="/perfil/comentarios" class="sidebar-link">Comentários</router-link>
-            <button @click="logout" class="logout-btn">Sair</button>
+            <button @click="authService.logout()" class="logout-btn">Sair</button>
         </div>
         <div class="content">
-            <router-view v-if=" useFavoritos().favoritos"/>
+            <router-view v-if=" favoritoStore.favoritos"/>
             <div v-else>
                 <h2>Não há itens favoritados</h2>
             </div>
@@ -18,8 +18,11 @@
 </template>
 
 <script setup>
-import { logout } from '@/service/authService'
-import { useFavoritos } from '@/store/Favoritos';
+import { AuthService } from '@/service/authService'
+import { FavoritoStore } from '@/store/Favoritos';
+
+const authService = new AuthService();
+const favoritoStore = new FavoritoStore();
 
 </script>
 
