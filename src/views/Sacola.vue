@@ -43,7 +43,7 @@
 <script setup>
 import { useSacola } from '@/store/Sacola.js';
 import { ref, onMounted } from 'vue';
-import { getUsuarioLogado } from '@/service/authService';
+import { AuthService } from '@/service/authService';
 import router from '@/router';
 
 const { aumentarQtd, diminuirQtd, removerItem } = useSacola();
@@ -52,8 +52,10 @@ const sacolaStore = useSacola();
 const cep = ref('');
 const frete = ref(null);
 const erroCep = ref('');
+const authService = new AuthService();
+
 function logado() {
-    if (!getUsuarioLogado()) {
+    if (!authService.getUsuarioLogado()) {
         router.push('/login');
         alert('Por favor, faça login para finalizar a compra.');
     }
