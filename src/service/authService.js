@@ -30,4 +30,8 @@ export class AuthService {
       return false;
     }
   }
+
+  async cadastrarUsuario(dadosUsuario, dadosEndereco) {
+    return await this.service.cadastrar(dadosUsuario, dadosEndereco);
+  }
 }

@@ -35,7 +35,6 @@ async function buscarEndereco(cepString) {
         };
 
     } catch (e) {
-        // Captura erros de rede ou outros
         erro.value = e.message;
         loading.value = false;
         setTimeout(() => { erro.value = null; }, 2000);

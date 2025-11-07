@@ -86,7 +86,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { cadastrarUsuario, getUsuarioLogado } from '@/service/authService';
+import { AuthService } from '@/service/authService';
 import { useCepApi } from '@/composable/useCepApi';
 const email = ref('')
 const nome = ref('')
@@ -105,6 +105,7 @@ const isSuccess = ref(false)
 const usuarioLogado = ref(null)
 
 const { buscarEndereco, loading, erro } = useCepApi()
+const authService = new AuthService()
 
 function confirmarPassword() {
     if (senha.value !== confirmarSenha.value) {
@@ -114,12 +115,12 @@ function confirmarPassword() {
     return true
 }
 function checkSession() {
-    const usuario = getUsuarioLogado()
+    const usuario = authService.getUsuarioLogado()
     if (usuario) {
         usuarioLogado.value = usuario
     }
 }
-function fazerCadastro() {
+async function fazerCadastro() {
     const dadosUsuario = {
         email: email.value,
         nome: nome.value,
@@ -129,7 +130,7 @@ function fazerCadastro() {
     }
     const dadosEndereco = {
         rua: rua.value,
-        numero: rua.value,
+        numero: numero.value,
         bairro: bairro.value,
         cep: cep.value,
         estado: estado.value,
@@ -141,13 +142,13 @@ function fazerCadastro() {
     }
 
     try {
-        cadastrarUsuario(dadosUsuario, dadosEndereco)
+        await authService.cadastrarUsuario(dadosUsuario, dadosEndereco)
         mensagem.value = 'Cadastro realizado com sucesso!'
         isSuccess.value = true
-        
+
         window.location.href = '/'
 
-    } catch (error) {        
+    } catch (error) {
         mensagem.value = 'Erro ao realizar cadastro: ' + error.message
         isSuccess.value = false
     }
