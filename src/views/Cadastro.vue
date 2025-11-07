@@ -86,7 +86,8 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { AuthService } from '@/service/authService';
+import { useUsuarioStore } from '@/store/Usuario';
+import { useAuthStore } from '@/store/authStore';
 import { useCepApi } from '@/composable/useCepApi';
 const email = ref('')
 const nome = ref('')
@@ -105,7 +106,8 @@ const isSuccess = ref(false)
 const usuarioLogado = ref(null)
 
 const { buscarEndereco, loading, erro } = useCepApi()
-const authService = new AuthService()
+const usuarioStore = useUsuarioStore()
+const auth = useAuthStore()
 
 function confirmarPassword() {
     if (senha.value !== confirmarSenha.value) {
@@ -115,7 +117,7 @@ function confirmarPassword() {
     return true
 }
 function checkSession() {
-    const usuario = authService.getUsuarioLogado()
+    const usuario = auth.verificarSessao();
     if (usuario) {
         usuarioLogado.value = usuario
     }
@@ -142,7 +144,7 @@ async function fazerCadastro() {
     }
 
     try {
-        await authService.cadastrarUsuario(dadosUsuario, dadosEndereco)
+        await usuarioStore.cadastrar(dadosUsuario, dadosEndereco)
         mensagem.value = 'Cadastro realizado com sucesso!'
         isSuccess.value = true
 
