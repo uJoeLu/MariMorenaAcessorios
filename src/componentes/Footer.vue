@@ -39,8 +39,11 @@
 </template>
 
 <script setup>
-import { useFiltros} from '@/composable/Filtros';
-const { categoriasSelecionadas, categorias} = useFiltros();
+import { ref } from 'vue';
+import { ProdutoStore } from '@/store/Produtos.js';
+const produtoStore = new ProdutoStore();
+const categoriasSelecionadas = ref('');
+const categorias = ref([]); // Will be populated from store
 
 
 </script>

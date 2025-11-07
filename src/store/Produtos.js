@@ -1,27 +1,29 @@
 import { defineStore } from 'pinia';
 import { ProdutoService } from '@/service/produtoService';
 
-const service = new ProdutoService();
+export class ProdutoStore {
+    constructor() {
+        this.service = new ProdutoService();
+    }
 
-export const useProdutos = defineStore('produtos', {
-    state: () => ({
+    state = () => ({
         produtos: [],
         erro: null
-    }),
+    });
 
-    getters: {
+    getters = {
         getProdutoById: (state) => (id) => {
             return state.produtos.find(produto => produto.id === id);
         },
         buscarPorCategoria: (state) => (categoria) => {
             return state.produtos.filter(produto => produto.categoria === categoria);
         },
-    },
+    };
 
-    actions: {
+    actions = {
         async carregarProdutos() {
             try {
-                this.produtos = await service.listarProdutos();
+                this.produtos = await this.service.listarProdutos();
                 this.erro = null;
             } catch (error) {
                 this.erro = error.message;
@@ -31,7 +33,7 @@ export const useProdutos = defineStore('produtos', {
 
         async cadastrarProduto(novoProduto) {
             try {
-                const produto = await service.cadastrar(novoProduto);
+                const produto = await this.service.cadastrar(novoProduto);
                 this.produtos.push(produto);
                 this.erro = null;
                 return produto;
@@ -43,7 +45,7 @@ export const useProdutos = defineStore('produtos', {
 
         async atualizarProduto(id, dadosAtualizados) {
             try {
-                const produtoAtualizado = await service.atualizar(id, dadosAtualizados);
+                const produtoAtualizado = await this.service.atualizar(id, dadosAtualizados);
                 const index = this.produtos.findIndex(p => p.id === id);
                 if (index !== -1) {
                     this.produtos[index] = produtoAtualizado;
@@ -58,7 +60,7 @@ export const useProdutos = defineStore('produtos', {
 
         async deletarProduto(id) {
             try {
-                await service.deletar(id);
+                await this.service.deletar(id);
                 this.produtos = this.produtos.filter(produto => produto.id !== id);
                 this.erro = null;
             } catch (error) {
@@ -69,7 +71,7 @@ export const useProdutos = defineStore('produtos', {
 
         async reduzirEstoque(id, quantidade) {
             try {
-                const produtoAtualizado = await service.reduzirEstoque(id, quantidade);
+                const produtoAtualizado = await this.service.reduzirEstoque(id, quantidade);
                 const index = this.produtos.findIndex(p => p.id === id);
                 if (index !== -1) {
                     this.produtos[index] = produtoAtualizado;
@@ -84,7 +86,7 @@ export const useProdutos = defineStore('produtos', {
 
         async aumentarEstoque(id, quantidade) {
             try {
-                const produtoAtualizado = await service.aumentarEstoque(id, quantidade);
+                const produtoAtualizado = await this.service.aumentarEstoque(id, quantidade);
                 const index = this.produtos.findIndex(p => p.id === id);
                 if (index !== -1) {
                     this.produtos[index] = produtoAtualizado;
@@ -96,5 +98,9 @@ export const useProdutos = defineStore('produtos', {
                 throw error;
             }
         },
-    }
-});
+    };
+}
+
+const service = new ProdutoService();
+
+export const useProdutos = defineStore('produtos', new ProdutoStore());
