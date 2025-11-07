@@ -39,8 +39,15 @@ import Carrossel from '@/componentes/Carrossel.vue';
 import CartaoProduto from '@/componentes/CartaoProduto.vue';
 import Busca from '@/componentes/Busca.vue';
 import { useFiltros } from '@/composable/Filtros';
+import { useProdutos } from '@/store/Produtos.js';
+import { onMounted } from 'vue';
 
 const { categoriasSelecionadas, categorias, ordenacaoSelecionada, ordenacoes, produtosOrdenados } = useFiltros();
+const produtosStore = useProdutos();
+
+onMounted(async () => {
+    await produtosStore.carregarProdutos();
+});
 
 </script>
 <style scoped>
