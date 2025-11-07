@@ -46,8 +46,11 @@
     </div>
 </template>
 <script setup>
-import { getUsuarioLogado } from '@/service/authService'
+import { AuthService } from '@/service/authService'
 import { ref, onMounted, computed } from 'vue'
+
+const authService = new AuthService();
+
 const primeiroEndereco = computed(() => {
     return usuario.value && usuario.value.enderecos.length > 0
         ? usuario.value.enderecos.find(e => e.isPrincipal) || usuario.value.enderecos[0]
@@ -57,7 +60,7 @@ const primeiroEndereco = computed(() => {
 const usuario = ref(null)
 
 onMounted(() => {
-    usuario.value = getUsuarioLogado()
+    usuario.value = authService.getUsuarioLogado()
 })
 </script>
 <style scoped>
