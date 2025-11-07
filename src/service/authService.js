@@ -1,41 +1,28 @@
-import { UsuarioService } from "./usuarioService";
+import { UsuarioDAO } from "@/dao/usuarioDao";
 
 export class AuthService {
   constructor() {
-    this.service = new UsuarioService();
+    this.dao = new UsuarioDAO();
+
   }
 
   async login(email, senha) {
-    return await this.service.login(email, senha);
+    const usuario = await this.dao.getUsuarioPorEmail(email);
+    if(!usuario || usuario.senha!== senha) throw new Error ("Usuario e senha incorretos!");
+    await this.dao.setUsuarioLogado(usuario);
+    return usuario;
   }
 
   async logout() {
-    await this.service.logout();
+    await this.dao.logout();
     window.location.href = "/";
   }
-
-  async getUsuarioLogado() {
-    try {
-      return await this.service.dao.getUsuarioLogado();
-    } catch (error) {
-      throw new Error("Usuário não localizado. Faça login novamente.");
-    }
+  async getUsuarioLogado(){
+    return await this.dao.getUsuarioLogado();
   }
 
   async isAutenticado() {
-    try {
-      await this.getUsuarioLogado();
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  async cadastrarUsuario(dadosUsuario, dadosEndereco) {
-    return await this.service.cadastrar(dadosUsuario, dadosEndereco);
-  }
-
-  async redefinirSenha(email, dataNasc, novaSenha) {
-    return await this.service.redefinirSenha(email, dataNasc, novaSenha);
+    const user = await this.getUsuarioLogado();
+    return !!user;
   }
 }

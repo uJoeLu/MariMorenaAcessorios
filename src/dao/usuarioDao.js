@@ -16,12 +16,13 @@ export class UsuarioDAO extends GenericDAO {
   async getUsuarioLogado() {
     const usuarioLogado = localStorage.getItem('usuarioLogado');
     if (!usuarioLogado) {
-      throw new Error('Nenhum usuário logado.');
+      return null;
     }
     try {
       return JSON.parse(usuarioLogado);
     } catch (error) {
-      throw new Error('Erro ao recuperar usuário logado.');
+      localStorage.removeItem('usuarioLogado');
+      return null;
     }
   }
 
@@ -31,5 +32,8 @@ export class UsuarioDAO extends GenericDAO {
     } catch (error) {
       throw new Error('Erro ao salvar usuário logado.');
     }
+  }
+  async logout(){
+    localStorage.removeItem('usuarioLogado');
   }
 }

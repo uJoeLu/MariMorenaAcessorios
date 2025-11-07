@@ -20,21 +20,6 @@ export const useUsuarioStore = defineStore('usuario', {
                 throw error;
             }
         },
-        async login(email, senha) {
-            try {
-                const usuario = await service.login(email, senha);
-                this.usuario = usuario;
-                this.erro = null;
-                return usuario;
-            } catch (error) {
-                this.erro = error.message;
-                throw error;
-            }
-        },
-        logout() {
-            service.logout();
-            this.usuario = null;
-        },
         async buscarEnderecos() {
             return await service.buscarEnderecosDoUsuario();
         },

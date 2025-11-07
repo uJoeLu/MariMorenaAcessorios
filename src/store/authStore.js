@@ -8,7 +8,10 @@ export const useAuthStore = defineStore("auth", {
         usuario: null,
         erro: null
     }),
-
+    getters:{
+    
+        isAutenticado: (state) => !!state.usuario,
+    },
     actions: {
         async login(email, senha) {
             try {
@@ -33,22 +36,8 @@ export const useAuthStore = defineStore("auth", {
         },
 
         async verificarSessao() {
-            try {
-                this.usuario = await authService.getUsuarioLogado();
-                this.erro = null;
-            } catch (error) {
-                this.usuario = null;
-                this.erro = error.message;
-            }
+            this.usuario = await authService.getUsuarioLogado();
         },
 
-        async isAutenticado() {
-            try {
-                await authService.isAutenticado();
-                return true;
-            } catch {
-                return false;
-            }
-        }
     }
 });

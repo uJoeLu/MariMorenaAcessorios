@@ -12,7 +12,7 @@
               {{ totalQuantidade }}
             </span>
             </router-link></a></li>
-            <li v-if=" !isAutenticado " class="nav-item guest-section dropdown">
+            <li v-if=" !auth.isAutenticado " class="nav-item guest-section dropdown">
                 <font-awesome-icon :icon="['fas', 'user']" />
                 <div class="dropdown-content">
                     <router-link to="/login">Entrar</router-link>
@@ -21,7 +21,7 @@
             </li>
             <li v-else class="nav-item user-section dropdown">
                 <font-awesome-icon :icon="['fas', 'user']" />
-                {{ usuarioLogado?.nome }}
+                {{ auth.usuario.nome }}
                 <div class="dropdown-content">
                     <router-link to="/perfil/meusdados">Perfil</router-link>
                     <router-link to="/perfil/meuspedidos">Meus Pedidos</router-link>
@@ -38,14 +38,16 @@
 import { useSacola } from '@/store/Sacola';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authStore';
-import { computed } from 'vue';
+import { onMounted } from 'vue';
 
 const auth = useAuthStore();
 const sacola = useSacola();
 const {totalQuantidade} = storeToRefs(sacola);
 
-const isAutenticado = computed(() => auth.usuario !== null);
-const usuarioLogado = computed(() => auth.usuario);
+onMounted(() => {
+    auth.verificarSessao();
+})
+
 </script>
 
 <style scoped>

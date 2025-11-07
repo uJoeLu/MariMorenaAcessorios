@@ -23,7 +23,7 @@ export class ProdutoStore {
     actions = {
         async carregarProdutos() {
             try {
-                this.produtos = await this.service.listarProdutos();
+                this.produtos = await service.listarProdutos();
                 this.erro = null;
             } catch (error) {
                 this.erro = error.message;

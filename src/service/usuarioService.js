@@ -42,19 +42,6 @@ export class UsuarioService {
     return { usuario: novoUsuario };
   }
 
-  async login(email, senha) {
-    const usuario = await this.dao.getUsuarioPorEmail(email);
-    if (!usuario || btoa(senha) !== usuario.senha) {
-      throw new Error("Email ou senha incorretos.");
-    }
-    await this.dao.setUsuarioLogado(usuario);
-    return usuario;
-  }
-
-  async logout() {
-    localStorage.removeItem('usuarioLogado');
-  }
-
   async buscarEnderecosDoUsuario(idUsuario) {
     return await this.enderecoDao.buscarPorUsuarioId(idUsuario);
   }
