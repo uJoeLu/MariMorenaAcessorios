@@ -12,7 +12,7 @@
               {{ totalQuantidade }}
             </span>
             </router-link></a></li>
-            <li v-if=" getUsuarioLogado() === null " class="nav-item guest-section dropdown">
+            <li v-if=" authService.getUsuarioLogado() === null " class="nav-item guest-section dropdown">
                 <font-awesome-icon :icon="['fas', 'user']" />
                 <div class="dropdown-content">
                     <router-link to="/login">Entrar</router-link>
@@ -21,13 +21,13 @@
             </li>
             <li v-else class="nav-item user-section dropdown">
                 <font-awesome-icon :icon="['fas', 'user']" />
-                {{ getUsuarioLogado().nome }}
+                {{ authService.getUsuarioLogado().nome }}
                 <div class="dropdown-content">
                     <router-link to="/perfil/meusdados">Perfil</router-link>
                     <router-link to="/perfil/meuspedidos">Meus Pedidos</router-link>
                     <router-link to="/perfil/favoritos">Favoritos</router-link>
                     <router-link to="/perfil/comentarios">Comentarios</router-link>
-                    <a @click="logout()">Sair</a>
+                    <a @click="authService.logout()">Sair</a>
                 </div>
             </li>
         </ul>
@@ -37,8 +37,9 @@
 <script setup>
 import { useSacola } from '@/store/Sacola';
 import { storeToRefs } from 'pinia';
-import {  getUsuarioLogado, logout } from '@/service/authService';
+import { AuthService } from '@/service/authService';
 
+const authService = new AuthService();
 const sacola = useSacola();
 const {totalQuantidade} = storeToRefs(sacola);
 </script>
