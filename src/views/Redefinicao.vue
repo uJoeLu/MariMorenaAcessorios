@@ -35,13 +35,14 @@
     </div>
 </template>
 <script setup>
-import { redefinirSenha } from '@/service/authService';
+import { AuthService } from '@/service/authService';
 import { ref } from 'vue';
 const email = ref('');
 const dataNasc = ref('');
 const novaSenha = ref('');
 const confirmarSenha = ref('');
 const mensagem = ref('');
+const authService = new AuthService();
 
 async function senhaNova() {
 
@@ -63,7 +64,7 @@ async function senhaNova() {
     }
 
     try {
-        await redefinirSenha(email.value, dataNasc.value, novaSenha.value);
+        await authService.redefinirSenha(email.value, dataNasc.value, novaSenha.value);
         mensagem.value = 'Senha redefinida com sucesso!';
         setTimeout(() => {
             mensagem.value = '';

@@ -34,4 +34,8 @@ export class AuthService {
   async cadastrarUsuario(dadosUsuario, dadosEndereco) {
     return await this.service.cadastrar(dadosUsuario, dadosEndereco);
   }
+
+  async redefinirSenha(email, dataNasc, novaSenha) {
+    return await this.service.redefinirSenha(email, dataNasc, novaSenha);
+  }
 }

@@ -70,4 +70,16 @@ export class UsuarioService {
     if (!usuario) throw new Error("Usuário não localizado!");
     return await this.dao.delete(id);
   }
+
+  async redefinirSenha(email, dataNasc, novaSenha) {
+    const usuario = await this.dao.getUsuarioPorEmail(email);
+    if (!usuario) {
+      throw new Error("Usuário não encontrado.");
+    }
+    if (usuario.dataNasc !== dataNasc) {
+      throw new Error("Data de nascimento incorreta.");
+    }
+    const dadosAtualizados = { senha: btoa(novaSenha) };
+    return await this.dao.update(usuario.id, dadosAtualizados);
+  }
 }
