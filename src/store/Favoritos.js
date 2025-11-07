@@ -1,23 +1,25 @@
 import { defineStore } from "pinia";
 import { FavoritoService } from "@/service/favoritoService";
 
-const service = new FavoritoService();
+export class FavoritoStore {
+  constructor() {
+    this.service = new FavoritoService();
+  }
 
-export const useFavoritos = defineStore("favoritos", {
-  state: () => ({
+  state = () => ({
     favoritos: [],
     erro: null
-  }),
+  });
 
-  getters: {
+  getters = {
     isFavorito: (state) => (produtoId) =>
       state.favoritos.some((item) => item.produtoId === produtoId),
-  },
+  };
 
-  actions: {
+  actions = {
     async adicionarFavorito(produto) {
       try {
-        const favorito = await service.adicionarFavorito(produto);
+        const favorito = await this.service.adicionarFavorito(produto);
         this.favoritos.push(favorito);
         this.erro = null;
         return favorito;
@@ -29,7 +31,7 @@ export const useFavoritos = defineStore("favoritos", {
 
     async removerFavorito(produtoId) {
       try {
-        await service.removerFavorito(produtoId);
+        await this.service.removerFavorito(produtoId);
         this.favoritos = this.favoritos.filter(item => item.produtoId !== produtoId);
         this.erro = null;
       } catch (error) {
@@ -40,7 +42,7 @@ export const useFavoritos = defineStore("favoritos", {
 
     async toggleFavorito(produto) {
       try {
-        await service.toggleFavorito(produto);
+        await this.service.toggleFavorito(produto);
         if (this.isFavorito(produto.id)) {
           await this.removerFavorito(produto.id);
         } else {
@@ -55,12 +57,16 @@ export const useFavoritos = defineStore("favoritos", {
 
     async loadFavoritos() {
       try {
-        this.favoritos = await service.listarFavoritos();
+        this.favoritos = await this.service.listarFavoritos();
         this.erro = null;
       } catch (error) {
         this.erro = error.message;
         throw error;
       }
     },
-  },
-});
+  };
+}
+
+const service = new FavoritoService();
+
+export const useFavoritos = defineStore("favoritos", new FavoritoStore());
