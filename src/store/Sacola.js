@@ -1,60 +1,27 @@
 import { defineStore } from "pinia";
-import { SacolaDAO } from "@/dao/sacolaDao";
-import { UsuarioDAO } from "@/dao/usuarioDao";
+import { SacolaService } from "@/service/sacolaService";
+import { useAuthStore } from "@/store/authStore";
 
-const dao = new SacolaDAO();
-const usuarioDao = new UsuarioDAO();
+const service = new SacolaService();
 
-const getKey = () => {
-  try {
-    const usuario = usuarioDao.getUsuarioLogado();
-    return usuario ? `sacola_${usuario.id}` : 'sacola';
-  } catch {
-    return 'sacola';
-  }
-}
-
-const getSacolaFromStorage = () => {
-  try {
-    const data = JSON.parse(localStorage.getItem(getKey())) || [];
-    if (!Array.isArray(data)) return [];
-    return data.filter(item => typeof item === 'object' && item !== null && item.id && typeof item.quantidade === 'number' && item.quantidade > 0);
-  } catch {
-    return [];
-  }
-};
-
-export const useSacola = defineStore('sacola', {
+export const useSacola = defineStore("sacola", {
   state: () => ({
-    sacola: getSacolaFromStorage(),
-    erro: null
+    sacola: [],
+    erro: null,
   }),
 
   getters: {
-    cartCounter: (state) => {
-      return state.sacola.length;
-    },
-
-    totalQuantidade: (state) => {
-      return state.sacola.reduce((total, item) => total + item.quantidade, 0);
-    },
-
-    totalPreco: (state) => {
-      return state.sacola.reduce((total, item,) => total + (item.preco * item.quantidade), 0);
-    },
+    cartCounter: (state) => state.sacola.length,
+    totalQuantidade: (state) => state.sacola.reduce((total, item) => total + item.quantidade, 0),
+    totalPreco: (state) => state.sacola.reduce((total, item) => total + (item.preco * item.quantidade), 0),
   },
 
   actions: {
     async adicionarNaSacola(produto) {
       try {
-        const itemExistente = this.sacola.find(item => item.id === produto.id);
-        if (itemExistente) {
-          itemExistente.quantidade++;
-        } else {
-          this.sacola.push({ ...produto, quantidade: 1 });
-        }
-        await this.saveToLocalStorage();
-        this.erro = null;
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const sacola = await service.adicionarItem(usuarioId, produto);
+        this.sacola = sacola.itens;
       } catch (error) {
         this.erro = error.message;
         throw error;
@@ -63,12 +30,12 @@ export const useSacola = defineStore('sacola', {
 
     async aumentarQtd(produtoId) {
       try {
-        const itemExistente = this.sacola.find(item => item.id === produtoId);
-        if (itemExistente) {
-          itemExistente.quantidade++;
-          await this.saveToLocalStorage();
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const produto = this.sacola.find(item => item.produtoId === produtoId);
+        if (produto) {
+          const sacola = await service.adicionarItem(usuarioId, { id: produtoId, nome: produto.nome, preco: produto.preco });
+          this.sacola = sacola.itens;
         }
-        this.erro = null;
       } catch (error) {
         this.erro = error.message;
         throw error;
@@ -77,17 +44,9 @@ export const useSacola = defineStore('sacola', {
 
     async diminuirQtd(produtoId) {
       try {
-        const itemIndex = this.sacola.findIndex(item => item.id === produtoId);
-        if (itemIndex !== -1) {
-          const itemExistente = this.sacola[itemIndex];
-          if (itemExistente.quantidade > 1) {
-            itemExistente.quantidade--;
-          } else {
-            this.sacola.splice(itemIndex, 1);
-          }
-          await this.saveToLocalStorage();
-        }
-        this.erro = null;
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const sacola = await service.diminuirItem(usuarioId, produtoId);
+        this.sacola = sacola.itens;
       } catch (error) {
         this.erro = error.message;
         throw error;
@@ -96,9 +55,11 @@ export const useSacola = defineStore('sacola', {
 
     async removerItem(produtoId) {
       try {
-        this.sacola = this.sacola.filter(item => item.id !== produtoId);
-        await this.saveToLocalStorage();
-        this.erro = null;
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const sacola = await service.getSacola(usuarioId);
+        sacola.itens = sacola.itens.filter(item => item.produtoId !== produtoId);
+        const updated = await service.salvarSacola(sacola);
+        this.sacola = updated.itens;
       } catch (error) {
         this.erro = error.message;
         throw error;
@@ -107,23 +68,20 @@ export const useSacola = defineStore('sacola', {
 
     async limparSacola() {
       try {
-        this.sacola = [];
-        await this.saveToLocalStorage();
-        this.erro = null;
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const sacola = await service.limparSacola(usuarioId);
+        this.sacola = sacola.itens;
       } catch (error) {
         this.erro = error.message;
         throw error;
       }
     },
 
-    async saveToLocalStorage() {
-      localStorage.setItem(getKey(), JSON.stringify(this.sacola));
-    },
-
     async loadSacola() {
       try {
-        this.sacola = getSacolaFromStorage();
-        this.erro = null;
+        const usuarioId = useAuthStore().usuario?.id || 'guest';
+        const sacola = await service.getSacola(usuarioId);
+        this.sacola = sacola.itens;
       } catch (error) {
         this.erro = error.message;
         throw error;
