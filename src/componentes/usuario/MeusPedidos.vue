@@ -41,11 +41,10 @@
 
 <script setup>
 import { usePedidos } from '@/store/Pedidos.js';
-
 const pedidosStore = usePedidos();
 const { getPedidosPorUsuario, cancelarPedido } = pedidosStore;
 
-const pedidos = getPedidosPorUsuario;
+const pedidos = getPedidosPorUsuario();
 
 const editarPedido = () => {
     alert('Funcionalidade de edição de pedido ainda não implementada.');
