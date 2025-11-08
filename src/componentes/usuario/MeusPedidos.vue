@@ -41,14 +41,31 @@
 
 <script setup>
 import { usePedidos } from '@/store/Pedidos.js';
-const pedidosStore = usePedidos();
-const { getPedidosPorUsuario, cancelarPedido } = pedidosStore;
+import { onMounted, computed } from 'vue';
 
-const pedidos = getPedidosPorUsuario();
+const pedidosStore = usePedidos();
+
+const pedidos = computed(() => pedidosStore.getPedidosPorUsuario);
 
 const editarPedido = () => {
     alert('Funcionalidade de edição de pedido ainda não implementada.');
 };
+
+const cancelarPedido = async (pedidoId) => {
+    try {
+        await pedidosStore.cancelarPedido(pedidoId);
+    } catch (error) {
+        alert('Erro ao cancelar pedido: ' + error.message);
+    }
+};
+
+onMounted(async () => {
+    try {
+        await pedidosStore.loadPedidos();
+    } catch (error) {
+        console.error('Erro ao carregar pedidos:', error);
+    }
+});
 
 </script>
 
