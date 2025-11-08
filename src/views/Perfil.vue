@@ -8,7 +8,7 @@
             <button @click="authService.logout()" class="logout-btn">Sair</button>
         </div>
         <div class="content">
-            <router-view v-if=" favoritoStore.favoritos"/>
+            <router-view v-if=" favoritoStore.loadFavoritos"/>
             <div v-else>
                 <h2>Não há itens favoritados</h2>
             </div>
@@ -19,10 +19,10 @@
 
 <script setup>
 import { AuthService } from '@/service/authService'
-import { FavoritoStore } from '@/store/Favoritos';
+import { useFavoritosStore } from '@/store/Favoritos';
 
 const authService = new AuthService();
-const favoritoStore = new FavoritoStore();
+const favoritoStore = useFavoritosStore()
 
 </script>
 

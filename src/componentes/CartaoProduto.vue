@@ -3,7 +3,7 @@
     <div class="imagem-container">
       <div v-if="erroFavorito" class="mensagem-erro"> {{ erroFavorito }} </div>
       <router-link :to="'/detalhes/' + produto.id"><img :src="produto.imagem" :alt="produto.nome" /></router-link>
-      <button class="favorito-btn" @click="handleToggleFavorito(produto)" :class="{ 'favoritado': favoritoStore.getters.isFavorito(produto.id)}" >
+      <button class="favorito-btn" @click="handleToggleFavorito(produto)" :class="{ 'favoritado': favoritoStore.isFavorito(produto.id)}" >
         ♥
       </button>
     </div>
@@ -20,17 +20,17 @@
 <script setup>
 import { ref } from 'vue';
 import { useSacola } from '@/store/Sacola.js';
-import { FavoritoStore } from '@/store/Favoritos.js';
+import { useFavoritosStore } from '@/store/Favoritos.js';
 
 const { adicionarNaSacola } = useSacola();
-const favoritoStore = new FavoritoStore();
+const favoritoStore = useFavoritosStore();
 
 const erroFavorito = ref('');
 
 const handleToggleFavorito = async (produto) => {
   try {
-    await favoritoStore.actions.toggleFavorito(produto);
-    erroFavorito.value = '';
+    await favoritoStore.toggleFavorito(produto)
+    erroFavorito.value = erroFavorito.value;
   } catch (error) {
     erroFavorito.value = error.message;
     setTimeout(() => {

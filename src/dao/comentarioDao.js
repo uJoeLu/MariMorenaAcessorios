@@ -9,12 +9,12 @@ export class ComentarioDAO extends GenericDAO {
     }
 
     async buscarPorUsuarioId(usuarioId) {
-        const comentarios = await this.findAll();
+        const comentarios = await this.getAll();
         return comentarios.filter(comentario => comentario.usuarioId === usuarioId);
     }
 
     async buscarPorProdutoId(produtoId) {
-        const comentarios = await this.findAll();
+        const comentarios = await this.getAll();
         return comentarios.filter(comentario => comentario.produtoId === produtoId);
     }
 

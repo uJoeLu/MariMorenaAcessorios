@@ -9,7 +9,7 @@ export class FavoritoDAO extends GenericDAO {
     }
 
     async buscarPorUsuarioId(usuarioId) {
-        const favoritos = await this.findAll();
+        const favoritos = await this.getAll();
         return favoritos.filter(favorito => favorito.usuarioId === usuarioId);
     }
 

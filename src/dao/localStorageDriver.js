@@ -2,7 +2,8 @@ export class LocalStorageDriver {
   async all(tabela) {
     try {
       const data = localStorage.getItem(tabela)
-      return data ? JSON.parse(data) : []
+      const parsed = data ? JSON.parse(data) : []
+      return Array.isArray(parsed) ? parsed : []
     } catch (error) {
       throw new Error(`Erro ao ler dados da tabela ${tabela}: ${error.message}`)
     }

@@ -2,20 +2,20 @@
     <div class="favoritos-container">
         <h2>Meus Favoritos</h2>
         <div class="itens-favoritados">
-        <div class="item-favorito" v-if="storeFavoritos.favoritos.length > 0 ">
-            <div v-for="favorito in storeFavoritos.favoritos" :key="favorito.id" class="item">
-                <img :src="favorito.imagem" />
-                <div class="text">
-                    <p> {{ favorito.nome }}</p>
-                    <p>{{ favorito.descricao }}</p>
-                    <p>R$ {{ parseFloat(favorito.preco).toFixed(2) }}</p> 
+            <div class="item-favorito" v-if="storeFavoritos.favoritos.length > 0">
+                <div v-for="favorito in favoritados" :key="favorito.id" class="item">
+                    <img :src="favorito.produto.imagem" />
+                    <div class="text">
+                        <p> {{ favorito.produto.nome }}</p>
+                        <p>{{ favorito.produto.descricao }}</p>
+                        <p>R$ {{ parseFloat(favorito.produto.preco).toFixed(2) }}</p>
+                    </div>
+
+                    <button @click="removerFavorito(favorito.id)">
+                        remover
+                    </button>
                 </div>
-                
-                <button @click="() => storeFavoritos.removerFavorito(favorito.id)"> 
-                    remover 
-                </button>
             </div>
-        </div>
             <div v-else>
                 <h2>
                     Não há itens favoritados
@@ -26,11 +26,19 @@
 </template>
 
 <script setup>
-import { useFavoritos } from '@/store/Favoritos';
-import { onMounted } from 'vue';
-const storeFavoritos = useFavoritos();
-onMounted(() => {
-    storeFavoritos.loadFavoritos();
+import { useFavoritosStore } from '@/store/Favoritos';
+import { onMounted, computed } from 'vue';
+const storeFavoritos = useFavoritosStore();
+
+const favoritados = computed(() => storeFavoritos.favoritos);
+
+const removerFavorito = async (produtoId) => {
+    await storeFavoritos.removerFavorito(produtoId);
+};
+
+onMounted(async () => {
+    await storeFavoritos.loadFavoritos();
+
 });
 
 </script>
@@ -48,6 +56,7 @@ onMounted(() => {
     flex-direction: column;
     background-color: #D9D9D905;
 }
+
 .item-favorito {
     display: flex;
     flex-direction: column;
@@ -66,6 +75,7 @@ onMounted(() => {
     margin: auto;
 
 }
+
 button {
     background-color: #FF6F61;
     color: white;
