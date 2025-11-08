@@ -8,7 +8,7 @@ export class AuthService {
 
   async login(email, senha) {
     const usuario = await this.dao.getUsuarioPorEmail(email);
-    if(!usuario || usuario.senha!== senha) throw new Error ("Usuario e senha incorretos!");
+    if(!usuario || usuario.senha !== btoa(senha)) throw new Error ("Usuario e senha incorretos!");
     await this.dao.setUsuarioLogado(usuario);
     return usuario;
   }

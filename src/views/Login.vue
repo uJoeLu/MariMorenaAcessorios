@@ -28,16 +28,16 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { AuthService } from '@/service/authService';
+import { useAuthStore } from '@/store/authStore';
 const email = ref('');
 const senha = ref('');
 const mensagem = ref('');
 const isSuccess = ref(false);
 const usuarioLogado = ref(null);
-const authService = new AuthService();
+const authStore = useAuthStore();
 
 const checkSession = () => {
-  const user = authService.getUsuarioLogado();
+  const user = authStore.verificarSessao();
   usuarioLogado.value = user ? user.email : null;
 };
 
@@ -50,7 +50,7 @@ const login = async () => {
   }
 
   try {
-    const resultado = await authService.login(email.value, senha.value);
+    const resultado = await authStore.login(email.value, senha.value);
 
     mensagem.value = 'Login realizado com sucesso!';
     isSuccess.value = true;
