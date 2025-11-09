@@ -11,7 +11,7 @@
                         <p>R$ {{ parseFloat(favorito.produto.preco).toFixed(2) }}</p>
                     </div>
 
-                    <button @click="removerFavorito(favorito.id)">
+                    <button @click="removerFavorito(favorito.produto.id)">
                         remover
                     </button>
                 </div>
