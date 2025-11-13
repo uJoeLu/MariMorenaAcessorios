@@ -13,12 +13,6 @@ dist
 dist-ssr
 coverage
 *.local
-.env
-.env.*.local
-.TODO.md
-
-/cypress/videos/
-/cypress/screenshots/
 
 # Editor directories and files
 .vscode/*
@@ -31,5 +25,16 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-package.json
-package-lock.json
+
+.eslintcache
+
+# Environment variables
+.env
+.TODO.md
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/

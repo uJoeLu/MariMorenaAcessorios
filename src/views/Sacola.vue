@@ -1,233 +1,350 @@
 <template>
+  <div class="sacola">
     <div class="sacola-container">
-        <h1>Minha Sacola</h1>
+      <h1 class="titulo">Minha Sacola</h1>
 
-        <div v-if="sacolaStore.sacola.length < 1  " class="sacola-vazia">
-            <p>Sua sacola está vazia. Adicione alguns acessórios lindos!</p>
-            <router-link to="/" class="btn-voltar">Voltar ao Catálogo</router-link>
+      <div v-if="itens.length === 0" class="vazio">
+        <p>Sua sacola está vazia</p>
+        <router-link to="/" class="btn-continuar">Continuar Comprando</router-link>
+      </div>
+
+      <div v-else class="sacola-content">
+        <div class="itens-lista">
+          <div v-for="item in itens" :key="item.id" class="item-card">
+            <div class="item-imagem">
+              <img :src="item.imagem" :alt="item.nome" />
+            </div>
+
+            <div class="item-info">
+              <h3>{{ item.nome }}</h3>
+              <p class="categoria">{{ item.categoria }}</p>
+              <p class="preco">R$ {{ formatarPreco(item.preco) }}</p>
+            </div>
+
+            <div class="item-acoes">
+              <div class="quantidade-controls">
+                <button @click="diminuirQuantidade(item)" :disabled="item.quantidade <= 1">-</button>
+                <span class="quantidade">{{ item.quantidade }}</span>
+                <button @click="aumentarQuantidade(item)">+</button>
+              </div>
+
+              <p class="subtotal">Subtotal: R$ {{ formatarPreco(item.preco * item.quantidade) }}</p>
+
+              <button class="btn-remover" @click="removerItem(item.id)">Remover</button>
+            </div>
+          </div>
         </div>
 
-        <div v-else>
-            <div v-for="item in sacolaStore.sacola" :key="item.id" class="item-sacola">
-                <div class="imagem-container">
-                <img :src="item.imagem" :alt="item.nome" class="item-imagem">
-                </div>
-                <div class="item-detalhes">
-                    <h3>{{ item.nome }}</h3>
-                    <p>Preço unitário: R$ {{ item.preco.toFixed(2) }}</p>
-                    <div class="quantidade-controle">
-                        <button @click="diminuirQtd(item.id)" class="btn-quantidade">-</button>
-                        <span>Quantidade: {{ item.quantidade }}</span>
-                        <button @click="aumentarQtd(item.id)" class="btn-quantidade">+</button>
-                    </div>
-                    <p>Subtotal: R$ {{ (item.preco * item.quantidade).toFixed(2) }}</p>
-                    <button @click="removerItem(item.id)" class="btn-remover">Remover Item</button>
-                </div>
-            </div>
-            <div class="cep">
-                <h3>Calcular Frete</h3>
-                <input type="text" v-model="cep" placeholder="Digite seu CEP" />
-                <button class="btn-calcular" @click="calcularFrete">Calcular</button>
-                <p v-if="frete !== null">Frete estimado: R$ {{ frete.toFixed(2) }}</p>
-                <p v-if="erroCep" class="erro-cep">{{ erroCep }}</p>
-            </div>
+        <div class="resumo">
+          <h2>Resumo do Pedido</h2>
 
-            <div class="sacola-resumo">
-                <h2>Total da Compra: R$ {{ (sacolaStore.totalPreco + frete).toFixed(2)}}</h2>
-                <button @click="logado" class="btn-checkout" ><router-link to="/finalizar-compra"  > Finalizar Compra </router-link></button>
-            </div>
+          <div class="resumo-linha">
+            <span>Total de itens:</span>
+            <span>{{ totalItens }}</span>
+          </div>
+
+          <div class="resumo-linha total">
+            <span>Total:</span>
+            <span>R$ {{ formatarPreco(valorTotal) }}</span>
+          </div>
+
+          <button class="btn-finalizar" @click="finalizarCompra">Finalizar Compra</button>
+
+          <router-link to="/" class="btn-continuar-comprando">Continuar Comprando</router-link>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
-import { useSacola } from '@/store/Sacola.js';
-import { ref, onMounted } from 'vue';
-import { AuthService } from '@/service/authService';
-import router from '@/router';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useSacolaStore } from '../stores/sacolaStore';
 
-const { aumentarQtd, diminuirQtd, removerItem } = useSacola();
-const sacolaStore = useSacola();
+const router = useRouter();
+const sacolaStore = useSacolaStore();
 
-const cep = ref('');
-const frete = ref(null);
-const erroCep = ref('');
-const authService = new AuthService();
+const itens = computed(() => sacolaStore.itens);
+const totalItens = computed(() => sacolaStore.totalItens);
+const valorTotal = computed(() => sacolaStore.valorTotal);
 
-function logado() {
-    if (!authService.getUsuarioLogado()) {
-        router.push('/login');
-        alert('Por favor, faça login para finalizar a compra.');
-    }
-}
+const formatarPreco = (preco) => {
+  return preco.toFixed(2).replace('.', ',');
+};
 
-function calcularFrete() {
-  erroCep.value = '';
-  frete.value = null;
-  const cepValido = /^[0-9]{5}-?[0-9]{3}$/.test(cep.value);
-  if (!cepValido) {
-    erroCep.value = 'CEP inválido. Por favor, insira um CEP no formato 00000-000 ou 00000000.';
-    return 0;
+const aumentarQuantidade = (item) => {
+  sacolaStore.atualizarQuantidade(item.id, item.quantidade + 1);
+};
+
+const diminuirQuantidade = (item) => {
+  if (item.quantidade > 1) {
+    sacolaStore.atualizarQuantidade(item.id, item.quantidade - 1);
   }
-  frete.value = 15.00;
-}
-onMounted(() => {
-    sacolaStore.loadSacola();
-});
+};
 
+const removerItem = (itemId) => {
+  sacolaStore.removerItem(itemId);
+};
+
+const finalizarCompra = () => {
+  alert('Funcionalidade de finalização de compra em desenvolvimento!');
+};
 </script>
+
 <style scoped>
+.sacola {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 2rem 1rem;
+}
 
 .sacola-container {
-    width: 50%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color:#FEDE8B;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20% ;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.sacola-vazia {
-    text-align: center;
-    margin-top: 50px;
+
+.titulo {
+  text-align: center;
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
-.btn-voltar {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #BFAF8F;
-    color: #000000;
-    text-decoration: none;
-    border-radius: 5px;
+
+.vazio {
+  text-align: center;
+  padding: 3rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.btn-voltar:hover {
-    background-color: #e6c76b;
+
+.vazio p {
+  font-size: 1.2rem;
+  color: #666666;
+  margin-bottom: 2rem;
 }
-.cep {
-    margin-top: 20px;
+
+.btn-continuar {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background-color: #d4af37;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s;
 }
-.cep input {
-    padding: 8px;
-    width: 200px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+
+.btn-continuar:hover {
+  background-color: #c49b2a;
 }
-.cep .btn-calcular {
-    padding: 8px 16px;
-    background-color: #BFAF8F;
-    color: #000000;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+
+.sacola-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
 }
-.cep .btn-calcular:hover {
-    background-color: #e6c76b;
+
+.itens-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-.item-sacola {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #000000;
-    padding: 15px 0;
+
+.item-card {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.imagem-container {
-    flex: 0 0 150px;
-    margin-right: 20px;
-}
+
 .item-imagem {
-    max-width: 100%;
-    border-radius: 8px;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f5f5f5;
 }
-.item-detalhes {
-    flex: 1;
+
+.item-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.item-detalhes h3 {
-    margin: 0 0 10px;
+
+.item-info h3 {
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
 }
-.item-detalhes p {
-    margin: 5px 0;
+
+.item-info .categoria {
+  color: #666666;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
 }
+
+.item-info .preco {
+  color: #d4af37;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.item-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.quantidade-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.quantidade-controls button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background-color: #d4af37;
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quantidade-controls button:hover:not(:disabled) {
+  background-color: #c49b2a;
+}
+
+.quantidade-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantidade-controls .quantidade {
+  width: 50px;
+  text-align: center;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+
+.subtotal {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin: 0;
+}
+
 .btn-remover {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #ff4d4d;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
+
 .btn-remover:hover {
-    background-color: #e04343;
+  background-color: #e74c3c;
+  color: #ffffff;
 }
-.sacola-resumo {
-    text-align: right;
-    margin-top: 20px;
+
+.resumo {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
 }
-.btn-checkout {
-    padding: 12px 24px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+
+.resumo h2 {
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem 0;
 }
-.btn-checkout:hover {
-    background-color: #218838;
+
+.resumo-linha {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: #666666;
 }
-.quantidade-controle {
-    display: flex;
+
+.resumo-linha.total {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  padding-top: 1rem;
+  border-top: 2px solid #f5f5f5;
+  margin-top: 1rem;
+}
+
+.resumo-linha.total span:last-child {
+  color: #d4af37;
+}
+
+.btn-finalizar {
+  width: 100%;
+  padding: 1rem;
+  background-color: #d4af37;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1.5rem;
+}
+
+.btn-finalizar:hover {
+  background-color: #c49b2a;
+}
+
+.btn-continuar-comprando {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  color: #666666;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.btn-continuar-comprando:hover {
+  color: #d4af37;
+}
+
+@media (max-width: 968px) {
+  .sacola-content {
+    grid-template-columns: 1fr;
+  }
+
+  .resumo {
+    position: static;
+  }
+
+  .item-card {
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+  }
+
+  .item-acoes {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    margin: 10px 0;
-}
-.btn-quantidade {
-    padding: 5px 10px;
-    background-color: #BFAF8F;
-    color: #000;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.btn-quantidade:hover {
-    background-color: #e6c76b;
-}
-.item-sacola:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: 768px) {
-    .sacola-container {
-        width: 90%;
-        margin: 10px auto;
-        padding: 15px;
-    }
-
-    .item-sacola {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .imagem-container {
-        flex: none;
-        margin-right: 0;
-        margin-bottom: 10px;
-        align-self: center;
-    }
-
-    .cep input {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    .cep .btn-calcular {
-        width: 100%;
-    }
-
-    .sacola-resumo {
-        text-align: center;
-    }
+  }
 }
 </style>

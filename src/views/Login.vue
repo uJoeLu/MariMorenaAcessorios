@@ -1,154 +1,177 @@
 <template>
-    <div class="login-page">
-
-            <img src="../assets/logofull.jpeg" alt="Logo">
-
-        <div class="form">
-            <h2>Entrar com sua conta<br>Mari Morena</h2>
-            <h3>Acessórios</h3>
-            <form @submit.prevent="login">
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required v-model="email"/>
-                </div>
-                <div>
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" required v-model="senha" />
-                    <p :style="{ opacity: 0.5 }"><router-link to="/redefinicao">Esqueceu a senha?</router-link></p>                    
-                </div>
-                <div class="button-group">
-                    <button><router-link to="/cadastro">Cadastre-se</router-link>
-                    </button>
-                    <button type="submit">Entrar</button>
-                </div>
-            </form>
-            <p v-if="mensagem" :class="{ success: isSuccess, error: !isSuccess }">{{ mensagem }}</p>
+  <div class="login-container">
+    <div class="login-form">
+      <h2>Entrar</h2>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" v-model="email" :class="{ 'error': v$.email.$error }" @blur="v$.email.$touch()"
+            placeholder="Digite seu email" />
+          <small v-if="v$.email.$error" class="error-text">
+            <p v-for="error of v$.email.$errors" :key="error.$uid">
+              {{ error.$message }}
+            </p>
+          </small>
         </div>
+        <div class="form-group">
+          <label for="password">Senha:</label>
+          <input type="password" id="password" v-model="password" :class="{ 'error': v$.password.$error }"
+            @blur="v$.password.$touch()" placeholder="Digite sua senha" />
+          <small v-if="v$.password.$error" class="error-text">
+            <p v-for="error of v$.password.$errors" :key="error.$uid">
+              {{ error.$message }}
+            </p>
+          </small>
+        </div>
+        <button type="submit" :disabled="loading" class="btn-login">
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+        <p v-if="error" class="error-message">{{ error }}</p>
+      </form>
+      <div class="links">
+        <router-link to="/register">Não tem conta? Cadastre-se</router-link>
+        <router-link to="/reset-password">Esqueceu a senha?</router-link>
+      </div>
     </div>
+  </div>
 </template>
+
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useAuthStore } from '@/store/authStore';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { authService } from '@/services/authService';
+import { useVuelidate } from '@vuelidate/core';
+import { required, email as emailValidator, minLength } from '@vuelidate/validators';
+
+const router = useRouter();
 const email = ref('');
-const senha = ref('');
-const mensagem = ref('');
-const isSuccess = ref(false);
-const usuarioLogado = ref(null);
-const authStore = useAuthStore();
+const password = ref('');
+const loading = ref(false);
+const error = ref('');
 
-const checkSession = () => {
-  const user = authStore.verificarSessao();
-  usuarioLogado.value = user ? user.email : null;
+const rules = {
+  email: { required, email: emailValidator },
+  password: { required, minLength: minLength(6) }
 };
 
-const login = async () => {
-  mensagem.value = '';
-  if (!email.value || !senha.value) {
-    mensagem.value = 'Preencha todos os campos.';
-    isSuccess.value = false;
-    return;
-  }
+const v$ = useVuelidate(rules, { email, password });
 
+const handleLogin = async () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) return;
+
+  loading.value = true;
+  error.value = '';
   try {
-    const resultado = await authStore.login(email.value, senha.value);
-
-    mensagem.value = 'Login realizado com sucesso!';
-    isSuccess.value = true;
-    usuarioLogado.value = resultado.email;
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 2000);
-
-
-    email.value = '';
-    senha.value = '';
-
-  } catch (error) {
-    mensagem.value = error.message;
-    isSuccess.value = false;
+    await authService.login(email.value, password.value);
+    router.push('/');
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
   }
 };
-
-onMounted(() => {
-  checkSession();
-});
 </script>
+
 <style scoped>
-.login-page {
-    display: grid;
-    gap: 200px;
-    place-items: center;
-    margin: auto;
-    grid-template-columns: 1fr 1fr;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;   
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
 }
 
-.form {
-    max-width: 400px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    background: #FEDE8B;
-}
-.form input {
-    border-radius: 8px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-    background: white;
-}
-.form h2{
-    margin-top: 0;
-    text-align: center;
-}
-.form h3{
-    text-align: center;
-    margin-top: -1.5rem;
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-.success {
-    color: green;
-}
-.error {
-    color: red;
-}
-form{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 3rem;
-    max-width: 300px;
-    margin-left: 3rem;
-    margin-right: 3rem;
-    justify-content: center;
-    align-items: center;
-}
-.button-group {
-    display: flex;
-    place-items: center;
-    gap: 10px;
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
 }
 
-@media (max-width: 768px) {
-    .login-page {
-        grid-template-columns: 1fr;
-        gap: 50px;
-        padding: 20px;
-    }
+.form-group {
+  margin-bottom: 1rem;
+}
 
-    .form {
-        max-width: 100%;
-        margin-top: 0;
-    }
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
 
-    form {
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #d4af37;
+}
+
+.form-group input.error {
+  border-color: #d9534f;
+}
+
+.error-text {
+  color: #d9534f;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #d4af37;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-login:hover:not(:disabled) {
+  background-color: #b8941f;
+}
+
+.btn-login:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #d9534f;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.links {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.links a {
+  display: block;
+  color: #007bff;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.links a:hover {
+  text-decoration: underline;
 }
 </style>

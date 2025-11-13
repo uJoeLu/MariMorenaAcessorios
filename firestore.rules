@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Variável global para o ID do usuário logado (se houver)
+    function getUid() {
+      return request.auth.uid;
+    }
+    
+    // Função para verificar se usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se é o dono do documento
+    // userId é o ID do usuário que deve ser o dono (pode ser o ID do documento ou um campo 'userId' nele)
+    function isOwner(userId) {
+      return getUid() == userId;
+    }
+
+    // Verifica se o usuário é Administrador lendo o perfil no Firestore
+    function isAdmin() {
+      // 1. Deve estar autenticado.
+      // 2. Tenta buscar o documento de perfil (assumindo que o UID é o ID do documento).
+      // 3. Verifica se o campo 'eAdmin' é true.
+      return isAuthenticated() 
+        && get(/databases/$(database)/documents/usuarios/$(getUid())).data.eAdmin == true;
+    }
+
+    // ----------------------------------------------------------------------
+    // 1. Coleção 'usuarios' (Perfis)
+    // ----------------------------------------------------------------------
+    match /usuarios/{userId} {
+      // Criação: Permitida se o UID logado for o ID do documento que está sendo criado.
+      allow create: if isAuthenticated() && isOwner(userId);
+
+      // Leitura/Atualização: O usuário só pode gerenciar seu próprio perfil.
+      allow read, update: if isOwner(userId);
+      
+      // Leitura total: Permite que administradores listem e inspecionem qualquer perfil.
+      allow read: if isAdmin();
+      
+      // Delete: Negado para todos.
+      allow delete: if false; 
+    }
+    
+    // ----------------------------------------------------------------------
+    // 2. Coleção 'produtos' (Catálogo Público)
+    // ----------------------------------------------------------------------
+    match /produtos/{produtoId} {
+      // Leitura: Qualquer pessoa (logada ou não) pode ver os produtos.
+      allow read: if true;
+
+      // Escrita/Atualização/Deleção: Apenas administradores.
+      allow write: if isAdmin(); 
+    }
+    
+    // ----------------------------------------------------------------------
+    // 3. Coleção 'favoritos' (Privado e de Propriedade do Usuário)
+    // ----------------------------------------------------------------------
+    match /favoritos/{favoritoId} {
+      // Nota: Assumimos que o documento favorito tem um campo 'userId'.
+      
+      // Criação/Leitura/Atualização/Deleção: Apenas o dono pode gerenciar seus favoritos.
+      allow write: if isAuthenticated() && isOwner(request.resource.data.userId); // Criação e Update
+      allow delete: if isAuthenticated() && isOwner(resource.data.userId); // Deleção
+      allow read: if isAuthenticated() && isOwner(resource.data.userId); // Leitura
+      
+      // Opcional: Admins podem ler todos
+      allow read: if isAdmin();
+    }
+    
+    // ----------------------------------------------------------------------
+    // 4. Coleção 'comentarios' (Leitura Pública, Escrita Restrita)
+    // ----------------------------------------------------------------------
+    match /comentarios/{comentarioId} {
+      // Leitura: Todos podem ver os comentários.
+      allow read: if true;
+
+      // Criação: Apenas usuários logados.
+      // Validação: Garante que o campo 'userId' no comentário é o ID do criador.
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId); 
+
+      // Atualização: Apenas o dono pode atualizar seu comentário (ex: corrigir um erro).
+      allow update: if isAuthenticated() && isOwner(resource.data.userId);
+      
+      // Deleção: Apenas o dono ou um Admin.
+      allow delete: if isAuthenticated() && isOwner(resource.data.userId) || isAdmin();
+    }
+    
+    // ----------------------------------------------------------------------
+    // 5. Coleção 'pedidos' (Transacional e Restrito ao Dono/Admin)
+    // ----------------------------------------------------------------------
+    match /pedidos/{pedidoId} {
+      // Criação: Permitida a qualquer logado, desde que o campo 'userId' corresponda ao Auth UID.
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+
+      // Leitura: Apenas o dono do pedido ou um Admin.
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+
+      // Atualização:
+      // Admins podem atualizar (mudar status).
+      // O dono não pode atualizar (pedidos são imutáveis após a criação).
+      allow update: if isAdmin();
+      
+      // Deleção: Apenas admins podem deletar pedidos (para fins de auditoria/logística).
+      allow delete: if isAdmin();
+    }
+
+    // ----------------------------------------------------------------------
+    // 6. Nega tudo que não foi explicitamente permitido
+    // ----------------------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
