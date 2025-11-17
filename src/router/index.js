@@ -1,28 +1,27 @@
-// Lazy-loaded components for better performance
-const ListaClientes = () => import('@/components/admin/clientes/ListaClientes.vue')
-const DetalhesCliente = () => import('@/components/admin/clientes/DetalhesCliente.vue')
-const Dashboard = () => import('@/components/admin/Dashboard.vue')
-const Relatorios = () => import('@/components/admin/Relatorios.vue')
-const ListaPedidos = () => import('@/components/admin/pedidos/ListaPedidos.vue')
-const DetalhesPedido = () => import('@/components/admin/pedidos/DetalhesPedido.vue')
-const CadastrarProduto = () => import('@/components/admin/produtos/CadastrarProduto.vue')
-const ListaProdutos = () => import('@/components/admin/produtos/ListaProdutos.vue')
-const Checkout = () => import('@/components/checkout/Checkout.vue')
-const Confirmacao = () => import('@/components/checkout/Confirmacao.vue')
-const Endereco = () => import('@/components/checkout/Endereco.vue')
-const Pagamento = () => import('@/components/checkout/Pagamento.vue')
-const Favoritos = () => import('@/components/usuario/Favoritos.vue')
-const Meusdados = () => import('@/components/usuario/Meusdados.vue')
-const MeusPedidos = () => import('@/components/usuario/MeusPedidos.vue')
-const Catalogo = () => import('@/views/Catalogo.vue')
-const Perfil = () => import('@/views/Perfil.vue')
-const ProdutoDetalhes = () => import('@/views/ProdutoDetalhes.vue')
-const Sacola = () => import('@/views/Sacola.vue')
-const Login = () => import('@/views/Login.vue')
-const Register = () => import('@/views/Register.vue')
-const ResetPassword = () => import('@/views/ResetPassword.vue')
-const AtualizarProduto = () => import('@/components/admin/produtos/AtualizarProduto.vue')
-const LayoutAdmin = () => import('@/components/admin/LayoutAdmin.vue')
+import ListaClientes from '@/components/admin/clientes/ListaClientes.vue'
+import DetalhesCliente from '@/components/admin/clientes/DetalhesCliente.vue'
+import Dashboard from '@/components/admin/Dashboard.vue'
+import Relatorios from '@/components/admin/Relatorios.vue'
+import ListaPedidos from '@/components/admin/pedidos/ListaPedidos.vue'
+import DetalhesPedido from '@/components/admin/pedidos/DetalhesPedido.vue'
+import CadastrarProduto from '@/components/admin/produtos/CadastrarProduto.vue'
+import ListaProdutos from '@/components/admin/produtos/ListaProdutos.vue'
+import Checkout from '@/components/checkout/Checkout.vue'
+import Confirmacao from '@/components/checkout/Confirmacao.vue'
+import Endereco from '@/components/checkout/Endereco.vue'
+import Pagamento from '@/components/checkout/Pagamento.vue'
+import Favoritos from '@/components/usuario/Favoritos.vue'
+import Meusdados from '@/components/usuario/Meusdados.vue'
+import MeusPedidos from '@/components/usuario/MeusPedidos.vue'
+import Catalogo from '@/views/Catalogo.vue'
+import Perfil from '@/views/Perfil.vue'
+import ProdutoDetalhes from '@/views/ProdutoDetalhes.vue'
+import Sacola from '@/views/Sacola.vue'
+import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
+import ResetPassword from '@/views/ResetPassword.vue'
+import AtualizarProduto from '@/components/admin/produtos/AtualizarProduto.vue'
+import LayoutAdmin from '@/components/admin/LayoutAdmin.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import { authService } from '@/services/authService'
@@ -53,7 +52,6 @@ const adminGuard = async (to, from, next) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Public routes
     { path: '/', name: 'catalogo', component: Catalogo },
     { path: '/login', name: 'login', component: Login },
     { path: '/register', name: 'register', component: Register },
@@ -61,7 +59,6 @@ const router = createRouter({
     { path: '/sacola', name: 'sacola', component: Sacola },
     { path: '/produto/:id', name: 'produto-detalhes', component: ProdutoDetalhes },
 
-    // User authenticated routes
     {
       path: '/perfil',
       name: 'perfil',
