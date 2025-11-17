@@ -23,9 +23,7 @@
           </svg>
         </router-link>
         <router-link v-if="eAutenticado" to="/perfil/meus-dados" class="nav-link">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path :d="mdiAccountCircle" />
-          </svg>
+          <img :src="user?.photoURL || '/default-avatar.png'" alt="Foto do Usuário" class="user-avatar" />
         </router-link>
         <div v-else class="dropdown">
           <button @click="toggleDropdown" class="dropdown-toggle nav-link">
@@ -48,6 +46,8 @@ import { computed, ref } from 'vue';
 import { useSacolaStore } from '../stores/sacolaStore';
 import { authService } from '@/services/authService';
 import { mdiAccountCircle, mdiHeart, mdiHome, mdiShopping } from '@mdi/js';
+
+const user = computed(() => authService.getCurrentUser());
 
 const sacolaStore = useSacolaStore();
 const totalItens = computed(() => sacolaStore.totalItens);
@@ -84,6 +84,7 @@ const closeDropdown = () => {
 
 .logo img{
     height: 100px;
+    
 }
 
 .logo {
@@ -170,5 +171,12 @@ const closeDropdown = () => {
 .dropdown-item:hover {
   background-color: #d4af37;
   color: #1a1a1a;
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
