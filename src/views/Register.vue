@@ -252,9 +252,9 @@ const handleRegister = async () => {
       telefone: telefone.value,
       endereco: endereco.value,
     };
-    
+
     await authService.registrar(email.value, password.value, displayName.value, arquivoFoto, userData);
-    
+
     router.push('/');
   } catch (err) {
     error.value = err.message;

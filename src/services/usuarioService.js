@@ -52,10 +52,7 @@ export const usuarioService = {
   async criar(usuario, uid) {
     try {
       await setDoc(doc(db, COLLECTION_NAME, uid), usuario);
-      currentUser.value = {
-        id: auth.currentUser.user.uid,
-        ...usuario
-      };
+      return { id: uid, ...usuario };
     } catch (error) {
       console.error('Erro ao criar usuário:', error);
       throw error;
