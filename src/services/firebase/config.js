@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyANWgJ--08ju5iDEQ_MSEj3vbQWnugL40I",
+  authDomain: "marimorenaacessorios.firebaseapp.com",
+  projectId: "marimorenaacessorios",
+  storageBucket: "marimorenaacessorios.firebasestorage.app",
+  messagingSenderId: "993695616857",
+  appId: "1:993695616857:web:320dd97a25a3b975fd4648",
+  measurementId: "G-SQDPM8LL8Q"
 };
 
 const app = initializeApp(firebaseConfig);
