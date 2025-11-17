@@ -3,7 +3,7 @@
         <div class="sidebar">
             <div class="user-photo">
                 <img :src="user?.photo || '/default-avatar.png'" alt="Foto do Usuário" class="avatar" />
-                <h3>{{ user?.name || 'Usuário' }}</h3>
+                <h3>{{ user?.displayName || 'Usuário' }}</h3>
             </div>
             <nav class="sidebar-nav">
                 <router-link to="/perfil/meus-dados" class="sidebar-link">Meus Dados</router-link>

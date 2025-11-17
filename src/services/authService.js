@@ -39,8 +39,6 @@ export const authService = {
       await updateProfile(user, { displayName, photoURL: photoUrlFinal })
 
       const dadosFireStore = {
-        email,
-        displayName,
         photoURL: photoUrlFinal,
         ...dadosAdicionais,
         dataCriacao: new Date().toISOString(),
