@@ -40,6 +40,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '@/services/authService';
+import { usuarioService } from '@/services/usuarioService';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email as emailValidator, minLength } from '@vuelidate/validators';
 
@@ -63,8 +64,19 @@ const handleLogin = async () => {
   loading.value = true;
   error.value = '';
   try {
-    await authService.login(email.value, password.value);
+    const user = await authService.login(email.value, password.value);
+
+    const usuario = await usuarioService.buscarPorId(user.uid);
+    
+    if (usuario.eAdmin === true) {
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/');
+    }
+
+    console.error('Erro ao verificar se é admin:', adminCheckError);
     router.push('/');
+
   } catch (err) {
     error.value = err.message;
   } finally {

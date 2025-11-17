@@ -25,6 +25,7 @@ import LayoutAdmin from '@/components/admin/LayoutAdmin.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import { authService } from '@/services/authService'
+import { usuarioService } from '@/services/usuarioService'
 
 // Guard functions
 const authGuard = async (to, from, next) => {
@@ -39,12 +40,16 @@ const adminGuard = async (to, from, next) => {
   const user = await authService.waitForUser()
 
   if (!user) {
-    return next('/login') 
+    return next('/login')
   }
-  const token = await user.getIdTokenResult(true)
 
-  if (token.claims.admin === true) {
-    return next()
+  try {
+    const usuario = await usuarioService.buscarPorId(user.uid)
+    if (usuario.eAdmin === true) {
+      return next()
+    }
+  } catch (error) {
+    console.error('Erro ao verificar permissões de admin:', error)
   }
 
   return next('/') // não-admin → volta para home
