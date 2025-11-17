@@ -37,17 +37,19 @@ const authGuard = async (to, from, next) => {
 
 const adminGuard = async (to, from, next) => {
   const user = await authService.waitForUser()
-  if (user) {
-    const idTokenResult = await user.getIdTokenResult()
-    if (idTokenResult.claims.admin) {
-      next()
-    } else {
-      next('/')
-    }
-  } else {
-    next('/login')
+
+  if (!user) {
+    return next('/login') 
   }
+  const token = await user.getIdTokenResult(true)
+
+  if (token.claims.admin === true) {
+    return next()
+  }
+
+  return next('/') // não-admin → volta para home
 }
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
