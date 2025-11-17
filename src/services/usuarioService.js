@@ -1,5 +1,5 @@
 import { collection, getDocs, getDoc, doc, addDoc, updateDoc, deleteDoc, query, where, setDoc } from 'firebase/firestore';
-import { db } from './firebase/config';
+import { auth, db } from './firebase/config';
 
 const COLLECTION_NAME = 'usuarios';
 
@@ -52,7 +52,10 @@ export const usuarioService = {
   async criar(usuario, uid) {
     try {
       await setDoc(doc(db, COLLECTION_NAME, uid), usuario);
-      return { id: uid, ...usuario };
+      currentUser.value = {
+        id: auth.currentUser.user.uid,
+        ...usuario
+      };
     } catch (error) {
       console.error('Erro ao criar usuário:', error);
       throw error;

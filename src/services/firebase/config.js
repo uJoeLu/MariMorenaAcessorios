@@ -9,8 +9,8 @@ const firebaseConfig = {
   projectId: "marimorenaacessorios",
   storageBucket: "marimorenaacessorios.firebasestorage.app",
   messagingSenderId: "993695616857",
-  appId: "1:993695616857:web:320dd97a25a3b975fd4648",
-  measurementId: "G-SQDPM8LL8Q"
+  appId: "1:993695616857:web:8c11543872156524fd4648",
+  measurementId: "G-010FP8C9G4"
 };
 
 const app = initializeApp(firebaseConfig);

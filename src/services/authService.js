@@ -43,7 +43,7 @@ export const authService = {
         displayName,
         photoURL: photoUrlFinal,
         ...dadosAdicionais,
-        dataCriacao: new Date(),
+        dataCriacao: new Date().toISOString(),
         eAdmin: false
       }
 
@@ -88,5 +88,14 @@ export const authService = {
 
   getCurrentUser() {
     return auth.currentUser;
+  },
+
+  waitForUser() {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    });
   }
 };
