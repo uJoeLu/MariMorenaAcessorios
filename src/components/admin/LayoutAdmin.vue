@@ -46,7 +46,7 @@
         </div>
         <div class="navbar-profile">
           <span>Olá, {{ usuario.displayName }}</span>
-          <img src="@/assets/logo-icon.png" alt="Admin Avatar" class="profile-avatar" />
+          <img :src="usuario?.photoURL || '/default-avatar.png'" alt="Foto do Usuário" class="profile-avatar" />
         </div>
       </header>
       <div class="content-area">
@@ -90,7 +90,6 @@ const logout = async () => {
   padding: 28px 22px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
