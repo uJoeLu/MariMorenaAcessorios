@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav v-if="usuario.eAdmin===false" class="navbar" >
     <div class="navbar-container">
       <router-link to="/" class="logo">
         <img src="/src/assets/logo.png"/>
@@ -45,10 +45,11 @@
 import { computed, ref } from 'vue';
 import { useSacolaStore } from '../stores/sacolaStore';
 import { authService } from '@/services/authService';
+import { usuarioService } from '@/services/usuarioService';
 import { mdiAccountCircle, mdiHeart, mdiHome, mdiShopping } from '@mdi/js';
 
 const user = computed(() => authService.getCurrentUser());
-
+const usuario = await usuarioService.buscarPorId(user.uid);
 const sacolaStore = useSacolaStore();
 const totalItens = computed(() => sacolaStore.totalItens);
 const eAutenticado = ref(false);
@@ -57,6 +58,7 @@ const dropdownOpen = ref(false);
 authService.onAuthStateChange((user) => {
   eAutenticado.value = !!user;
 });
+
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;

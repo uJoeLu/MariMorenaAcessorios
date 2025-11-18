@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer v-if="usuario.eAdmin === false" class="footer">
     <div class="footer-container">
       <div class="footer-section">
         <h3>Mari Morena Acessórios</h3>
@@ -30,7 +30,13 @@
 </template>
 
 <script setup>
+import { usuarioService } from '@/services/usuarioService';
+import { authService } from '@/services/authService';
 import { computed } from 'vue';
+
+const user = authService.getCurrentUser();
+const usuario = await usuarioService.buscarPorId(user.uid);
+
 
 const currentYear = computed(() => new Date().getFullYear());
 </script>

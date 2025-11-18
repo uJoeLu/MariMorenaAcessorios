@@ -52,7 +52,7 @@ const adminGuard = async (to, from, next) => {
     console.error('Erro ao verificar permissões de admin:', error)
   }
 
-  return next('/') // não-admin → volta para home
+  return next('/') 
 }
 
 
@@ -66,11 +66,8 @@ const router = createRouter({
     { path: '/sacola', name: 'sacola', component: Sacola },
     { path: '/produto/:id', name: 'produto-detalhes', component: ProdutoDetalhes },
 
-    {
-      path: '/perfil',
-      name: 'perfil',
-      component: Perfil,
-      beforeEnter: authGuard,
+    { 
+      path: '/perfil', name: 'perfil', component: Perfil, beforeEnter: authGuard,
       children: [
         { path: 'meus-dados', name: 'perfil-dados', component: Meusdados },
         { path: 'meus-pedidos', name: 'perfil-pedidos', component: MeusPedidos },
@@ -78,10 +75,7 @@ const router = createRouter({
       ]
     },
     {
-      path: '/checkout',
-      name: 'checkout',
-      component: Checkout,
-      beforeEnter: authGuard,
+      path: '/checkout', name: 'checkout', component: Checkout, beforeEnter: authGuard,
       children: [
         { path: 'endereco', name: 'checkout-endereco', component: Endereco },
         { path: 'pagamento', name: 'checkout-pagamento', component: Pagamento },
@@ -89,12 +83,8 @@ const router = createRouter({
       ]
     },
 
-    // Admin routes
     {
-      path: '/admin',
-      name: 'admin',
-      component: LayoutAdmin,
-      beforeEnter: adminGuard,
+      path: '/admin', name: 'admin', component: LayoutAdmin, beforeEnter: adminGuard,
       children: [
         { path: 'dashboard', name: 'dashboard', component: Dashboard },
         { path: 'clientes', name: 'clientes', component: ListaClientes },
@@ -112,5 +102,23 @@ const router = createRouter({
 
 
 
+
+// Global guard to restrict admin users to admin routes only
+router.beforeEach(async (to, from, next) => {
+  const user = await authService.waitForUser()
+
+  if (user) {
+    try {
+      const usuario = await usuarioService.buscarPorId(user.uid)
+      if (usuario.eAdmin === true && !to.path.startsWith('/admin')) {
+        return next('/admin')
+      }
+    } catch (error) {
+      console.error('Erro ao verificar permissões de admin:', error)
+    }
+  }
+
+  next()
+})
 
 export default router
