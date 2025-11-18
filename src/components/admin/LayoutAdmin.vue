@@ -74,44 +74,49 @@ const logout = async () => {
 }
 </script>
 
-<style>
+<style scoped>
 .admin-layout {
   display: flex;
   min-height: 100vh;
   background-color: #1a1a1a;
+  font-family: "Inter", sans-serif;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
   width: 260px;
-  background-color: #111;
+  background-color: #0e0e0e;
   color: #fff;
-  padding: 25px 20px;
+  padding: 28px 22px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-header h3 {
-  font-size: 1.4rem;
-  font-weight: bold;
+  font-size: 1.45rem;
+  font-weight: 700;
   color: #f5f5dc;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 32px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 /* SEÇÕES DA NAV */
 .nav-section {
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
 .nav-section-title {
   color: #f5f5dc;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 10px;
-  opacity: 0.9;
+  margin-bottom: 12px;
+  opacity: 0.8;
+  letter-spacing: 0.4px;
 }
 
 /* LINKS */
@@ -119,30 +124,33 @@ const logout = async () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  color: #ccc;
+  padding: 12px 14px;
+  color: #cfcfcf;
   text-decoration: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: background 0.2s, color 0.2s;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  transition: all 0.25s ease;
 }
 
 .nav-link i {
   width: 20px;
   text-align: center;
+  font-size: 1.1rem;
+  opacity: 0.85;
 }
 
-/* Hover elegante */
+/* Hover mais premium */
 .nav-link:hover {
-  background-color: #1e1e1e;
+  background-color: #1c1c1c;
   color: #fff;
+  transform: translateX(4px);
 }
 
-/* Item ativo */
+/* Ativo */
 .router-link-active {
-  background-color: #f5f5dc;
-  color: #111 !important;
-  font-weight: bold;
+  background-color: #f5f5dc !important;
+  color: #0e0e0e !important;
+  font-weight: 700;
 }
 
 .router-link-active i {
@@ -151,24 +159,25 @@ const logout = async () => {
 
 /* BOTÃO DE SAIR */
 .logout-btn {
-  margin-top: auto;
   background: #c2185b;
   border: none;
   color: white;
-  padding: 12px;
+  padding: 13px;
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 10px;
   justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.25s;
+  margin-top: 10px;
 }
 
 .logout-btn:hover {
   background: #9c164c;
+  transform: scale(1.03);
 }
 
 /* --- MAIN CONTENT --- */
@@ -176,41 +185,45 @@ const logout = async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0;
 }
 
 /* NAVBAR SUPERIOR */
 .navbar {
   background: #f5f5dc;
-  padding: 15px 25px;
+  padding: 18px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #e5e5c5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .navbar-brand h2 {
   margin: 0;
-  color: #333;
+  color: #2d2d2d;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .navbar-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #333;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .profile-avatar {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  border: 2px solid #ddd;
 }
 
-/* ÁREA PRINCIPAL DOS COMPONENTES */
+/* ÁREA DAS VIEWS */
 .content-area {
-  padding: 25px;
+  padding: 30px;
 }
 
 </style>

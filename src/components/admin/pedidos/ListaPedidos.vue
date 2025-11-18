@@ -109,70 +109,125 @@ onMounted(() => {
 
 <style scoped>
 .lista-pedidos {
-  padding: 20px;
+  padding: 24px;
+  background: #f5f5dc;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
-.loading, .error {
+/* Títulos padrão produtos */
+.lista-pedidos h2 {
+  margin-bottom: 6px;
+  font-size: 26px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.lista-pedidos p {
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: #666;
+}
+
+/* Loading e erro */
+.loading, 
+.error {
   text-align: center;
   padding: 20px;
   font-size: 16px;
 }
 
 .error {
-  color: red;
+  color: #b00020;
+  background: #ffebee;
+  border-radius: 8px;
 }
 
+/* Barra de busca idêntica à usada em produtos */
 .search-bar {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 40px 10px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 12px 42px 12px 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.2s;
+  background: #fafafa;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+  background: #fff;
 }
 
 .search-icon {
   position: absolute;
-  right: 10px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  font-size: 17px;
+  color: #888;
 }
 
+/* Tabela estilo produtos */
 .pedidos-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: 10px;
 }
 
-.pedidos-table th, .pedidos-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
+.pedidos-table thead th {
+  background: #f1f1f1;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #ddd;
   text-align: left;
 }
 
-.pedidos-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+/* Linhas como cartões */
+.pedidos-table tbody tr {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  transition: 0.18s ease;
 }
 
+.pedidos-table tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.pedidos-table td {
+  padding: 14px;
+  font-size: 14px;
+  color: #444;
+  border-top: 1px solid #eee;
+}
+
+/* Botão igual ao de produtos */
 .btn-detalhes {
-  background-color: #007bff;
+  background-color: #3498db;
   color: white;
-  border: none;
   padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  border-radius: 10px;
   text-decoration: none;
-  display: inline-block;
+  font-size: 14px;
+  transition: 0.2s;
 }
 
 .btn-detalhes:hover {
-  background-color: #0056b3;
+  background-color: #217dbb;
+  transform: scale(1.04);
 }
+
 </style>

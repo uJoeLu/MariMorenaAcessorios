@@ -213,57 +213,97 @@ const excluirProduto = async () => {
   }
 };
 </script>
-
 <style scoped>
 .atualizar-produto {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
 }
 
+.atualizar-produto h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.atualizar-produto p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Painel idêntico ao cadastrar produto */
 .form-panel {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
+/* Seções */
 .form-section {
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 .form-section h2 {
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 18px;
 }
 
+/* Inputs */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px 14px;
+  border: 1px solid #dcdcdc;
+  background: #fafafa;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
-.imagens-existentes {
-  margin-bottom: 20px;
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  background: #fff;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+}
+
+/* Checkbox padronizado */
+#ativo {
+  margin-right: 8px;
+}
+
+/* Imagens existentes */
+.imagens-existentes h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #444;
+  font-weight: 600;
 }
 
 .imagens-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
 }
 
 .imagem-item {
@@ -272,97 +312,24 @@ const excluirProduto = async () => {
 
 .imagem-item img {
   width: 100%;
-  height: 100px;
+  height: 110px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .imagem-item button {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: red;
-  color: white;
+  top: 6px;
+  right: 6px;
+  background: #e74c3c;
   border: none;
+  color: #fff;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-}
-
-.upload-area {
-  border: 2px dashed #ccc;
-  padding: 40px;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: border-color 0.3s;
-}
-
-.upload-area:hover {
-  border-color: #999;
-}
-
-.upload-content i {
-  font-size: 48px;
-  color: #ccc;
-  margin-bottom: 10px;
-}
-
-.upload-formats {
   font-size: 12px;
-  color: #666;
-}
-
-.file-list {
-  margin-top: 20px;
-}
-
-.file-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.file-list li {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.form-actions {
-  text-align: right;
-  margin-top: 30px;
-}
-
-.btn-primary,
-.btn-secondary,
-.btn-warning,
-.btn-danger {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.btn-primary {
-  background: #007bff;
-  color: white;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-warning {
-  background: #ffc107;
-  color: black;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
+  font-weight: bold;
 }
 </style>

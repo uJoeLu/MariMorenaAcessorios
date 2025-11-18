@@ -99,10 +99,21 @@ onMounted(() => {
 
 <style scoped>
 .lista-clientes {
-  padding: 20px;
+  padding: 24px;
+  background: #f5f5dc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.loading, .error {
+.lista-clientes h2 {
+  margin-bottom: 12px;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.loading, 
+.error {
   text-align: center;
   padding: 20px;
   font-size: 16px;
@@ -110,36 +121,58 @@ onMounted(() => {
 
 .error {
   color: red;
+  background: #ffe5e5;
+  border-radius: 6px;
 }
 
 .clientes-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px; /* linhas separadas */
   margin-top: 20px;
 }
 
-.clientes-table th, .clientes-table td {
-  border: 1px solid #ddd;
+.clientes-table thead th {
+  background-color: #f6f6f6;
+  font-weight: 600;
   padding: 12px;
+  border-bottom: 2px solid #ddd;
+  color: #444;
   text-align: left;
 }
 
-.clientes-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+.clientes-table tbody tr {
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.clientes-table tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.clientes-table td {
+  padding: 12px;
+  color: #555;
+  border-top: 1px solid #eee;
 }
 
 .btn-detalhes {
   background-color: #007bff;
   color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background 0.3s, transform 0.1s;
 }
 
 .btn-detalhes:hover {
   background-color: #0056b3;
+  transform: scale(1.03);
 }
+
 </style>

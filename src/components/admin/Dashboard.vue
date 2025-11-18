@@ -172,110 +172,124 @@ onMounted(() => {
 <style scoped>
 .dashboard-container {
   min-height: 100vh;
-  background-color: #1a1a1a; /* Fundo escuro */
-  padding: 20px;
+  background-color: #1a1a1a;
+  padding: 30px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .dashboard-card {
-  background-color: #f5f5dc; /* Bege/amarelo claro */
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5dc;
+  border-radius: 14px;
+  padding: 35px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   width: 100%;
   max-width: 1400px;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .titulo-principal {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 35px;
   text-align: center;
+  letter-spacing: .6px;
 }
 
+/* KPIs ------- */
 .kpis-section {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 40px;
+  gap: 22px;
+  margin-bottom: 45px;
 }
 
 .kpi-card {
-  background-color: #e0e0e0; /* Cinza-claro */
-  border-radius: 8px;
-  padding: 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.kpi-content {
-  flex: 1;
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
 
 .kpi-value {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #222;
 }
 
 .kpi-label {
-  font-size: 1rem;
-  color: #666;
-  margin-top: 5px;
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: #555;
 }
 
 .kpi-icon {
-  color: #666;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
+  color: #777;
+  opacity: 0.9;
 }
 
+/* PANELS -------- */
 .modules-section {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
 }
 
 .module-panel {
-  flex: 1;
   background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: box-shadow .2s ease;
+}
+
+.module-panel:hover {
+  box-shadow: 0 5px 16px rgba(0,0,0,0.15);
 }
 
 .module-title {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 22px;
+  color: #222;
 }
 
-.loading, .error {
-  text-align: center;
-  padding: 20px;
-  font-size: 18px;
-}
-
-.error {
-  color: red;
-}
-
-.pedidos-list, .produtos-list {
+/* LISTAS -------- */
+.pedidos-list,
+.produtos-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.pedido-item, .produto-item {
+.pedido-item,
+.produto-item {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: background .2s ease;
+}
+
+.pedido-item:hover,
+.produto-item:hover {
+  background: #f2f2f2;
 }
 
 .pedido-info {
@@ -284,21 +298,21 @@ onMounted(() => {
 }
 
 .pedido-numero {
-  font-weight: bold;
-  color: #333;
+  font-weight: 700;
+  color: #222;
 }
 
 .pedido-produto {
-  color: #666;
   font-size: 0.9rem;
+  color: #666;
 }
 
 .pedido-status {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 .status-loading {
-  color: #ffc107;
+  color: #f0ad4e;
 }
 
 .status-completed {
@@ -306,12 +320,28 @@ onMounted(() => {
 }
 
 .produto-nome {
-  flex: 1;
-  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
 }
 
 .produto-volume {
-  font-weight: bold;
   color: #333;
+  font-weight: 700;
+  font-size: 0.95rem;
 }
+
+/* LOADING E ERRO ------ */
+.loading,
+.error {
+  text-align: center;
+  padding: 20px;
+  font-size: 1rem;
+}
+
+.error {
+  color: #c2185b;
+  font-weight: 600;
+}
+
 </style>

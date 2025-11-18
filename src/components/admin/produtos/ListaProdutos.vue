@@ -150,38 +150,41 @@ onMounted(() => {
 .lista-produtos-container {
   min-height: 100vh;
   background-color: #1a1a1a; /* Fundo escuro */
-  padding: 20px;
+  padding: 40px 20px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .lista-produtos-card {
-  background-color: #f5f5dc; /* Bege/amarelo claro */
-  border-radius: 8px;
+  background-color: #f5f5dc; /* Bege */
+  border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1300px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .titulo-principal {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: 2.3rem;
+  margin-bottom: 24px;
   color: #333;
   text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .acoes-superior {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
 .barra-pesquisa {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
   max-width: 600px;
 }
@@ -193,45 +196,58 @@ onMounted(() => {
 
 .campo-pesquisa i {
   position: absolute;
-  left: 10px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: #777;
 }
 
 .campo-pesquisa input {
   width: 100%;
-  padding: 10px 10px 10px 35px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
   font-size: 16px;
+  transition: all 0.2s;
+}
+
+.campo-pesquisa input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
 .filtro-rapido {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
   font-size: 16px;
-  min-width: 150px;
+  transition: all 0.2s;
+}
+
+.filtro-rapido:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
 .btn-cadastrar {
   background-color: #28a745;
   color: white;
-  border: none;
   padding: 12px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
+  border-radius: 6px;
   font-size: 16px;
-  transition: background-color 0.3s;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.1s;
+  white-space: nowrap;
 }
 
 .btn-cadastrar:hover {
   background-color: #218838;
+  transform: scale(1.03);
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 20px;
   font-size: 18px;
@@ -239,42 +255,66 @@ onMounted(() => {
 
 .error {
   color: red;
+  background: #ffe5e5;
+  border-radius: 6px;
 }
+
+/* ---- TABELA MODERNA ---- */
 
 .produtos-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: 10px;
 }
 
-.produtos-table th, .produtos-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
+.produtos-table thead th {
+  background-color: #e8e8d8;
+  font-weight: 600;
+  padding: 14px;
+  color: #444;
+  border-bottom: 2px solid #ccc;
 }
 
-.produtos-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+.produtos-table tbody tr {
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
+
+.produtos-table tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+}
+
+.produtos-table td {
+  padding: 14px;
+  color: #555;
+}
+
+/* ---- MINIATURA ---- */
 
 .miniatura {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
 }
 
 .miniatura-placeholder {
-  width: 50px;
-  height: 50px;
-  background-color: #eee;
+  width: 55px;
+  height: 55px;
+  background-color: #ddd;
+  border: 1px solid #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  color: #666;
+  border-radius: 6px;
+  color: #555;
 }
+
+/* ---- AÇÕES ---- */
 
 .acoes {
   display: flex;
@@ -282,12 +322,12 @@ onMounted(() => {
 }
 
 .btn-acao {
-  border: none;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  border: none;
+  transition: all 0.2s;
 }
 
 .btn-editar {
@@ -297,6 +337,7 @@ onMounted(() => {
 
 .btn-editar:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .btn-excluir {
@@ -306,5 +347,7 @@ onMounted(() => {
 
 .btn-excluir:hover {
   background-color: #c82333;
+  transform: scale(1.05);
 }
+
 </style>
