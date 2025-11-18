@@ -2,7 +2,7 @@
   <div class="product-card">
     <router-link :to="`/produto/${produto.id}`" class="product-link">
       <div class="product-image">
-        <img :src="produto.imagem" :alt="produto.nome" />
+        <img :src="produto.imagens[0].url" :alt="produto.nome" />
       </div>
       <div class="product-info">
         <h3 class="product-name">{{ produto.nome }}</h3>

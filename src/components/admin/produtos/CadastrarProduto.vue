@@ -18,7 +18,11 @@
             <label for="preco">Preço</label>
             <input id="preco" v-model.number="produto.preco" type="number" step="0.01" required />
           </div>
-
+          <div class="form-group">
+            <label for="quantidade">Preço</label>
+            <input id="quantidade" v-model.number="produto.quantidade" type="number" step="0.01" required />
+          </div>
+          
           <div class="form-group">
             <label for="categoria">Categorias</label>
             <select id="categoria" v-model="produto.categoria" required>
@@ -28,7 +32,7 @@
               <option value="Colares">Colares</option>
               <option value="Conjuntos">Conjuntos</option>
               <option value="Pulseiras">Pulseiras</option>
-              <option value="Tiaras">Tiras</option>
+              <option value="Tiaras">Tiaras</option>
               <option value="Outros">Outros</option>
             </select>
           </div>
@@ -39,7 +43,6 @@
           </div>
         </section>
 
-        <!-- Seção B: Mídia e imagens -->
         <section class="form-section">
           <h2>Mídia e imagens</h2>
 
@@ -82,6 +85,7 @@ const produto = ref({
   nome: '',
   preco: null,
   categoria: '',
+  quantidade: null,
   descricao: ''
 });
 
@@ -114,12 +118,12 @@ const salvarProduto = async () => {
     const imagensParaAtualizar = [];
 
     for (const arquivo of arquivos.value) {
-      const { url, caminho } = await storageService.uploadImagemProduto(
+      const { url } = await storageService.uploadImagemProduto(
         arquivo,
         produtoCriado.id
       );
 
-      imagensParaAtualizar.push({ url, path: caminho });
+      imagensParaAtualizar.push(url);
     }
 
     await produtoService.atualizar(produtoCriado.id, { imagens: imagensParaAtualizar });
