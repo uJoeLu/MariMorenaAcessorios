@@ -29,7 +29,7 @@
           <tr v-for="pedido in filteredPedidos" :key="pedido.id">
             <td>#{{ pedido.id.slice(-8) }}</td>
             <td>{{ pedido.clienteNome || 'Cliente não encontrado' }}</td>
-            <td>{{ pedido.dataFormatada }}</td>
+            <td>{{ pedido.dataCriacao }}</td>
             <td>{{ pedido.valorFormatado }}</td>
             <td>{{ pedido.status }}</td>
             <td>
@@ -70,11 +70,14 @@ const carregarPedidos = async () => {
     const pedidosComClientes = await Promise.all(
       todosPedidos.map(async (pedido) => {
         try {
-          const cliente = await usuarioService.buscarPorId(pedido.userId)
-          const clienteNome = cliente ? cliente.nome : 'Cliente não encontrado'
+          let clienteNome = 'Cliente não informado'
+          if (pedido.usuarioId) {
+            const cliente = await usuarioService.buscarPorId(pedido.usuarioId)
+            clienteNome = cliente ? cliente.nome : 'Cliente não encontrado'
+          }
 
-          const dataFormatada = new Date(pedido.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR')
-          const valorFormatado = pedido.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+          const dataFormatada = pedido.dataCriacao ? new Date(pedido.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR') : 'N/A'
+          const valorFormatado = (pedido.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
           return {
             ...pedido,
@@ -87,8 +90,8 @@ const carregarPedidos = async () => {
           return {
             ...pedido,
             clienteNome: 'Erro ao carregar',
-            dataFormatada: new Date(pedido.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR'),
-            valorFormatado: pedido.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+            dataFormatada: pedido.dataCriacao ? new Date(pedido.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR') : 'N/A',
+            valorFormatado: (pedido.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
           }
         }
       })

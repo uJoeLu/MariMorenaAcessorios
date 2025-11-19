@@ -19,6 +19,9 @@ export const usuarioService = {
 
   async buscarPorId(id) {
     try {
+      if (!id) {
+        throw new Error('ID do usuário não fornecido');
+      }
       const docRef = doc(db, COLLECTION_NAME, id);
       const docSnap = await getDoc(docRef);
 
@@ -29,7 +32,7 @@ export const usuarioService = {
       }
     } catch (error) {
       console.error('Erro ao buscar por ID do usuário:', error);
-      throw new Error('Falha na busca por ID do usuário');
+      throw error;
     }
   },
 

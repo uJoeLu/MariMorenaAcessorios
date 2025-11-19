@@ -64,7 +64,7 @@ export const pedidoService = {
   async criar(pedido) {
     try {
       const docRef = await addDoc(collection(db, COLLECTION_NAME), pedido);
-      return { id: docRef.id, ...pedido, dataCriacao: new Date().toISOString().split("T")[0] };
+      return { id: docRef.id, ...pedido };
     } catch (error) {
       console.error('Erro ao criar pedido:', error);
       throw new Error('Não foi possível criar o pedido');

@@ -13,7 +13,7 @@
           <span :class="['status-badge', statusClass]">{{ pedido.status }}</span>
         </div>
         <div class="status-actions">
-          <button v-for="status in statusOptions" :key="status.value" :class="['status-btn', status.class]">
+          <button v-for="status in statusOptions" :key="status.value" :class="['status-btn', status.class]" @click="alterarStatus(status.value)">
             {{ status.label }}
           </button>
           <button class="btn-save" @click="salvarStatus" :disabled="!statusMudou">
@@ -161,12 +161,18 @@ const carregarDados = async () => {
   }
 }
 
+const alterarStatus = (novoStatus) => {
+  statusAtual.value = novoStatus
+}
+
 const salvarStatus = async () => {
   try {
     await pedidoService.atualizar(pedido.value.id, { status: statusAtual.value })
     pedido.value.status = statusAtual.value
+    // Usar uma notificação mais amigável ou toast ao invés de alert
     alert('Status atualizado com sucesso!')
   } catch (err) {
+    console.error('Erro ao salvar status:', err)
     alert('Erro ao atualizar status: ' + err.message)
   }
 }

@@ -59,7 +59,7 @@
               getStatusLabel(pedidoSelecionado.status) }}</span>
           </div>
           <div class="detalhe-item">
-            <strong>Data:</strong> {{ formatarData(pedidoSelecionado.dataCriacao) }}
+            <strong>Data:</strong> {{ pedidoSelecionado.dataCriacao }}
           </div>
           <div class="detalhe-item">
             <strong>Total:</strong> R$ {{ pedidoSelecionado.total ? pedidoSelecionado.total.toFixed(2) : '0.00' }}
@@ -206,12 +206,7 @@ const fecharModal = () => {
   pedidoSelecionado.value = null;
 };
 
-// Formatar data
-const formatarData = (data) => {
-  if (!data) return '';
-  const date = data.toDate ? data.toDate() : new Date(data);
-  return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR');
-};
+
 </script>
 
 <style scoped>

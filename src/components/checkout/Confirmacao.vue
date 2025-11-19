@@ -147,6 +147,7 @@ const finalizarPedido = async () => {
       total: totalComFrete.value,
       frete: frete.value,
       status: 'pendente',
+      dataCriacao: new Date().toISOString().split("T")[0]
     };
 
 
