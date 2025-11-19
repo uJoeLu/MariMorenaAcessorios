@@ -79,7 +79,7 @@
 
       <div class="form-actions">
         <button type="button" @click="voltar" class="btn-voltar">Voltar</button>
-        <button type="submit" class="btn-proximo">Revisar Pedido</button>
+        <button type="submit" :disabled="!pagamento.metodo" class="btn-proximo">Revisar Pedido</button>
       </div>
     </form>
   </div>

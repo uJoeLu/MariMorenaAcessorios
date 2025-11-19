@@ -73,7 +73,8 @@
       <div class="qrcode-placeholder">
         <i class="fas fa-qrcode"></i>
         <p>QR Code seria gerado aqui</p>
-        <small>Em produção, seria integrado com gateway de pagamento</small>
+        <small><img src="/src/assets/PixCode - MariMorena.png"></img> </small>
+        <h2><strong>chave pix:</strong><br>marimorena.ac@gmail.com</h2>
       </div>
     </div>
 
