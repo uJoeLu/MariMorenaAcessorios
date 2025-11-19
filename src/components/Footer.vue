@@ -1,5 +1,5 @@
 <template>
-  <footer v-if="usuario.eAdmin === false" class="footer">
+  <footer v-if="!isAdmin()" class="footer">
     <div class="footer-container">
       <div class="footer-section">
         <h3>Mari Morena Acessórios</h3>
@@ -32,10 +32,24 @@
 <script setup>
 import { usuarioService } from '@/services/usuarioService';
 import { authService } from '@/services/authService';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+const usuario = ref(null);
+const eAutenticado = ref(false);
 
 const user = authService.getCurrentUser();
-const usuario = await usuarioService.buscarPorId(user.uid);
+
+function isAdmin(){
+  return usuario.value?.eAdmin === true;
+}
+
+authService.onAuthStateChange(async (user) => {
+  eAutenticado.value = !!user;
+  if (user) {
+    usuario.value = await usuarioService.buscarPorId(user.uid);
+  } else {
+    usuario.value = null;
+  }
+});
 
 
 const currentYear = computed(() => new Date().getFullYear());

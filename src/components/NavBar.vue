@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="usuario.eAdmin===false" class="navbar" >
+  <nav v-if="!isAdmin()" class="navbar" >
     <div class="navbar-container">
       <router-link to="/" class="logo">
         <img src="/src/assets/logo.png"/>
@@ -49,14 +49,23 @@ import { usuarioService } from '@/services/usuarioService';
 import { mdiAccountCircle, mdiHeart, mdiHome, mdiShopping } from '@mdi/js';
 
 const user = computed(() => authService.getCurrentUser());
-const usuario = await usuarioService.buscarPorId(user.uid);
 const sacolaStore = useSacolaStore();
 const totalItens = computed(() => sacolaStore.totalItens);
-const eAutenticado = ref(false);
 const dropdownOpen = ref(false);
+const usuario = ref(null);
+const eAutenticado = ref(false);
 
-authService.onAuthStateChange((user) => {
+function isAdmin(){
+  return usuario.value?.eAdmin === true;
+}
+
+authService.onAuthStateChange(async (user) => {
   eAutenticado.value = !!user;
+  if (user) {
+    usuario.value = await usuarioService.buscarPorId(user.uid);
+  } else {
+    usuario.value = null;
+  }
 });
 
 
