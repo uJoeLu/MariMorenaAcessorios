@@ -48,7 +48,7 @@ import { authService } from '@/services/authService';
 import { usuarioService } from '@/services/usuarioService';
 import { mdiAccountCircle, mdiHeart, mdiHome, mdiShopping } from '@mdi/js';
 
-const user = computed(() => authService.getCurrentUser());
+const user = authService.getCurrentUser();
 const sacolaStore = useSacolaStore();
 const totalItens = computed(() => sacolaStore.totalItens);
 const dropdownOpen = ref(false);
