@@ -37,7 +37,7 @@
             <textarea id="descricao" v-model="produto.descricao" rows="4" required></textarea>
           </div>
 
-          <div class="form-group">
+          <div>
             <label for="ativo">
               <input id="ativo" v-model="produto.ativo" type="checkbox" />
               Produto ativo
@@ -52,7 +52,7 @@
             <h3>Imagens atuais:</h3>
             <div class="imagens-grid">
               <div v-for="(imagem, index) in imagensExistentes" :key="index" class="imagem-item">
-                <img :src="imagem" alt="Imagem do produto" />
+                <img :src="imagem.url" alt="Imagem do produto" />
                 <button type="button" @click="removerImagemExistente(index)">Remover</button>
               </div>
             </div>
@@ -104,6 +104,7 @@ const produto = ref({
   preco: null,
   categoria: '',
   descricao: '',
+  
   ativo: true
 });
 
@@ -120,7 +121,7 @@ onMounted(async () => {
       preco: produtoData.preco || null,
       categoria: produtoData.categoria || '',
       descricao: produtoData.descricao || '',
-      ativo: produtoData.ativo !== false // assume true if not set
+      ativo: produtoData.ativo !== false 
     };
     imagensExistentes.value = produtoData.imagens || [];
   } catch (error) {
@@ -201,7 +202,7 @@ const excluirProduto = async () => {
     const produtoId = route.params.id;
     try {
       for (const imagem of imagensExistentes.value) { 
-        await storageService.deletarImagem(imagem.path); // ⬅️ USAR image.path
+        await storageService.deletarImagem(imagem.path);
       }
       await produtoService.deletar(produtoId);
       alert('Produto excluído com sucesso!');
@@ -331,5 +332,9 @@ const excluirProduto = async () => {
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;
+}
+.form-actions{
+  display: flex;
+  gap: 10px;
 }
 </style>

@@ -12,7 +12,7 @@
         <div class="itens-lista">
           <div v-for="item in itens" :key="item.id" class="item-card">
             <div class="item-imagem">
-              <img :src="item.imagem" :alt="item.nome" />
+              <img :src="item.imagens[0].url" :alt="item.nome" />
             </div>
 
             <div class="item-info">
@@ -88,7 +88,7 @@ const removerItem = (itemId) => {
 };
 
 const finalizarCompra = () => {
-  alert('Funcionalidade de finalização de compra em desenvolvimento!');
+  router.push('/checkout/endereco');
 };
 </script>
 

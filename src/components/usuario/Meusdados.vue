@@ -98,7 +98,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, helpers, minLength, maxLength } from '@vuelidate/validators';
+import { required, numeric, minLength, maxLength } from '@vuelidate/validators';
 import { authService } from '@/services/authService';
 import { usuarioService } from '@/services/usuarioService';
 import { buscarEnderecoViaCep } from '@/services/cepService';
@@ -122,16 +122,14 @@ const loading = ref(false);
 const error = ref('');
 const success = ref('');
 const cepTimeout = ref(null); 
-const apenasNumero = helpers.regex(/^\d+$/);
 
-// --- Validação com Vuelidate ---
 const rules = computed(() => ({
   nome: { required, minLength: minLength(8), maxLength: maxLength(100) },
-  telefone: { required, apenasNumero, minLength: minLength(10), maxLength: maxLength(15) },
+  telefone: { required, numeric, minLength: minLength(10), maxLength: maxLength(15) },
   endereco: {
-    cep: { required, apenasNumero, minLength: minLength(8), maxLength: maxLength(8) },
+    cep: { required, numeric, minLength: minLength(8), maxLength: maxLength(8) },
     rua: { required, minLength: minLength(3) },
-    numero: { required, apenasNumero },
+    numero: { required, numeric, minLength: minLength(2), maxLength: maxLength(5) },
     bairro: { required, minLength: minLength(2) },
     cidade: { required, minLength: minLength(2) },
     estado: { required }

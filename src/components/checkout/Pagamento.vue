@@ -36,12 +36,24 @@
               <span>Boleto Bancário</span>
             </div>
           </label>
+          <label class="opcao-pagamento">
+            <input
+              type="radio"
+              value="cartao"
+              v-model="pagamento.metodo"
+            />
+            <div class="opcao-content">
+              <i class="fas fa-barcode"></i>
+              <span>Cartão</span>
+            </div>
+            <p style="font-size: 10px"> Sujeito ao pequeno acréscimo</p>
+          </label>
         </div>
       </div>
 
       <div v-if="pagamento.metodo === 'pix'" class="dados-pix">
         <h3>Pagamento via PIX</h3>
-        <p>O pagamento será processado manualmente após a confirmação do pedido. Você receberá as instruções por e-mail.</p>
+        <p>O pagamento será processado manualmente após a confirmação do pedido. Você receberá as instruções por e-mail ou Whatsapp.</p>
         <div class="pix-info">
           <i class="fas fa-info-circle"></i>
           <span>As informações de pagamento serão enviadas após a finalização do pedido</span>
@@ -50,7 +62,15 @@
 
       <div v-if="pagamento.metodo === 'boleto'" class="dados-boleto">
         <h3>Pagamento via Boleto</h3>
-        <p>O pagamento será processado manualmente após a confirmação do pedido. Você receberá as instruções por e-mail.</p>
+        <p>O pagamento será processado manualmente após a confirmação do pedido. Você receberá as instruções por e-mail ou Whatsapp.</p>
+        <div class="boleto-info">
+          <i class="fas fa-info-circle"></i>
+          <span>As informações de pagamento serão enviadas após a finalização do pedido</span>
+        </div>
+      </div>
+      <div v-if="pagamento.metodo === 'cartao'" class="dados-boleto">
+        <h3>Pagamento via Cartão</h3>
+        <p>O pagamento será processado manualmente após a confirmação do pedido. Você receberá as instruções por e-mail ou Whatsapp.</p>
         <div class="boleto-info">
           <i class="fas fa-info-circle"></i>
           <span>As informações de pagamento serão enviadas após a finalização do pedido</span>

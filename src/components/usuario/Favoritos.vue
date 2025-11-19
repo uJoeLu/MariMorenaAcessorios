@@ -23,7 +23,7 @@
       >
         <router-link :to="`/produto/${produto.id}`" class="produto-link">
           <div class="produto-imagem">
-            <img :src="produto.imagem" :alt="produto.nome" />
+            <img :src="produto.imagens[0].url" :alt="produto.nome" />
           </div>
           <div class="produto-info">
             <h3 class="produto-nome">{{ produto.nome }}</h3>

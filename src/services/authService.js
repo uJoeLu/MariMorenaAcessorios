@@ -41,7 +41,7 @@ export const authService = {
       const dadosFireStore = {
         photoURL: photoUrlFinal,
         ...dadosAdicionais,
-        dataCriacao: new Date().toISOString(),
+        dataCriacao: new Date().toISOString().split("T")[0],
         eAdmin: false
       }
 

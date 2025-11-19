@@ -32,6 +32,10 @@
               <option value="Outros">Outros</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="estoque">Preço</label>
+            <input id="estoque" v-model.number="produto.estoque" type="number" step="0.01" required />
+          </div>
 
           <div class="form-group">
             <label for="descricao">Descrição</label>
@@ -39,7 +43,6 @@
           </div>
         </section>
 
-        <!-- Upload -->
         <section class="form-box">
           <h2 class="section-title">Imagens e Mídia</h2>
 
@@ -83,6 +86,7 @@ const produto = ref({
   nome: '',
   preco: null,
   categoria: '',
+  estoque:null,
   descricao: ''
 });
 

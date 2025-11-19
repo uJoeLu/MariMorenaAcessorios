@@ -4,77 +4,38 @@
 
     <form @submit.prevent="salvarEndereco" class="endereco-form">
       <div class="form-group">
-        <label for="cep">CEP</label>
-        <input
-          type="text"
-          id="cep"
-          v-model="endereco.cep"
-          @blur="buscarCep"
-          placeholder="00000-000"
-          required
-        />
+        <label for="cep">CEP:</label>
+          <input type="text" id="cep" v-model="endereco.cep" @input="buscarCep" maxlength="8" />
       </div>
-
       <div class="form-row">
         <div class="form-group">
-          <label for="rua">Rua</label>
-          <input
-            type="text"
-            id="rua"
-            v-model="endereco.rua"
-            placeholder="Nome da rua"
-            required
-          />
+          <label for="rua">Rua:</label>
+          <input type="text" id="rua" v-model="endereco.rua" placeholder="Nome da rua" />
         </div>
         <div class="form-group">
-          <label for="numero">Número</label>
-          <input
-            type="text"
-            id="numero"
-            v-model="endereco.numero"
-            placeholder="123"
-            required
-          />
+          <label for="numero">Número:</label>
+          <input type="text" id="numero" v-model="endereco.numero" placeholder="123" />
         </div>
       </div>
-
       <div class="form-group">
-        <label for="complemento">Complemento (opcional)</label>
-        <input
-          type="text"
-          id="complemento"
-          v-model="endereco.complemento"
-          placeholder="Apartamento, bloco, etc."
-        />
+        <label for="complemento">Complemento:</label>
+        <input type="text" id="complemento" v-model="endereco.complemento"
+          placeholder="Apartamento, bloco, etc." />
       </div>
-
       <div class="form-row">
         <div class="form-group">
-          <label for="bairro">Bairro</label>
-          <input
-            type="text"
-            id="bairro"
-            v-model="endereco.bairro"
-            placeholder="Nome do bairro"
-            required
-          />
+          <label for="bairro">Bairro:</label>
+          <input type="text" id="bairro" v-model="endereco.bairro" placeholder="Nome do bairro" />
         </div>
         <div class="form-group">
-          <label for="cidade">Cidade</label>
-          <input
-            type="text"
-            id="cidade"
-            v-model="endereco.cidade"
-            placeholder="Nome da cidade"
-            required
-          />
+          <label for="cidade">Cidade:</label>
+          <input type="text" id="cidade" v-model="endereco.cidade" placeholder="Nome da cidade" />
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
-          <label for="estado">Estado</label>
-          <select id="estado" v-model="endereco.estado" required>
+          <label for="estado">Estado:</label>
+          <select id="estado" v-model="endereco.estado">
             <option value="">Selecione</option>
             <option value="AC">Acre</option>
             <option value="AL">Alagoas</option>
@@ -106,14 +67,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="pais">País</label>
-          <input
-            type="text"
-            id="pais"
-            v-model="endereco.pais"
-            value="Brasil"
-            readonly
-          />
+          <label for="pais">País:</label>
+          <input type="text" id="pais" v-model="endereco.pais" value="Brasil" readonly />
         </div>
       </div>
 
@@ -126,14 +81,21 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCheckoutStore } from '@/stores/checkoutStore';
+import { authService } from '@/services/authService';
+import { usuarioService } from '@/services/usuarioService';
+import { useVuelidate } from '@vuelidate/core';
+import { required, numeric, minLength, maxLength } from '@vuelidate/validators';
+
+const user = computed(() => authService.getCurrentUser());
+
 
 const router = useRouter();
 const checkoutStore = useCheckoutStore();
 
-const endereco = reactive({
+const endereco = ref({
   cep: '',
   rua: '',
   numero: '',
@@ -144,17 +106,49 @@ const endereco = reactive({
   pais: 'Brasil'
 });
 
+const rules = computed(() => ({
+  endereco: {
+    cep: { required, numeric, minLength: minLength(8), maxLength: maxLength(8) },
+    rua: { required, minLength: minLength(3) },
+    numero: { required, numeric, minLength: minLength(1), maxLength: maxLength(5) },
+    bairro: { required, minLength: minLength(2) },
+    cidade: { required, minLength: minLength(2) },
+    estado: { required }
+  }
+}));
+
+const v$ = useVuelidate(rules, { endereco });
+
+onMounted(async () => {
+  const currentUser = authService.getCurrentUser();
+  if (!currentUser) {
+    return;
+  }
+
+  try {
+    const data = await usuarioService.buscarPorId(currentUser.uid);
+    if (data.endereco) {
+      endereco.value = { ...endereco.value, ...data.endereco };
+    }
+  } catch (err) {
+    console.error("Erro ao carregar dados do usuário:", err);
+  }
+});
+
+
+
+
 const buscarCep = async () => {
-  if (endereco.cep.length === 9) {
+  if (endereco.value.cep.length === 8) {
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${endereco.cep.replace('-', '')}/json/`);
+      const response = await fetch(`https://viacep.com.br/ws/${endereco.value.cep}/json/`);
       const data = await response.json();
 
       if (!data.erro) {
-        endereco.rua = data.logradouro;
-        endereco.bairro = data.bairro;
-        endereco.cidade = data.localidade;
-        endereco.estado = data.uf;
+        endereco.value.rua = data.logradouro;
+        endereco.value.bairro = data.bairro;
+        endereco.value.cidade = data.localidade;
+        endereco.value.estado = data.uf;
       }
     } catch (error) {
       console.error('Erro ao buscar CEP:', error);
@@ -163,7 +157,7 @@ const buscarCep = async () => {
 };
 
 const salvarEndereco = () => {
-  checkoutStore.setEndereco({ ...endereco });
+  checkoutStore.setEndereco({ ...endereco.value });
   router.push('/checkout/pagamento');
 };
 </script>
@@ -179,6 +173,41 @@ const salvarEndereco = () => {
   font-size: 1.8rem;
   margin-bottom: 2rem;
   text-align: center;
+}
+
+.endereco-salvo {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.endereco-salvo h3 {
+  color: #1a1a1a;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.endereco-salvo p {
+  margin: 0.5rem 0;
+  color: #666666;
+}
+
+.btn-usar {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  background-color: #d4af37;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-usar:hover {
+  background-color: #c49b2a;
 }
 
 .endereco-form {

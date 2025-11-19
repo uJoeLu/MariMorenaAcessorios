@@ -14,7 +14,7 @@
 
       <div class="produto-content">
         <div class="produto-imagem">
-          <img :src="produto.imagem" :alt="produto.nome" />
+          <img :src="produto.imagens[0].url" :alt="produto.nome" />
         </div>
 
         <div class="produto-info">

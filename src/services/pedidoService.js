@@ -35,7 +35,7 @@ export const pedidoService = {
 
   async buscarPorUsuario(userId) {
     try {
-      const q = query(collection(db, COLLECTION_NAME), where('userId', '==', userId), orderBy('dataCriacao', 'desc'));
+      const q = query(collection(db, COLLECTION_NAME), where('usuarioId', '==', userId));
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -63,12 +63,8 @@ export const pedidoService = {
 
   async criar(pedido) {
     try {
-      const docRef = await addDoc(collection(db, COLLECTION_NAME), {
-        ...pedido,
-        dataCriacao: new Date(),
-        status: pedido.status || 'pendente'
-      });
-      return { id: docRef.id, ...pedido };
+      const docRef = await addDoc(collection(db, COLLECTION_NAME), pedido);
+      return { id: docRef.id, ...pedido, dataCriacao: new Date().toISOString().split("T")[0] };
     } catch (error) {
       console.error('Erro ao criar pedido:', error);
       throw new Error('Não foi possível criar o pedido');

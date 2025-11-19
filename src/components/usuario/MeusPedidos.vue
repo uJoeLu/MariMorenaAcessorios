@@ -16,12 +16,8 @@
         </select>
       </div>
       <div class="search-group">
-        <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="Buscar por número do pedido ou produto..."
-          @input="filtrarPedidos"
-        />
+        <input type="text" v-model="searchQuery" placeholder="Buscar por número do pedido ou produto..."
+          @input="filtrarPedidos" />
       </div>
     </div>
 
@@ -38,30 +34,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pedido in pedidosFiltrados" :key="pedido.id">
-            <td>{{ pedido.numeroPedido || pedido.id }}</td>
-            <td>
-              <div class="produto-info">
-                <img
-                  v-if="pedido.itens && pedido.itens[0] && pedido.itens[0].produto && pedido.itens[0].produto.imagem"
-                  :src="pedido.itens[0].produto.imagem"
-                  :alt="pedido.itens[0].produto.nome"
-                  class="produto-imagem"
-                />
-                <span>{{ pedido.itens && pedido.itens[0] ? pedido.itens[0].produto.nome : 'Produto' }}</span>
-              </div>
-            </td>
-            <td>
-              <span :class="`status status-${pedido.status}`">{{ getStatusLabel(pedido.status) }}</span>
-            </td>
-            <td>{{ pedido.itens ? pedido.itens.length : 0 }}</td>
-            <td>
-              <button @click="verDetalhes(pedido)" class="btn-detalhes">Ver Detalhes</button>
-            </td>
-          </tr>
+          <PedidoItem v-for="pedido in pedidosFiltrados" :key="pedido.id" :pedido="pedido"
+            @ver-detalhes="verDetalhes" />
         </tbody>
       </table>
     </div>
+
 
     <!-- Estado Vazio -->
     <div v-else-if="!loading" class="empty-state">
@@ -77,7 +55,8 @@
         <h3>Detalhes do Pedido #{{ pedidoSelecionado.numeroPedido || pedidoSelecionado.id }}</h3>
         <div class="pedido-detalhes">
           <div class="detalhe-item">
-            <strong>Status:</strong> <span :class="`status status-${pedidoSelecionado.status}`">{{ getStatusLabel(pedidoSelecionado.status) }}</span>
+            <strong>Status:</strong> <span :class="`status status-${pedidoSelecionado.status}`">{{
+              getStatusLabel(pedidoSelecionado.status) }}</span>
           </div>
           <div class="detalhe-item">
             <strong>Data:</strong> {{ formatarData(pedidoSelecionado.dataCriacao) }}
@@ -89,21 +68,19 @@
             <strong>Itens:</strong>
             <ul class="itens-lista">
               <li v-for="item in pedidoSelecionado.itens" :key="item.id">
-                <img
-                  v-if="item.produto && item.produto.imagem"
-                  :src="item.produto.imagem"
-                  :alt="item.produto.nome"
-                  class="item-imagem"
-                />
-                <span>{{ item.produto ? item.produto.nome : 'Produto' }} - Quantidade: {{ item.quantidade }} - R$ {{ item.preco ? item.preco.toFixed(2) : '0.00' }}</span>
+                <img v-if="item.produto && item.produto.imagens[0].url" :src="item.produto.imagens[0].url"
+                  :alt="item.produto.nome" class="item-imagem" />
+                <span>{{ item.produto ? item.produto.nome : 'Produto' }} - Quantidade: {{ item.quantidade }} - R$ {{
+                  item.produto.preco ? item.produto.preco.toFixed(2) : '0.00' }}</span>
               </li>
             </ul>
           </div>
           <div v-if="pedidoSelecionado.endereco" class="detalhe-item">
             <strong>Endereço de Entrega:</strong>
             <p>{{ pedidoSelecionado.endereco.rua }}, {{ pedidoSelecionado.endereco.numero }}<br>
-            {{ pedidoSelecionado.endereco.bairro }}, {{ pedidoSelecionado.endereco.cidade }} - {{ pedidoSelecionado.endereco.estado }}<br>
-            CEP: {{ pedidoSelecionado.endereco.cep }}</p>
+              {{ pedidoSelecionado.endereco.bairro }}, {{ pedidoSelecionado.endereco.cidade }} - {{
+              pedidoSelecionado.endereco.estado }}<br>
+              CEP: {{ pedidoSelecionado.endereco.cep }}</p>
           </div>
         </div>
         <button @click="fecharModal" class="btn-fechar">Fechar</button>
@@ -117,6 +94,7 @@ import { ref, onMounted, computed } from 'vue';
 import { pedidoService } from '@/services/pedidoService';
 import { produtoService } from '@/services/produtoService';
 import { authService } from '@/services/authService';
+import PedidoItem from '../PedidoItem.vue';
 
 // Estado
 const pedidos = ref([]);
@@ -133,31 +111,50 @@ onMounted(async () => {
 
 const carregarPedidos = async () => {
   const currentUser = authService.getCurrentUser();
+  console.log('Current user:', currentUser);
   if (!currentUser) return;
 
   loading.value = true;
+
   try {
     const userPedidos = await pedidoService.buscarPorUsuario(currentUser.uid);
+    console.log('User pedidos:', userPedidos);
 
-    // Carregar detalhes dos produtos para cada pedido
-    for (const pedido of userPedidos) {
-      if (pedido.itens) {
-        for (const item of pedido.itens) {
-          if (item.produtoId && !item.produto) {
-            try {
-              item.produto = await produtoService.buscarPorId(item.produtoId);
-            } catch (error) {
-              console.error('Erro ao carregar produto:', error);
-            }
-          }
-        }
-      }
-    }
+    // Converte itens para array
+    userPedidos.forEach(pedido => {
+      pedido.itens = Array.isArray(pedido.itens)
+        ? pedido.itens
+        : Object.values(pedido.itens || {});
+    });
+
+    // Coletar IDs únicos
+    const produtoIds = new Set();
+    userPedidos.forEach(p => {
+      p.itens.forEach(i => i.produtoId && produtoIds.add(i.produtoId));
+    });
+
+    // Buscar todos os produtos em paralelo
+    const produtos = await Promise.all(
+      [...produtoIds].map(id =>
+        produtoService.buscarPorId(id).then(prod => ({ id, prod }))
+      )
+    );
+
+    // Criar mapa
+    const produtoMap = new Map(produtos.map(p => [p.id, p.prod]));
+
+    // Associar produtos aos itens
+    userPedidos.forEach(pedido => {
+      pedido.itens.forEach(item => {
+        item.produto = produtoMap.get(item.produtoId) || null;
+      });
+    });
 
     pedidos.value = userPedidos;
     pedidosFiltrados.value = userPedidos;
+
   } catch (error) {
-    console.error('Erro ao carregar pedidos:', error);
+    console.error("Erro ao carregar pedidos:", error);
   } finally {
     loading.value = false;
   }

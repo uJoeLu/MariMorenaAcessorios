@@ -23,7 +23,7 @@
           </svg>
         </router-link>
         <router-link v-if="eAutenticado" to="/perfil/meus-dados" class="nav-link">
-          <img :src="user?.photoURL || '/default-avatar.png'" alt="Foto do Usuário" class="user-avatar" />
+          <img :src="usuario?.photoURL || '/default-avatar.png'" alt="Foto do Usuário" class="user-avatar" />
         </router-link>
         <div v-else class="dropdown">
           <button @click="toggleDropdown" class="dropdown-toggle nav-link">

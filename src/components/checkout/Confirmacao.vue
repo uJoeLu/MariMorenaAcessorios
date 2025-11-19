@@ -8,7 +8,7 @@
       <div class="itens-pedido">
         <div v-for="item in itensSacola" :key="item.id" class="item-resumo">
           <div class="item-info">
-            <img :src="item.imagem" :alt="item.nome" class="item-imagem" />
+            <img :src="item.imagens[0].url" :alt="item.nome" class="item-imagem" />
             <div class="item-detalhes">
               <h4>{{ item.nome }}</h4>
               <p>{{ item.categoria }}</p>
@@ -53,8 +53,7 @@
         <div v-if="pagamento.metodo === 'cartao'" class="cartao-info">
           <i class="fas fa-credit-card"></i>
           <span>Cartão de Crédito</span>
-          <p>**** **** **** {{ pagamento.numeroCartao.slice(-4) }}</p>
-          <p>{{ pagamento.parcelas }}x de R$ {{ formatarPreco(totalComFrete / pagamento.parcelas) }}</p>
+          <p>Entraremos em contato em até 24 horas</p>
         </div>
         <div v-else-if="pagamento.metodo === 'pix'" class="pix-info">
           <i class="fas fa-qrcode"></i>
@@ -137,21 +136,18 @@ const finalizarPedido = async () => {
     const pedido = {
       usuarioId: user.uid,
       itens: itensSacola.value.map(item => ({
-        id: item.id,
-        nome: item.nome,
-        preco: item.preco,
-        quantidade: item.quantidade,
-        imagem: item.imagem
+        produtoId: item.id,
+        quantidade: item.quantidade
       })),
       endereco: endereco.value,
       pagamento: {
-        metodo: pagamento.value.metodo,
-        parcelas: pagamento.value.parcelas || 1
+        metodo: pagamento.value.metodo
       },
       total: totalComFrete.value,
       frete: frete.value,
-      status: 'pendente'
+      status: 'pendente',
     };
+
 
     const pedidoCriado = await pedidoService.criar(pedido);
 

@@ -42,8 +42,8 @@
             <tr v-for="produto in produtosFiltrados" :key="produto.id">
               <td>
                 <img
-                  v-if="produto.imagem"
-                  :src="produto.imagem"
+                  v-if="produto.imagens"
+                  :src="produto.imagens[0].url"
                   alt="Miniatura do produto"
                   class="miniatura"
                 />
@@ -57,7 +57,7 @@
               <td>{{ produto.estoque }}</td>
               <td class="acoes">
                 <router-link
-                  :to="{ name: 'atualizar-produto', params: { id: produto.id } }"
+                  :to="{ name: 'produto-atualizar', params: { id: produto.id } }"
                   class="btn-acao btn-editar"
                   title="Editar"
                 >
