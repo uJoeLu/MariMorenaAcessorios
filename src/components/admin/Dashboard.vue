@@ -104,7 +104,7 @@ const carregarKPIs = async () => {
   try {
     const hoje = new Date().toISOString().split('T')[0]
     const pedidos = await pedidoService.listarTodos()
-    const pedidosHojeCount = pedidos.filter(p => p.dataCriacao && p.dataCriacao.toDate().toISOString().split('T')[0] === hoje).length
+    const pedidosHojeCount = pedidos.filter(p => p.dataCriacao && p.dataCriacao === hoje).length
     pedidosHoje.value = pedidosHojeCount
 
     const produtos = await produtoService.listarTodos()
