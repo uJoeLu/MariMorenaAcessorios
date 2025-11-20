@@ -41,12 +41,10 @@
     </div>
 
 
-    <!-- Estado Vazio -->
     <div v-else-if="!loading" class="empty-state">
       <p>{{ pedidos.length === 0 ? 'Você ainda não fez nenhum pedido.' : 'Nenhum pedido encontrado com os filtros aplicados.' }}</p>
     </div>
 
-    <!-- Loading -->
     <div v-if="loading" class="loading">Carregando pedidos...</div>
 
     <!-- Modal de Detalhes -->
@@ -75,6 +73,9 @@
               </li>
             </ul>
           </div>
+          <div v-if="podeCancelar(pedidoSelecionado)" class="detalhe-item">
+            <button @click="cancelarPedido(pedidoSelecionado)" class="btn-cancelar">Cancelar Pedido</button>
+          </div>
           <div v-if="pedidoSelecionado.endereco" class="detalhe-item">
             <strong>Endereço de Entrega:</strong>
             <p>{{ pedidoSelecionado.endereco.rua }}, {{ pedidoSelecionado.endereco.numero }}<br>
@@ -96,7 +97,6 @@ import { produtoService } from '@/services/produtoService';
 import { authService } from '@/services/authService';
 import PedidoItem from '../PedidoItem.vue';
 
-// Estado
 const pedidos = ref([]);
 const pedidosFiltrados = ref([]);
 const loading = ref(false);
@@ -104,7 +104,6 @@ const statusFilter = ref('');
 const searchQuery = ref('');
 const pedidoSelecionado = ref(null);
 
-// Carregar pedidos do usuário
 onMounted(async () => {
   await carregarPedidos();
 });
@@ -184,7 +183,6 @@ const filtrarPedidos = () => {
   pedidosFiltrados.value = filtrados;
 };
 
-// Obter label do status
 const getStatusLabel = (status) => {
   const labels = {
     pendente: 'Pendente',
@@ -196,14 +194,40 @@ const getStatusLabel = (status) => {
   return labels[status] || status;
 };
 
-// Ver detalhes do pedido
 const verDetalhes = (pedido) => {
   pedidoSelecionado.value = pedido;
 };
 
-// Fechar modal
 const fecharModal = () => {
   pedidoSelecionado.value = null;
+};
+
+const podeCancelar = (pedido) => {
+  return pedido.status === 'pendente';
+};
+
+const cancelarPedido = async (pedido) => {
+  if (!confirm('Tem certeza que deseja cancelar este pedido?')) return;
+
+  try {
+    await pedidoService.atualizar(pedido.id, { status: 'cancelado' });
+    pedido.status = 'cancelado';
+
+    for (const item of pedido.itens) {
+      if (item.produtoId) {
+        const produto = await produtoService.buscarPorId(item.produtoId);
+        const novaQuantidade = (produto.quantidade || 0) + (item.quantidade || 0);
+        await produtoService.atualizar(item.produtoId, { quantidade: novaQuantidade });
+      }
+    }
+
+    alert('Pedido cancelado com sucesso!');
+    fecharModal();
+    await carregarPedidos(); 
+  } catch (error) {
+    console.error('Erro ao cancelar pedido:', error);
+    alert('Erro ao cancelar pedido: ' + error.message);
+  }
 };
 
 

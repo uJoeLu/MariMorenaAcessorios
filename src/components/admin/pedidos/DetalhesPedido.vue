@@ -122,11 +122,11 @@ const cliente = ref(null)
 const produtos = ref({})
 
 const statusOptions = [
-  { value: 'Aguardando pagamento', label: 'Aguardando Pagamento', class: 'status-critical' },
-  { value: 'Processando', label: 'Processando', class: 'status-attention' },
-  { value: 'Enviado', label: 'Enviado', class: 'status-attention' },
-  { value: 'Entregue', label: 'Entregue', class: 'status-success' },
-  { value: 'Cancelar', label: 'Cancelar', class: 'status-critical' }
+  { value: 'pendente', label: 'Aguardando Pagamento', class: 'status-critical' },
+  { value: 'processando', label: 'Processando', class: 'status-attention' },
+  { value: 'enviado', label: 'Enviado', class: 'status-attention' },
+  { value: 'entregue', label: 'Entregue', class: 'status-success' },
+  { value: 'cancelado', label: 'Cancelar', class: 'status-critical' }
 ]
 
 const statusMudou = computed(() => statusAtual.value !== pedido.value?.status)

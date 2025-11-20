@@ -20,7 +20,7 @@
       </span>
     </td>
 
-    <td>{{ pedido.itens?.length || 0 }}</td>
+    <td>{{ totalQuantidade }}</td>
 
     <td>
       <button class="btn-detalhes" @click="$emit('ver-detalhes', pedido)">
@@ -39,6 +39,10 @@ const props = defineProps({
 
 const firstItem = computed(() => props.pedido?.itens?.[0] || null);
 
+const totalQuantidade = computed(() => {
+  return props.pedido?.itens?.reduce((sum, item) => sum + (item.quantidade || 0), 0) || 0;
+});
+
 const getStatusLabel = (status) => {
   const labels = {
     pendente: "Pendente",
@@ -49,6 +53,7 @@ const getStatusLabel = (status) => {
   };
   return labels[status] || status;
 };
+
 </script>
 
 <style scoped>
