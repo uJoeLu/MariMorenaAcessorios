@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td>{{ pedido.id }}</td>
+    <td style="padding-left: 20px;">#{{ pedido.id.substring(0, 10) }}</td>
 
     <td>
       <div class="produto-info">

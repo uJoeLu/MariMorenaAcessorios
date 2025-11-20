@@ -23,7 +23,7 @@
 
     <!-- Tabela de Pedidos -->
     <div v-if="pedidosFiltrados.length > 0" class="pedidos-table">
-      <table>
+      <table class="tabela-pedidos">
         <thead>
           <tr>
             <th>Número do Pedido</th>
@@ -263,6 +263,10 @@ const cancelarPedido = async (pedido) => {
 
 .pedidos-table {
   overflow-x: auto;
+}
+.tabela-pedidos {
+  border-collapse: separate;
+  border-spacing: 0 12px; 
 }
 
 table {
