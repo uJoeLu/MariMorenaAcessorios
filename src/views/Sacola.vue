@@ -37,16 +37,17 @@
 
         <div class="resumo">
           <h2>Resumo do Pedido</h2>
-
+          <p style="color: red;"> Compras acima de R$ 100,00 não paga frete</p>
           <div class="resumo-linha">
             <span>Total de itens:</span>
             <span>{{ totalItens }}</span>
+            <span>Frete:</span>
+            <span>{{ frete.toFixed(2) }}</span>
           </div>
 
           <div class="resumo-linha total">
             <span>Total:</span>
-            <span>R$ {{ formatarPreco(valorTotal) }}</span>
-            <p style="color: red;"> Compras acima de R$ 100,00 não paga frete</p>
+            <span>R$ {{ formatarPreco(valorTotal + frete) }}</span>
           </div>
 
           <button class="btn-finalizar" @click="finalizarCompra">Finalizar Compra</button>
@@ -69,6 +70,8 @@ const sacolaStore = useSacolaStore();
 const itens = computed(() => sacolaStore.itens);
 const totalItens = computed(() => sacolaStore.totalItens);
 const valorTotal = computed(() => sacolaStore.valorTotal);
+
+const frete = computed(() => valorTotal.value >= 100 ? 0 : 15);
 
 const formatarPreco = (preco) => {
   return preco.toFixed(2).replace('.', ',');

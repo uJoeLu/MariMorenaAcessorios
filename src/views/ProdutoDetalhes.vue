@@ -15,17 +15,17 @@
       <div class="produto-content">
         <div class="produto-galeria">
           <div class="imagem-principal">
-            <img :src="imagemSelecionada.url" :alt="produto.nome" />
+            <img :src="imagemAtual" :alt="produto.nome" />
           </div>
 
           <div class="thumbnails">
             <img v-for="(img, index) in produto.imagens" :key="index" :src="img.url" :alt="produto.nome"
-              :class="{ ativo: imagemSelecionada.url === img.url }" @click="selecionarImagem(img)" />
+              :class="{ ativo: index === indiceAtual }" @click="mudarImagem(index)" />
           </div>
         </div>
 
         <div class="produto-info">
-          <span class="categoria-badge">{{ produto.categoria }}</span>
+          <span class="categoria-badge">{{ produto.categoria }} - {{ produto.cor }}</span>
           <h1 class="produto-nome">{{ produto.nome }}</h1>
           <p class="produto-preco">R$ {{ formatarPreco(produto.preco) }}</p>
 
@@ -59,10 +59,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useProdutoStore } from '@/stores/produtoStore'; 
 import { useSacolaStore } from '@/stores/sacolaStore';
+const props = defineProps({
+  produto: {
+    type: Object, 
+  },
+});
 
 const route = useRoute();
 const produtoStore = useProdutoStore();
@@ -73,11 +78,28 @@ const quantidadeCompra = ref(1);
 const carregando = computed(() => produtoStore.carregando);
 const erro = computed(() => produtoStore.erro);
 const produto = computed(() => produtoStore.produtoAtual);
-const imagemSelecionada = ref(produto.imagens[0])
+const imagensIniciais = props.produto?.imagens ?? [];
+const imagemAtual = ref(imagensIniciais[0]?.url || null); 
+const indiceAtual = ref(0);
 
-function selecionarImagem(img) {
-  imagemSelecionada.value = img
+function mudarImagem(index) {
+  const imgs = produto.value?.imagens;
+  if (!imgs || !imgs[index]) return;
+
+  indiceAtual.value = index;
+  imagemAtual.value = imgs[index].url;
 }
+
+watch(
+  () => produto.value,
+  (novo) => {
+    if (novo?.imagens?.length) {
+      imagemAtual.value = novo.imagens[0].url;
+      indiceAtual.value = 0;
+    }
+  },
+  { immediate: true }
+);
 
 const formatarPreco = (preco) => {
   return preco.toFixed(2).replace('.', ',');

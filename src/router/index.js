@@ -64,7 +64,7 @@ const router = createRouter({
     { path: '/register', name: 'register', component: Register },
     { path: '/reset-password', name: 'reset-password', component: ResetPassword },
     { path: '/sacola', name: 'sacola', component: Sacola },
-    { path: '/produto/:id', name: 'produto-detalhes', component: ProdutoDetalhes },
+    { path: '/produto/:id', name: 'produto-detalhes', component: ProdutoDetalhes, props: true },
 
     { 
       path: '/perfil', name: 'perfil', component: Perfil, beforeEnter: authGuard,
