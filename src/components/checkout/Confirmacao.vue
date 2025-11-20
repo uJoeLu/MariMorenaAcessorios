@@ -105,7 +105,7 @@ const loading = ref(false);
 
 const itensSacola = computed(() => sacolaStore.itens);
 const valorTotal = computed(() => sacolaStore.valorTotal);
-const frete = computed(() => valorTotal.value > 100 ? 0 : 15); // Frete grátis acima de R$ 100
+const frete = computed(() => valorTotal.value >= 100 ? 0 : 15); 
 const totalComFrete = computed(() => valorTotal.value + frete.value);
 
 const endereco = computed(() => checkoutStore.endereco);
