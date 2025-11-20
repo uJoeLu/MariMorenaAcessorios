@@ -13,8 +13,15 @@
       <button @click="$router.go(-1)" class="btn-voltar-simples">← Voltar</button>
 
       <div class="produto-content">
-        <div class="produto-imagem">
-          <img :src="produto.imagens[0].url" :alt="produto.nome" />
+        <div class="produto-galeria">
+          <div class="imagem-principal">
+            <img :src="imagemSelecionada.url" :alt="produto.nome" />
+          </div>
+
+          <div class="thumbnails">
+            <img v-for="(img, index) in produto.imagens" :key="index" :src="img.url" :alt="produto.nome"
+              :class="{ ativo: imagemSelecionada.url === img.url }" @click="selecionarImagem(img)" />
+          </div>
         </div>
 
         <div class="produto-info">
@@ -41,11 +48,7 @@
               <button @click="aumentarQuantidade" :disabled="quantidadeCompra >= produto.estoque">+</button>
             </div>
 
-            <button
-              class="btn-adicionar"
-              @click="adicionarNaSacola"
-              :disabled="produto.quantidade === 0"
-            >
+            <button class="btn-adicionar" @click="adicionarNaSacola" :disabled="produto.quantidade === 0">
               Adicionar à Sacola
             </button>
           </div>
@@ -70,6 +73,11 @@ const quantidadeCompra = ref(1);
 const carregando = computed(() => produtoStore.carregando);
 const erro = computed(() => produtoStore.erro);
 const produto = computed(() => produtoStore.produtoAtual);
+const imagemSelecionada = ref(produto.imagens[0])
+
+function selecionarImagem(img) {
+  imagemSelecionada.value = img
+}
 
 const formatarPreco = (preco) => {
   return preco.toFixed(2).replace('.', ',');
@@ -94,6 +102,7 @@ const adicionarNaSacola = () => {
   quantidadeCompra.value = 1;
 };
 
+
 onMounted(async () => {
   const produtoId = route.params.id;
   await produtoStore.carregarProduto(produtoId);
@@ -106,7 +115,35 @@ onMounted(async () => {
   background-color: #f5f5f5;
   padding: 2rem 1rem;
 }
+.produto-galeria {
+  max-width: 320px;
+}
 
+.imagem-principal img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.thumbnails {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.thumbnails img {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  border-radius: 6px;
+  opacity: 0.6;
+  transition: 0.2s;
+}
+
+.thumbnails img.ativo,
+.thumbnails img:hover {
+  opacity: 1;
+  border: 2px solid #e4dd7e;
+}
 .produto-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -136,19 +173,7 @@ onMounted(async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.produto-imagem {
-  width: 100%;
-  height: 500px;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #f5f5f5;
-}
 
-.produto-imagem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .produto-info {
   display: flex;

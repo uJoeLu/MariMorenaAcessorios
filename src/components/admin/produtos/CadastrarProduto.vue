@@ -100,7 +100,9 @@ const produto = ref({
   cor: '',
   categoria: '',
   estoque:null,
-  descricao: ''
+  descricao: '',
+
+  ativo: true,
 });
 
 const arquivos = ref([]);
@@ -127,7 +129,7 @@ const salvarProduto = async () => {
       imagens: []
     };
 
-    const produtoCriado = await produtoService.criar(novoProduto); // produtoCriado terá o ID
+    const produtoCriado = await produtoService.criar(novoProduto);
 
     const imagensParaAtualizar = [];
 
@@ -164,14 +166,14 @@ const limparFormulario = () => {
 <style scoped>
 .cadastrar-container {
   min-height: 100vh;
-  background: #1a1a1a; /* fundo igual ao dashboard */
+  background: #1a1a1a; 
   padding: 30px;
   display: flex;
   justify-content: center;
 }
 
 .cadastrar-card {
-  background: #f5f5dc; /* bege idêntico aos outros painéis */
+  background: #f5f5dc; 
   width: 100%;
   max-width: 1100px;
   padding: 30px;
@@ -194,8 +196,8 @@ const limparFormulario = () => {
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 25px;
 }
 

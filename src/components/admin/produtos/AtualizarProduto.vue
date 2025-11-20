@@ -17,7 +17,18 @@
             <label for="preco">Preço</label>
             <input id="preco" v-model.number="produto.preco" type="number" step="0.01" required />
           </div>
-
+          <div class="form-group">
+            <label for="cor">Cor</label>
+            <select id="cor" v-model="produto.cor" required>
+              <option value="">Selecione</option>
+              <option value="dourado">Dourado</option>
+              <option value="prata">Prata</option>
+              <option value="verde">Verde</option>
+              <option value="vermelho">Vermelho</option>
+              <option value="preto">Preto</option>
+              <option value="rosa">Rosa</option>
+            </select>
+          </div>
           <div class="form-group">
             <label for="categoria">Categorias</label>
             <select id="categoria" v-model="produto.categoria" required>
@@ -106,9 +117,10 @@ const router = useRouter();
 const produto = ref({
   nome: '',
   preco: null,
+  cor: '',
   categoria: '',
   descricao: '',
-  
+  estoque: null,
   ativo: true
 });
 
