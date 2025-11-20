@@ -33,7 +33,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="estoque">Preço</label>
+            <label for="estoque">Estoque</label>
             <input id="estoque" v-model.number="produto.estoque" type="number" step="0.01" required />
           </div>
 

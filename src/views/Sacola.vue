@@ -46,6 +46,7 @@
           <div class="resumo-linha total">
             <span>Total:</span>
             <span>R$ {{ formatarPreco(valorTotal) }}</span>
+            <p style="color: red;"> Compras acima de R$ 100,00 não paga frete</p>
           </div>
 
           <button class="btn-finalizar" @click="finalizarCompra">Finalizar Compra</button>

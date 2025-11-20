@@ -14,27 +14,21 @@
         <div class="info-item">
           <strong>Nome</strong>
           <span>{{ cliente.nome }}</span>
-        </div>
 
-        <div class="info-item">
           <strong>Email</strong>
           <span>{{ cliente.email }}</span>
-        </div>
 
-        <div class="info-item">
           <strong>Telefone</strong>
           <span>{{ cliente.telefone || 'N/A' }}</span>
-        </div>
 
-        <div class="info-item">
           <strong>Endereço</strong>
           <span>{{ enderecoFormatado }}</span>
+          <div class="info-item">
+            <strong>Total Gasto</strong>
+            <span>{{ totalGastoFormatado }}</span>
+          </div>
         </div>
 
-        <div class="info-item">
-          <strong>Total Gasto</strong>
-          <span>{{ totalGastoFormatado }}</span>
-        </div>
 
       </div>
 
@@ -63,12 +57,12 @@
           <tbody>
             <tr v-for="pedido in pedidos" :key="pedido.id">
               <td>#{{ pedido.id.slice(-8).toUpperCase() }}</td>
-              <td>{{ dataPedidoFormatada(pedido.dataCriacao) }}</td>
+              <td>{{ pedido.dataCriacao }}</td>
               <td>
                 <span :class="['status', statusClass(pedido.status)]">{{ pedido.status }}</span>
               </td>
-              <td>{{ valorPedidoFormatado(pedido.valorTotal) }}</td>
-              <td>{{ produtosPedidoFormatados(pedido.produtos) }}</td>
+              <td>{{ valorPedidoFormatado(pedido.total) }}</td>
+              <td>{{ totalProdutos(pedido) }}</td>
             </tr>
           </tbody>
         </table>
@@ -108,17 +102,12 @@ const carregarDados = async () => {
     pedidos.value = await pedidoService.buscarPorUsuario(id)
 
     totalGasto.value = pedidos.value
-      .reduce((sum, p) => sum + (p.valorTotal || 0), 0)
+      .reduce((sum, p) => sum + (p.total || 0), 0)
   } catch (err) {
     error.value = 'Erro ao carregar dados: ' + err.message
   } finally {
     loading.value = false
   }
-}
-
-const dataPedidoFormatada = (dataCriacao) => {
-  if (!dataCriacao) return 'N/A'
-  return new Date(dataCriacao.seconds * 1000).toLocaleDateString('pt-BR')
 }
 
 const statusClass = (status) => {
@@ -127,14 +116,15 @@ const statusClass = (status) => {
   return 'status-critical'
 }
 
-const valorPedidoFormatado = (valorTotal) => {
-  return (valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+const valorPedidoFormatado = (total) => {
+  return (total || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-const produtosPedidoFormatados = (produtos) => {
-  if (!produtos) return 'N/A'
-  return produtos.map(p => typeof p === 'string' ? p : p.nome).join(', ')
-}
+const totalProdutos = (pedido) => {
+  if (!pedido?.itens?.length) return 0;
+
+  return pedido.itens.reduce((total, item) => total + (item.quantidade || 0), 0);
+};
 
 const enviarEmail = () => {
   if (cliente.value && cliente.value.email) {

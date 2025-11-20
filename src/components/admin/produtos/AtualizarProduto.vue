@@ -1,9 +1,9 @@
 <template>
   <div class="atualizar-produto">
-    <h1>Atualizar produto</h1>
-    <p>Edite as informações do produto selecionado.</p>
-
+    
     <div class="form-panel">
+      <h1>Atualizar produto</h1>
+      <p>Edite as informações do produto selecionado.</p>
       <form @submit.prevent="salvarProduto">
         <section class="form-section">
           <h2>Informações do acessório</h2>
@@ -30,6 +30,10 @@
               <option value="Tiaras">Tiaras</option>
               <option value="Outros">Outros</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label for="estoque">Estoque</label>
+            <input id="estoque" v-model.number="produto.estoque" type="number" step="0.01" required />
           </div>
 
           <div class="form-group">
@@ -121,6 +125,7 @@ onMounted(async () => {
       preco: produtoData.preco || null,
       categoria: produtoData.categoria || '',
       descricao: produtoData.descricao || '',
+      estoque: produtoData.estoque || null,
       ativo: produtoData.ativo !== false 
     };
     imagensExistentes.value = produtoData.imagens || [];
@@ -236,7 +241,7 @@ const excluirProduto = async () => {
 
 /* Painel idêntico ao cadastrar produto */
 .form-panel {
-  background: #ffffff;
+  background: #f5f5dc;
   padding: 28px;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);

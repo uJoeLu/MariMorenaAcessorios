@@ -76,13 +76,11 @@ const carregarPedidos = async () => {
             clienteNome = cliente ? cliente.nome : 'Cliente não encontrado'
           }
 
-          const dataFormatada = pedido.dataCriacao ? new Date(pedido.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR') : 'N/A'
-          const valorFormatado = (pedido.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+          const valorFormatado = (pedido.total || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
           return {
             ...pedido,
             clienteNome,
-            dataFormatada,
             valorFormatado
           }
         } catch (err) {

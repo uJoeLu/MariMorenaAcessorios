@@ -27,8 +27,8 @@
             <p>{{ produto.descricao }}</p>
           </div>
 
-          <div v-if="produto.quantidade > 0" class="disponibilidade">
-            <p class="em-estoque">✓ Em estoque ({{ produto.quantidade }} disponíveis)</p>
+          <div v-if="produto.estoque > 0" class="disponibilidade">
+            <p class="em-estoque">✓ Em estoque ({{ produto.estoque }} disponíveis)</p>
           </div>
           <div v-else class="disponibilidade">
             <p class="sem-estoque">✗ Produto esgotado</p>
@@ -37,8 +37,8 @@
           <div class="acoes">
             <div class="quantidade-selector">
               <button @click="diminuirQuantidade" :disabled="quantidadeCompra <= 1">-</button>
-              <input type="number" v-model.number="quantidadeCompra" min="1" :max="produto.quantidade" />
-              <button @click="aumentarQuantidade" :disabled="quantidadeCompra >= produto.quantidade">+</button>
+              <input type="number" v-model.number="quantidadeCompra" min="1" :max="produto.estoque" />
+              <button @click="aumentarQuantidade" :disabled="quantidadeCompra >= produto.estoque">+</button>
             </div>
 
             <button
@@ -76,7 +76,7 @@ const formatarPreco = (preco) => {
 };
 
 const aumentarQuantidade = () => {
-  if (quantidadeCompra.value < produto.value.quantidade) {
+  if (quantidadeCompra.value < produto.value.estoque) {
     quantidadeCompra.value++;
   }
 };

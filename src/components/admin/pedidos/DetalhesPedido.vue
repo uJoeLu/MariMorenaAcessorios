@@ -7,17 +7,18 @@
     <div v-if="loading" class="loading">Carregando detalhes do pedido...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else class="detalhes-pedido-card">
+      <button class="btn-save" @click="salvarStatus" :disabled="!statusMudou">
+        <i class="fas fa-save"></i> Salvar
+      </button>
       <div class="status-section">
         <div class="status-display">
           <span class="status-label">Status:</span>
           <span :class="['status-badge', statusClass]">{{ pedido.status }}</span>
         </div>
         <div class="status-actions">
-          <button v-for="status in statusOptions" :key="status.value" :class="['status-btn', status.class]" @click="alterarStatus(status.value)">
+          <button v-for="status in statusOptions" :key="status.value" :class="['status-btn', status.class]"
+            @click="alterarStatus(status.value)">
             {{ status.label }}
-          </button>
-          <button class="btn-save" @click="salvarStatus" :disabled="!statusMudou">
-            <i class="fas fa-save"></i> Salvar
           </button>
         </div>
       </div>
@@ -29,10 +30,10 @@
             <strong>Pedido #{{ pedido.id.slice(-8).toUpperCase() }}</strong>
           </div>
           <div class="info-item">
-            <strong>Data:</strong> {{ dataFormatada }}
+            <strong>Data:</strong> {{ pedido.dataCriacao }}
           </div>
           <div class="info-item">
-            <strong>Método de Pagamento:</strong> {{ pedido.metodoPagamento || 'N/A' }}
+            <strong>Método de Pagamento:</strong> {{ pedido.pagamento.metodo || 'N/A' }}
           </div>
         </div>
       </div>
@@ -48,22 +49,31 @@
           </div>
           <div class="client-column">
             <h4>Endereço</h4>
-            <p>{{ pedido.enderecoEntrega || cliente?.endereco || 'N/A' }}</p>
+            <p>Rua: {{ cliente.endereco.rua }},
+             N°: {{ cliente.endereco.numero }},<br>
+             Compl.: {{ cliente.endereco.complemento }}<br>
+              Bairro: {{ cliente.endereco.bairro }},
+              CEP: {{ cliente.endereco.cep }}<br>
+              Cidade: {{ cliente.endereco.cidade }} -
+              Estado: {{ cliente.endereco.estado }}<br>
+              País: {{ cliente.endereco.pais }}
+            </p>
+
           </div>
         </div>
       </div>
 
       <div class="section">
         <h3>Itens do Pedido</h3>
-        <div v-if="pedido.produtos && pedido.produtos.length > 0" class="items-list">
-          <div v-for="(item, index) in pedido.produtos" :key="index" class="item-row">
+        <div v-if="pedido.itens && pedido.itens.length > 0" class="items-list">
+          <div v-for="(item, index) in pedido.itens" :key="index" class="item-row">
             <div class="item-info">
-              <strong>{{ typeof item === 'string' ? item : item.nome }}</strong>
+              <strong>{{ produtos[item.produtoId]?.nome || 'Produto não encontrado' }}</strong>
               <span v-if="item.cor || item.material"> - {{ item.cor || item.material }}</span>
             </div>
             <div class="item-details">
-              <span>Qty: {{ item.quantidade || 1 }}</span>
-              <span>{{ (item.preco || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span>
+              <span>Qtd: {{ item.quantidade }}</span>
+              <span>{{ (produtos[item.produtoId].preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span>
             </div>
           </div>
         </div>
@@ -100,14 +110,16 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { pedidoService } from '@/services/pedidoService'
 import { usuarioService } from '@/services/usuarioService'
+import { produtoService } from '@/services/produtoService'
 
 const route = useRoute()
 
 const pedido = ref(null)
-const cliente = ref(null)
 const loading = ref(true)
 const error = ref(null)
 const statusAtual = ref('')
+const cliente = ref(null)
+const produtos = ref({})
 
 const statusOptions = [
   { value: 'Aguardando pagamento', label: 'Aguardando Pagamento', class: 'status-critical' },
@@ -119,6 +131,7 @@ const statusOptions = [
 
 const statusMudou = computed(() => statusAtual.value !== pedido.value?.status)
 
+
 const statusClass = computed(() => {
   const status = pedido.value?.status
   if (status === 'Entregue') return 'status-success'
@@ -126,24 +139,21 @@ const statusClass = computed(() => {
   return 'status-critical'
 })
 
-const dataFormatada = computed(() => {
-  if (!pedido.value?.dataCriacao) return 'N/A'
-  const date = new Date(pedido.value.dataCriacao.seconds * 1000)
-  return date.toLocaleDateString('pt-BR')
-})
-
-const valorTotalFormatado = computed(() => {
-  return (pedido.value?.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-})
-
 const subtotal = computed(() => {
-  if (!pedido.value?.produtos) return 0
-  return pedido.value.produtos.reduce((sum, item) => {
-    const preco = typeof item === 'object' ? item.preco || 0 : 0
-    const qtd = typeof item === 'object' ? item.quantidade || 1 : 1
+  if (!pedido.value?.itens) return 0
+  return pedido.value.itens.reduce((sum, item) => {
+    const preco = parseFloat(produtos.value[item.produtoId]?.preco) || 0
+    const qtd = parseInt(item.quantidade) || 1
     return sum + (preco * qtd)
   }, 0)
 })
+
+
+
+const valorTotalFormatado = computed(() => {
+  return (pedido.value?.total || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+})
+
 
 const carregarDados = async () => {
   try {
@@ -151,8 +161,16 @@ const carregarDados = async () => {
     pedido.value = await pedidoService.buscarPorId(id)
     statusAtual.value = pedido.value.status
 
-    if (pedido.value.userId) {
-      cliente.value = await usuarioService.buscarPorId(pedido.value.userId)
+    if (pedido.value.usuarioId) {
+      cliente.value = await usuarioService.buscarPorId(pedido.value.usuarioId)
+    }
+
+    if (pedido.value.itens && pedido.value.itens.length > 0) {
+      const produtoIds = [...new Set(pedido.value.itens.map(item => item.produtoId))]
+      const produtosFetched = await Promise.all(produtoIds.map(id => produtoService.buscarPorId(id)))
+      produtosFetched.forEach((produto, index) => {
+        produtos.value[produtoIds[index]] = produto
+      })
     }
   } catch (err) {
     error.value = 'Erro ao carregar dados: ' + err.message
@@ -169,7 +187,6 @@ const salvarStatus = async () => {
   try {
     await pedidoService.atualizar(pedido.value.id, { status: statusAtual.value })
     pedido.value.status = statusAtual.value
-    // Usar uma notificação mais amigável ou toast ao invés de alert
     alert('Status atualizado com sucesso!')
   } catch (err) {
     console.error('Erro ao salvar status:', err)
@@ -257,19 +274,11 @@ onMounted(() => {
   font-size: 14px;
 }
 
-.status-success {
-  background-color: #28a745;
-  color: white;
-}
-
-.status-attention {
-  background-color: #ffc107;
-  color: black;
-}
-
+.status-success,
+.status-attention,
 .status-critical {
-  background-color: #dc3545;
-  color: white;
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .status-actions {
@@ -308,10 +317,10 @@ onMounted(() => {
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
-  cursor: pointer;
   display: flex;
-  align-items: center;
-  gap: 5px;
+  justify-items: center;
+  margin: 20px;
+  margin-left: 90%;
 }
 
 .btn-save:disabled {

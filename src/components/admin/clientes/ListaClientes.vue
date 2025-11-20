@@ -60,9 +60,9 @@ const carregarClientes = async () => {
           if (pedidosCompletados.length > 0) {
             // Última compra é a mais recente
             const pedidoMaisRecente = pedidosCompletados.sort((a, b) =>
-              new Date(b.dataCriacao.seconds * 1000) - new Date(a.dataCriacao.seconds * 1000)
+              new Date(b.dataCriacao) - new Date(a.dataCriacao)
             )[0]
-            ultimaCompra = new Date(pedidoMaisRecente.dataCriacao.seconds * 1000).toLocaleDateString('pt-BR')
+            ultimaCompra = new Date(pedidoMaisRecente.dataCriacao).toLocaleDateString('pt-BR')
 
             // Valor total é a soma de todos os pedidos concluídos
             valorTotal = pedidosCompletados.reduce((total, pedido) => total + (pedido.valorTotal || 0), 0)

@@ -95,6 +95,7 @@ import { useSacolaStore } from '@/stores/sacolaStore';
 import { useCheckoutStore } from '@/stores/checkoutStore';
 import { pedidoService } from '@/services/pedidoService';
 import { authService } from '@/services/authService';
+import { produtoService } from '@/services/produtoService';
 
 const router = useRouter();
 const sacolaStore = useSacolaStore();
@@ -152,6 +153,18 @@ const finalizarPedido = async () => {
 
 
     const pedidoCriado = await pedidoService.criar(pedido);
+
+    // Diminuir estoque dos produtos
+    try {
+      for (const item of itensSacola.value) {
+        const produto = await produtoService.buscarPorId(item.id);
+        const novoEstoque = produto.estoque - item.quantidade;
+        await produtoService.atualizar(item.id, { estoque: novoEstoque });
+      }
+    } catch (estoqueError) {
+      console.error('Erro ao atualizar estoque:', estoqueError);
+      alert('Pedido criado, mas houve erro ao atualizar o estoque. Entre em contato com o suporte.');
+    }
 
     checkoutStore.setPedido(pedidoCriado);
     sacolaStore.limparSacola();

@@ -55,10 +55,11 @@ const erro = computed(() => produtoStore.erro);
 const categorias = computed(() => produtoStore.categorias);
 
 const produtosFiltrados = computed(() => {
+  let filtered = produtoStore.produtos.filter(produto => produto.estoque > 0);
   if (!categoriaSelecionada.value) {
-    return produtoStore.produtos;
+    return filtered;
   }
-  return produtoStore.produtosPorCategoria(categoriaSelecionada.value);
+  return filtered.filter(produto => produto.categoria === categoriaSelecionada.value);
 });
 
 const filtrarCategoria = (categoria) => {
