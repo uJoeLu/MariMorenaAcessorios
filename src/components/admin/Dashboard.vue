@@ -58,7 +58,7 @@
               </div>
               <div class="pedido-status">
                 <i v-if="pedido.status === 'processando'" class="fas fa-spinner fa-spin status-loading"></i>
-                <i v-else-if="pedido.status === 'concluido'" class="fas fa-check status-completed"></i>
+                <i v-else-if="pedido.status === 'entregue'" class="fas fa-check status-completed"></i>
               </div>
             </div>
           </div>
@@ -91,6 +91,7 @@ const pedidosHoje = ref('--')
 const estoque = ref('--')
 const vendasMes = ref('R$ --,--')
 const clientesAtivos = ref('--')
+const produtos = ref([])
 
 const pedidosRecentes = ref([])
 const loadingPedidos = ref(true)
@@ -114,7 +115,7 @@ const carregarKPIs = async () => {
     const mesAtual = new Date().getMonth() + 1
     const anoAtual = new Date().getFullYear()
     const vendas = pedidos.filter(p => {
-      if (!p.dataCriacao) return false
+      if (p.status !== 'entregue') return false
       const data = p.dataCriacao.toDate ? p.dataCriacao.toDate() : new Date(p.dataCriacao)
       return data.getMonth() + 1 === mesAtual && data.getFullYear() === anoAtual
     })
@@ -131,10 +132,22 @@ const carregarKPIs = async () => {
 const carregarPedidosRecentes = async () => {
   try {
     const pedidos = await pedidoService.listarTodos()
-    pedidosRecentes.value = pedidos.slice(0, 4).map((p, index) => ({
+    const produtos = await produtoService.listarTodos()
+    const produtoMap = produtos.reduce((map, prod) => {
+      map[prod.id] = prod.nome
+      return map
+    }, {})
+
+    const pedidosOrdenados = pedidos.sort((a, b) => {
+      const dataA = a.dataCriacao?.toDate ? a.dataCriacao.toDate() : new Date(a.dataCriacao)
+      const dataB = b.dataCriacao?.toDate ? b.dataCriacao.toDate() : new Date(b.dataCriacao)
+      return dataB - dataA
+    })
+    pedidosRecentes.value = pedidosOrdenados.slice(0, 4).map((p) => ({
       id: p.id,
-      produtoNome: p.itens[0]?.nome || 'Produto',
-      status: index < 2 ? 'processando' : 'concluido'
+      numero: p.id, 
+      produtoNome: p.itens?.map(item => produtoMap[item.produtoId]).join(', '),
+      status: p.status
     }))
   } catch (err) {
     errorPedidos.value = 'Erro ao carregar pedidos: ' + err.message
@@ -146,7 +159,6 @@ const carregarPedidosRecentes = async () => {
 const carregarProdutosVendidos = async () => {
   try {
     const produtos = await produtoService.listarTodos()
-    // Simular vendas: ordenar por estoque decrescente como proxy
     produtosVendidos.value = produtos
       .sort((a, b) => b.estoque - a.estoque)
       .slice(0, 3)

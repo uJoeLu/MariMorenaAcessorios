@@ -216,8 +216,8 @@ const cancelarPedido = async (pedido) => {
     for (const item of pedido.itens) {
       if (item.produtoId) {
         const produto = await produtoService.buscarPorId(item.produtoId);
-        const novaQuantidade = (produto.quantidade || 0) + (item.quantidade || 0);
-        await produtoService.atualizar(item.produtoId, { quantidade: novaQuantidade });
+        const novaQuantidade = (produto.estoque) + (item.estoque);
+        await produtoService.atualizar(item.produtoId, { estoque: novaQuantidade });
       }
     }
 
