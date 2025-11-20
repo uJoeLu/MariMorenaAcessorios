@@ -34,7 +34,7 @@
           </tr>
         </thead>
         <tbody>
-          <PedidoItem v-for="pedido in pedidosFiltrados" :key="pedido.id" :pedido="pedido"
+          <PedidoItem v-for="pedido in pedidosFiltrados" :key="pedido.id" :pedido="pedido" class="pedido-item"
             @ver-detalhes="verDetalhes" />
         </tbody>
       </table>
@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { pedidoService } from '@/services/pedidoService';
 import { produtoService } from '@/services/produtoService';
 import { authService } from '@/services/authService';
@@ -119,27 +119,23 @@ const carregarPedidos = async () => {
     const userPedidos = await pedidoService.buscarPorUsuario(currentUser.uid);
     console.log('User pedidos:', userPedidos);
 
-    // Converte itens para array
     userPedidos.forEach(pedido => {
       pedido.itens = Array.isArray(pedido.itens)
         ? pedido.itens
         : Object.values(pedido.itens || {});
     });
 
-    // Coletar IDs únicos
     const produtoIds = new Set();
     userPedidos.forEach(p => {
       p.itens.forEach(i => i.produtoId && produtoIds.add(i.produtoId));
     });
 
-    // Buscar todos os produtos em paralelo
     const produtos = await Promise.all(
       [...produtoIds].map(id =>
         produtoService.buscarPorId(id).then(prod => ({ id, prod }))
       )
     );
 
-    // Criar mapa
     const produtoMap = new Map(produtos.map(p => [p.id, p.prod]));
 
     // Associar produtos aos itens
@@ -286,6 +282,7 @@ th {
   background-color: #f8f9fa;
   font-weight: 600;
 }
+
 
 .produto-info {
   display: flex;

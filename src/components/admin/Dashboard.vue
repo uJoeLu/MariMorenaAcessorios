@@ -159,14 +159,29 @@ const carregarPedidosRecentes = async () => {
 const carregarProdutosVendidos = async () => {
   try {
     const produtos = await produtoService.listarTodos()
+    const pedidos = await pedidoService.listarTodos()
+
+    // Calculate total sold quantity for each product
+    const vendasPorProduto = pedidos.reduce((acc, pedido) => {
+      if (pedido.itens && pedido.status === 'entregue') {
+        pedido.itens.forEach(item => {
+          if (item.produtoId) {
+            acc[item.produtoId] = (acc[item.produtoId] || 0) + (item.quantidade)
+          }
+        })
+      }
+      return acc
+    }, {})
+
+    // Sort products by total sold quantity descending
     produtosVendidos.value = produtos
-      .sort((a, b) => b.estoque - a.estoque)
-      .slice(0, 3)
       .map(p => ({
         id: p.id,
         nome: p.nome,
-        volume: p.estoque 
+        volume: vendasPorProduto[p.id] || 0
       }))
+      .sort((a, b) => b.volume - a.volume)
+      .slice(0, 3)
   } catch (err) {
     errorProdutos.value = 'Erro ao carregar produtos: ' + err.message
   } finally {
