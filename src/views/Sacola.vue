@@ -37,7 +37,7 @@
 
         <div class="resumo">
           <h2>Resumo do Pedido</h2>
-          <p style="color: red;"> Compras acima de R$ 100,00 não paga frete</p>
+          <p style="color: red; font-size: small;"> Compras acima de R$ 99,99 não paga frete</p>
           <div class="resumo-linha">
             <span>Total de itens:</span>
             <span>{{ totalItens }}</span>

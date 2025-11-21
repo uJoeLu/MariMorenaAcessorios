@@ -44,11 +44,11 @@
           <div class="acoes">
             <div class="quantidade-selector">
               <button @click="diminuirQuantidade" :disabled="quantidadeCompra <= 1">-</button>
-              <input type="number" v-model.number="quantidadeCompra" min="1" :max="produto.estoque" />
+              <input type="number" v-model.number="quantidadeCompra" min="1" :max="produto.estoque" disabled/>
               <button @click="aumentarQuantidade" :disabled="quantidadeCompra >= produto.estoque">+</button>
             </div>
 
-            <button class="btn-adicionar" @click="adicionarNaSacola" :disabled="produto.quantidade === 0">
+            <button class="btn-adicionar" @click="adicionarNaSacola" :disabled="quantidadeCompra < produto.estoque">
               Adicionar à Sacola
             </button>
           </div>
